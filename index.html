@@ -5,91 +5,223 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Swing &amp; Snap — RougCorp</title>
 <meta name="description" content="Swing &amp; Snap is a free mobile game where you swing on a rope, snap to pivots, dodge lasers and obstacles. BLITZ mode, weekly leaderboard, 100+ campaign levels. Available on iOS and Android.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F5F0E8;color:#3E2723;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
-  .logo{font-size:3rem;margin-bottom:8px}
-  h1{font-size:2rem;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
-  h1 span{color:#FF8C00}
-  .sub{font-size:1rem;color:#795548;margin-bottom:8px}
-  .version{display:inline-block;font-size:.75rem;font-weight:700;background:#FF8C00;color:#fff;border-radius:20px;padding:3px 12px;margin-bottom:28px;letter-spacing:.5px}
-  .badges{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
-  .badge{display:inline-flex;align-items:center;gap:10px;background:#3E2723;color:#fff;padding:12px 22px;border-radius:14px;text-decoration:none;font-weight:700;font-size:.9rem;transition:.15s}
-  .badge:hover{background:#5D4037;transform:translateY(-2px)}
-  .badge svg{width:22px;height:22px;fill:#fff}
-  .features{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;max-width:600px}
-  .feat{background:#fff;border-radius:14px;padding:18px;flex:1;min-width:130px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
-  .feat-icon{font-size:1.6rem;margin-bottom:6px}
-  .feat-title{font-weight:900;font-size:.85rem;margin-bottom:4px}
-  .feat-desc{font-size:.75rem;color:#795548;line-height:1.4}
-  .whats-new{background:#fff;border-radius:16px;padding:20px 24px;max-width:480px;width:100%;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:36px;text-align:left}
-  .whats-new h2{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#BCAAA4;margin-bottom:12px}
-  .whats-new ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-  .whats-new li{font-size:.82rem;color:#3E2723;line-height:1.4}
-  .whats-new li b{font-weight:900}
-  footer{font-size:.8rem;color:#BCAAA4;margin-top:auto;padding-top:20px}
-  footer a{color:#FF8C00;text-decoration:none}
+:root{--accent:#8E63B4;--gold:#F4A926;--orange:#FF8C00;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',-apple-system,sans-serif;background:#0d0b1a;color:#fff;min-height:100vh;overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+
+.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 40px;gap:0}
+
+/* Hero */
+.hero{text-align:center;margin-bottom:36px;animation:fadeUp .8s ease both}
+.hero-icon{font-size:3.8rem;display:block;margin-bottom:14px;animation:float 3.2s ease-in-out infinite}
+h1{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:900;letter-spacing:-1.5px;line-height:1;margin-bottom:8px}
+h1 span{color:var(--orange)}
+.sub{font-size:.95rem;color:rgba(255,255,255,.5);margin-bottom:14px;letter-spacing:.3px}
+.version{display:inline-block;font-size:.72rem;font-weight:900;background:linear-gradient(135deg,var(--accent),#6A3D9A);color:#fff;border-radius:20px;padding:4px 14px;letter-spacing:1px;margin-bottom:34px}
+
+/* Badges */
+.badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px}
+.badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);color:#fff;padding:13px 24px;border-radius:16px;text-decoration:none;font-weight:900;font-size:.9rem;transition:all .2s;letter-spacing:.3px}
+.badge:hover{background:rgba(255,255,255,.15);transform:translateY(-3px);box-shadow:0 14px 40px rgba(142,99,180,.3)}
+.badge svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
+
+/* Features */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;max-width:640px;width:100%;margin-bottom:28px;animation:fadeUp .8s .15s ease both}
+.feat{background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:18px;padding:20px 14px;text-align:center;transition:all .22s;cursor:default}
+.feat:hover{background:rgba(255,255,255,.1);transform:translateY(-5px);border-color:rgba(142,99,180,.45);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.feat-icon{font-size:1.7rem;margin-bottom:8px;display:block}
+.feat-title{font-weight:900;font-size:.84rem;margin-bottom:5px}
+.feat-desc{font-size:.71rem;color:rgba(255,255,255,.55);line-height:1.5}
+
+/* Divider */
+.divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:30px auto}
+
+/* What's new */
+.whats-new{background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:20px;padding:24px 26px;max-width:460px;width:100%;animation:fadeUp .8s .3s ease both}
+.wn-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.wn-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex-shrink:0}
+.wn-head h2{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent)}
+.wn-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.wn-list li{font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.5;padding-left:15px;position:relative}
+.wn-list li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.wn-list li b{color:#fff;font-weight:900}
+
+/* Footer */
+footer{margin-top:38px;font-size:.76rem;color:rgba(255,255,255,.28);text-align:center;animation:fadeUp .8s .4s ease both}
+footer a{color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s}
+footer a:hover{color:var(--orange)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 </style>
 </head>
 <body>
 
-<div class="logo">🎯</div>
-<h1>Swing <span>&amp;</span> Snap</h1>
-<p class="sub">By RougCorp · Free mobile game</p>
-<span class="version">v1.3.3</span>
+<canvas id="bg"></canvas>
 
-<div class="badges">
-  <a class="badge" href="https://apps.apple.com/app/swing-snap/id6762198967" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-    App Store
-  </a>
-  <a class="badge" href="https://play.google.com/store/apps/details?id=com.rougcorp.swingandsnap" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.36.6 1.24 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
-    Google Play
-  </a>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="hero-icon">🎯</span>
+    <h1>Swing <span>&amp;</span> Snap</h1>
+    <p class="sub">By RougCorp &nbsp;·&nbsp; Free mobile game</p>
+    <span class="version">v1.3.3</span>
+  </div>
+
+  <div class="badges">
+    <a class="badge" href="https://apps.apple.com/app/swing-snap/id6762198967" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      App Store
+    </a>
+    <a class="badge" href="https://play.google.com/store/apps/details?id=com.rougcorp.swingandsnap" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.36.6 1.24 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
+      Google Play
+    </a>
+  </div>
+
+  <div class="features">
+    <div class="feat">
+      <span class="feat-icon">🌀</span>
+      <div class="feat-title">Swing &amp; Dodge</div>
+      <div class="feat-desc">Master the rope, dodge lasers, chain perfect snaps</div>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">BLITZ Mode</div>
+      <div class="feat-desc">60 seconds, no deaths — chain as many pivots as you can</div>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">⭐</span>
+      <div class="feat-title">Campaign</div>
+      <div class="feat-desc">100+ levels with star ratings and daily challenges</div>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">🏆</span>
+      <div class="feat-title">Leaderboard</div>
+      <div class="feat-desc">Weekly rankings, BLITZ scores, all-time records</div>
+    </div>
+    <div class="feat">
+      <span class="feat-icon">💎</span>
+      <div class="feat-title">Collect &amp; Unlock</div>
+      <div class="feat-desc">Gems, skins, trails, backgrounds and power-ups</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="whats-new">
+    <div class="wn-head"><div class="wn-dot"></div><h2>What's new in v1.3.3</h2></div>
+    <ul class="wn-list">
+      <li><b>3 new progression missions</b> — Perfect Snaps, x4 Multiplier, Weekly Podium</li>
+      <li><b>Mission descriptions</b> — each card now explains how to complete it</li>
+      <li><b>Bug fixes</b> — mid-game ad, visual glitch in BLITZ, leaderboard stability</li>
+      <li><b>Full translations</b> — all text translated in 6 languages</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>© 2026 RougCorp &nbsp;·&nbsp; <a href="https://rougcorp.github.io/swing-snap-game/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:rougcorp@gmail.com">Support</a></p>
+  </footer>
+
 </div>
 
-<div class="features">
-  <div class="feat">
-    <div class="feat-icon">🌀</div>
-    <div class="feat-title">Swing &amp; Dodge</div>
-    <div class="feat-desc">Master the rope, dodge lasers and obstacles, chain perfect snaps</div>
-  </div>
-  <div class="feat">
-    <div class="feat-icon">⚡</div>
-    <div class="feat-title">BLITZ Mode</div>
-    <div class="feat-desc">60 seconds, no deaths — chain as many pivots as possible</div>
-  </div>
-  <div class="feat">
-    <div class="feat-icon">⭐</div>
-    <div class="feat-title">Campaign</div>
-    <div class="feat-desc">100+ levels with star ratings and daily challenges</div>
-  </div>
-  <div class="feat">
-    <div class="feat-icon">🏆</div>
-    <div class="feat-title">Leaderboard</div>
-    <div class="feat-desc">Weekly rankings, BLITZ scores and all-time records</div>
-  </div>
-  <div class="feat">
-    <div class="feat-icon">💎</div>
-    <div class="feat-title">Collect &amp; Unlock</div>
-    <div class="feat-desc">Earn gems, unlock skins, trails, backgrounds and power-ups</div>
-  </div>
-</div>
+<script>
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let W,H;
 
-<div class="whats-new">
-  <h2>What's new in v1.3.3</h2>
-  <ul>
-    <li><b>3 new progression missions</b> — Perfect Snaps, x4 Multiplier, Weekly Podium</li>
-    <li><b>Mission descriptions</b> — each mission now explains how to complete it</li>
-    <li><b>Bug fixes</b> — ads, visual glitch in BLITZ, leaderboard stability</li>
-    <li><b>Full translations</b> — all text translated in 6 languages</li>
-  </ul>
-</div>
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
 
-<footer>
-  <p>© 2026 RougCorp · <a href="https://rougcorp.github.io/swing-snap-game/privacy.html">Privacy Policy</a> · <a href="mailto:rougcorp@gmail.com">Support</a></p>
-</footer>
+// Pivot nodes
+const nodes=Array.from({length:8},()=>({
+  x:Math.random()*window.innerWidth,
+  y:Math.random()*window.innerHeight,
+  vx:(Math.random()-.5)*.32,
+  vy:(Math.random()-.5)*.32,
+  r:6+Math.random()*7,
+  phase:Math.random()*Math.PI*2
+}));
 
+// Swinging ball
+const ball={pivot:nodes[0],angle:Math.random()*Math.PI*2,vel:.024+Math.random()*.014,ropLen:60+Math.random()*35,timer:0,cooldown:220+Math.floor(Math.random()*100)};
+let bx=0,by=0;
+
+function snapNearest(){
+  let best=null,bd=Infinity;
+  for(const n of nodes){if(n===ball.pivot)continue;const d=Math.hypot(n.x-bx,n.y-by);if(d<bd){bd=d;best=n;}}
+  if(best){ball.pivot=best;ball.angle=Math.atan2(by-best.y,bx-best.x);ball.cooldown=180+Math.floor(Math.random()*130);ball.vel=.02+Math.random()*.02;ball.ropLen=55+Math.random()*40;}
+}
+
+function draw(){
+  // Background gradient
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#0d0b1a');g.addColorStop(.55,'#1a1035');g.addColorStop(1,'#0f1528');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  // Move nodes
+  for(const n of nodes){
+    n.phase+=.011;n.x+=n.vx;n.y+=n.vy;
+    if(n.x<25||n.x>W-25)n.vx*=-1;
+    if(n.y<25||n.y>H-25)n.vy*=-1;
+  }
+
+  // Ropes between close nodes
+  const maxD=Math.min(W,H)*.38;
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<maxD){
+      const a=(1-d/maxD)*.13;
+      ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);
+      ctx.strokeStyle=`rgba(142,99,180,${a})`;ctx.lineWidth=1;ctx.stroke();
+    }
+  }
+
+  // Draw nodes
+  for(const n of nodes){
+    const gw=.6+.4*Math.sin(n.phase);
+    // Glow
+    const rg=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*5);
+    rg.addColorStop(0,`rgba(142,99,180,${.18*gw})`);rg.addColorStop(1,'rgba(142,99,180,0)');
+    ctx.fillStyle=rg;ctx.beginPath();ctx.arc(n.x,n.y,n.r*5,0,Math.PI*2);ctx.fill();
+    // Ring
+    ctx.strokeStyle=`rgba(142,99,180,${.65*gw})`;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.stroke();
+    // Fill
+    ctx.fillStyle=`rgba(142,99,180,${.25*gw})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();
+    // Center
+    ctx.fillStyle=`rgba(255,255,255,${.45*gw})`;ctx.beginPath();ctx.arc(n.x,n.y,2,0,Math.PI*2);ctx.fill();
+  }
+
+  // Ball
+  ball.angle+=ball.vel;
+  ball.timer++;
+  if(ball.timer>=ball.cooldown){ball.timer=0;snapNearest();}
+  bx=ball.pivot.x+Math.cos(ball.angle)*ball.ropLen;
+  by=ball.pivot.y+Math.sin(ball.angle)*ball.ropLen;
+
+  // Rope
+  ctx.beginPath();ctx.moveTo(ball.pivot.x,ball.pivot.y);ctx.lineTo(bx,by);
+  ctx.strokeStyle='rgba(255,155,0,.4)';ctx.lineWidth=1.5;ctx.stroke();
+
+  // Ball glow
+  const bg=ctx.createRadialGradient(bx,by,0,bx,by,20);
+  bg.addColorStop(0,'rgba(255,175,0,.45)');bg.addColorStop(1,'rgba(255,140,0,0)');
+  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(bx,by,20,0,Math.PI*2);ctx.fill();
+  // Ball body
+  ctx.fillStyle='#FF8C00';ctx.beginPath();ctx.arc(bx,by,7,0,Math.PI*2);ctx.fill();
+  // Highlight
+  ctx.fillStyle='rgba(255,228,110,.8)';ctx.beginPath();ctx.arc(bx-2,by-2,2.5,0,Math.PI*2);ctx.fill();
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
 </body>
 </html>

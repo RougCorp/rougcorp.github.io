@@ -16,7 +16,8 @@
 body{font-family:'Nunito',-apple-system,sans-serif;background:#0d0b1a;color:#fff;min-height:100vh;overflow-x:hidden}
 canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 
-.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 40px}
+/* Layout */
+.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 20px 44px}
 
 /* Hero */
 .hero{text-align:center;margin-bottom:36px;animation:fadeUp .8s ease both}
@@ -26,19 +27,29 @@ h1 span{color:var(--orange)}
 .sub{font-size:.95rem;color:rgba(255,255,255,.5);margin-bottom:14px;letter-spacing:.3px}
 .version{display:inline-block;font-size:.72rem;font-weight:900;background:linear-gradient(135deg,var(--accent),#6A3D9A);color:#fff;border-radius:20px;padding:4px 14px;letter-spacing:1px;margin-bottom:34px}
 
-/* Badges */
+/* Store badges */
 .badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px}
-.badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);color:#fff;padding:13px 24px;border-radius:16px;text-decoration:none;font-weight:900;font-size:.9rem;transition:all .2s;letter-spacing:.3px}
+.badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);color:#fff;padding:13px 24px;border-radius:16px;text-decoration:none;font-weight:900;font-size:.9rem;transition:background .2s,transform .2s,box-shadow .2s;letter-spacing:.3px}
 .badge:hover{background:rgba(255,255,255,.15);transform:translateY(-3px);box-shadow:0 14px 40px rgba(142,99,180,.3)}
 .badge svg{width:22px;height:22px;fill:#fff;flex-shrink:0}
 
-/* Features */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;max-width:640px;width:100%;margin-bottom:28px;animation:fadeUp .8s .15s ease both}
-.feat{background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:18px;padding:20px 14px;text-align:center;transition:all .22s;cursor:default}
-.feat:hover{background:rgba(255,255,255,.1);transform:translateY(-5px);border-color:rgba(142,99,180,.45);box-shadow:0 20px 50px rgba(0,0,0,.35)}
-.feat-icon{font-size:1.7rem;margin-bottom:8px;display:block}
-.feat-title{font-weight:900;font-size:.84rem;margin-bottom:5px}
-.feat-desc{font-size:.71rem;color:rgba(255,255,255,.55);line-height:1.5}
+/* Feature cards */
+.features-wrap{max-width:660px;width:100%;margin-bottom:28px;animation:fadeUp .8s .15s ease both}
+.features-hint{text-align:center;font-size:.68rem;color:rgba(255,255,255,.22);margin-bottom:12px;letter-spacing:.6px;text-transform:uppercase}
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
+
+.feat{background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:18px;padding:18px 16px 16px;text-align:left;transition:background .22s,transform .22s,border-color .22s,box-shadow .22s;cursor:pointer;user-select:none;-webkit-user-select:none}
+.feat:hover{background:rgba(255,255,255,.09);transform:translateY(-4px);border-color:rgba(142,99,180,.4);box-shadow:0 16px 44px rgba(0,0,0,.28)}
+.feat.open{background:rgba(255,255,255,.1);border-color:rgba(142,99,180,.55);box-shadow:0 20px 50px rgba(0,0,0,.32);transform:translateY(-4px)}
+
+.feat-icon{font-size:1.5rem;display:block;margin-bottom:9px}
+.feat-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+.feat-title{font-weight:900;font-size:.84rem;line-height:1.2}
+.feat-arrow{font-size:.78rem;color:rgba(255,255,255,.22);transition:transform .32s cubic-bezier(.34,1.56,.64,1),color .25s;flex-shrink:0;line-height:1}
+.feat.open .feat-arrow{transform:rotate(90deg);color:var(--accent)}
+.feat-desc{font-size:.71rem;color:rgba(255,255,255,.5);line-height:1.5}
+.feat-detail{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin-top .4s ease,padding-top .4s ease,border-color .3s ease;font-size:.7rem;color:rgba(255,255,255,.65);line-height:1.6;border-top:1px solid transparent;padding-top:0;margin-top:0}
+.feat.open .feat-detail{max-height:200px;opacity:1;border-top-color:rgba(255,255,255,.1);padding-top:10px;margin-top:10px}
 
 /* Divider */
 .divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:30px auto}
@@ -54,12 +65,17 @@ h1 span{color:var(--orange)}
 .wn-list li b{color:#fff;font-weight:900}
 
 /* Footer */
-footer{margin-top:38px;font-size:.76rem;color:rgba(255,255,255,.28);text-align:center;animation:fadeUp .8s .4s ease both}
-footer a{color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s}
+footer{margin-top:40px;font-size:.76rem;color:rgba(255,255,255,.28);text-align:center;animation:fadeUp .8s .4s ease both}
+footer a{color:rgba(255,255,255,.42);text-decoration:none;transition:color .15s}
 footer a:hover{color:var(--orange)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+@media(max-width:420px){
+  .features{grid-template-columns:repeat(2,1fr)}
+  .badge{padding:11px 18px;font-size:.84rem}
+}
 </style>
 </head>
 <body>
@@ -69,48 +85,77 @@ footer a:hover{color:var(--orange)}
 <div class="wrap">
 
   <div class="hero">
-    <img class="app-icon" src="icon.png" alt="Swing & Snap">
+    <img class="app-icon" src="icon.png" alt="Swing &amp; Snap">
     <h1>Swing <span>&amp;</span> Snap</h1>
     <p class="sub">By RougCorp &nbsp;·&nbsp; Free mobile game</p>
     <span class="version">v1.3.3</span>
   </div>
 
   <div class="badges">
-    <a class="badge" href="https://apps.apple.com/app/swing-snap/id6762198967" target="_blank">
+    <a class="badge" href="https://apps.apple.com/app/swing-snap/id6762198967" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       App Store
     </a>
-    <a class="badge" href="https://play.google.com/store/apps/details?id=com.rougcorp.swingandsnap" target="_blank">
+    <a class="badge" href="https://play.google.com/store/apps/details?id=com.rougcorp.swingandsnap" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.36.6 1.24 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
       Google Play
     </a>
   </div>
 
-  <div class="features">
-    <div class="feat">
-      <span class="feat-icon">🌀</span>
-      <div class="feat-title">Swing &amp; Dodge</div>
-      <div class="feat-desc">Master the rope, dodge lasers, chain perfect snaps</div>
-    </div>
-    <div class="feat">
-      <span class="feat-icon">⚡</span>
-      <div class="feat-title">BLITZ Mode</div>
-      <div class="feat-desc">60 seconds, no deaths — chain as many pivots as you can</div>
-    </div>
-    <div class="feat">
-      <span class="feat-icon">⭐</span>
-      <div class="feat-title">Campaign</div>
-      <div class="feat-desc">100+ levels with star ratings and daily challenges</div>
-    </div>
-    <div class="feat">
-      <span class="feat-icon">🏆</span>
-      <div class="feat-title">Leaderboard</div>
-      <div class="feat-desc">Weekly rankings, BLITZ scores, all-time records</div>
-    </div>
-    <div class="feat">
-      <span class="feat-icon">💎</span>
-      <div class="feat-title">Collect &amp; Unlock</div>
-      <div class="feat-desc">Gems, skins, trails, backgrounds and power-ups</div>
+  <div class="features-wrap">
+    <p class="features-hint">Tap a card to learn more</p>
+    <div class="features">
+
+      <div class="feat" onclick="toggleFeat(this)">
+        <span class="feat-icon">🌀</span>
+        <div class="feat-head">
+          <div class="feat-title">Swing &amp; Dodge</div>
+          <span class="feat-arrow">›</span>
+        </div>
+        <div class="feat-desc">Master the rope, dodge lasers, chain perfect snaps</div>
+        <div class="feat-detail">Time your snap to land in the golden zone — chain 10 consecutive perfects to unlock the ×4 score multiplier. Dodge rotating lasers, moving walls and obstacles to survive as long as possible.</div>
+      </div>
+
+      <div class="feat" onclick="toggleFeat(this)">
+        <span class="feat-icon">⚡</span>
+        <div class="feat-head">
+          <div class="feat-title">BLITZ Mode</div>
+          <span class="feat-arrow">›</span>
+        </div>
+        <div class="feat-desc">60 seconds, no deaths — chain as many pivots as you can</div>
+        <div class="feat-detail">Race against a 60-second clock with zero lives. Hit as many pivots as possible and beat the weekly leaderboard. Your score posts automatically after each run.</div>
+      </div>
+
+      <div class="feat" onclick="toggleFeat(this)">
+        <span class="feat-icon">⭐</span>
+        <div class="feat-head">
+          <div class="feat-title">Campaign</div>
+          <span class="feat-arrow">›</span>
+        </div>
+        <div class="feat-desc">100+ levels with star ratings and daily challenges</div>
+        <div class="feat-detail">Over 100 hand-crafted levels across themed worlds. Earn up to 3 stars per level by hitting score goals. A fresh daily challenge keeps the fun going every day.</div>
+      </div>
+
+      <div class="feat" onclick="toggleFeat(this)">
+        <span class="feat-icon">🏆</span>
+        <div class="feat-head">
+          <div class="feat-title">Leaderboard</div>
+          <span class="feat-arrow">›</span>
+        </div>
+        <div class="feat-desc">Weekly rankings, BLITZ scores, all-time records</div>
+        <div class="feat-detail">Four live leaderboards: weekly Classic, weekly BLITZ, all-time Classic and all-time BLITZ. Reach the weekly Top 3 to earn the Podium progression reward.</div>
+      </div>
+
+      <div class="feat" onclick="toggleFeat(this)">
+        <span class="feat-icon">💎</span>
+        <div class="feat-head">
+          <div class="feat-title">Collect &amp; Unlock</div>
+          <span class="feat-arrow">›</span>
+        </div>
+        <div class="feat-desc">Gems, skins, trails, backgrounds and power-ups</div>
+        <div class="feat-detail">Earn gems through missions and daily streaks. Unlock ball skins, trail effects and animated backgrounds. Complete 5-tier progression missions for extra rewards.</div>
+      </div>
+
     </div>
   </div>
 
@@ -133,77 +178,184 @@ footer a:hover{color:var(--orange)}
 </div>
 
 <script>
-const canvas=document.getElementById('bg');
-const ctx=canvas.getContext('2d');
-let W,H;
-
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-resize();
-window.addEventListener('resize',resize);
-
-const nodes=Array.from({length:8},()=>({
-  x:Math.random()*window.innerWidth,
-  y:Math.random()*window.innerHeight,
-  vx:(Math.random()-.5)*.32,
-  vy:(Math.random()-.5)*.32,
-  r:6+Math.random()*7,
-  phase:Math.random()*Math.PI*2
-}));
-
-const ball={pivot:nodes[0],angle:Math.random()*Math.PI*2,vel:.024+Math.random()*.014,ropLen:60+Math.random()*35,timer:0,cooldown:220+Math.floor(Math.random()*100)};
-let bx=0,by=0;
-
-function snapNearest(){
-  let best=null,bd=Infinity;
-  for(const n of nodes){if(n===ball.pivot)continue;const d=Math.hypot(n.x-bx,n.y-by);if(d<bd){bd=d;best=n;}}
-  if(best){ball.pivot=best;ball.angle=Math.atan2(by-best.y,bx-best.x);ball.cooldown=180+Math.floor(Math.random()*130);ball.vel=.02+Math.random()*.02;ball.ropLen=55+Math.random()*40;}
+// ── Card expand/collapse ──────────────────────────────────────────────
+function toggleFeat(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.feat.open').forEach(f => f.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
 }
 
-function draw(){
-  const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,'#0d0b1a');g.addColorStop(.55,'#1a1035');g.addColorStop(1,'#0f1528');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+// ── Canvas background — ball swings pivot-to-pivot ────────────────────
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
 
-  for(const n of nodes){
-    n.phase+=.011;n.x+=n.vx;n.y+=n.vy;
-    if(n.x<25||n.x>W-25)n.vx*=-1;
-    if(n.y<25||n.y>H-25)n.vy*=-1;
+// Floating pivot nodes
+const nodes = Array.from({length: 8}, () => ({
+  x: Math.random() * innerWidth,
+  y: Math.random() * innerHeight,
+  vx: (Math.random() - .5) * .24,
+  vy: (Math.random() - .5) * .24,
+  r: 6 + Math.random() * 6,
+  phase: Math.random() * Math.PI * 2
+}));
+
+// Ball — swings on a rope around a pivot, smoothly transitions to next
+const ball = {
+  px: nodes[0].x,       // virtual pivot x (lerps between nodes)
+  py: nodes[0].y,       // virtual pivot y
+  pivotNode: nodes[0],  // current anchor node
+  targetNode: null,     // node we are transitioning toward
+  snapping: false,
+  angle: Math.random() * Math.PI * 2,
+  vel: .022,            // angular velocity (rad / frame)
+  ropLen: 75,           // rope length in px
+  timer: 0,
+  cooldown: 260         // frames between snaps
+};
+
+// Trail history
+const trail = [];
+const TRAIL_LEN = 18;
+let bx = 0, by = 0;
+
+function pickNext() {
+  // Prefer pivots ~110-170 px from ball for natural-looking snaps
+  return nodes
+    .filter(n => n !== ball.pivotNode)
+    .map(n => ({ n, score: Math.abs(Math.hypot(n.x - bx, n.y - by) - 140) + Math.random() * 55 }))
+    .sort((a, b) => a.score - b.score)[0].n;
+}
+
+function draw() {
+  // Background
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#0d0b1a');
+  g.addColorStop(.55, '#1a1035');
+  g.addColorStop(1, '#0f1528');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  // Move nodes
+  for (const n of nodes) {
+    n.phase += .01;
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 30 || n.x > W - 30) n.vx *= -1;
+    if (n.y < 30 || n.y > H - 30) n.vy *= -1;
   }
 
-  const maxD=Math.min(W,H)*.38;
-  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
-    const dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<maxD){
-      ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);
-      ctx.strokeStyle=`rgba(142,99,180,${(1-d/maxD)*.13})`;ctx.lineWidth=1;ctx.stroke();
+  // Connecting lines between close nodes
+  const maxD = Math.min(W, H) * .38;
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < maxD) {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(142,99,180,${(1 - d / maxD) * .11})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
     }
   }
 
-  for(const n of nodes){
-    const gw=.6+.4*Math.sin(n.phase);
-    const rg=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*5);
-    rg.addColorStop(0,`rgba(142,99,180,${.18*gw})`);rg.addColorStop(1,'rgba(142,99,180,0)');
-    ctx.fillStyle=rg;ctx.beginPath();ctx.arc(n.x,n.y,n.r*5,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle=`rgba(142,99,180,${.65*gw})`;ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.stroke();
-    ctx.fillStyle=`rgba(142,99,180,${.25*gw})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=`rgba(255,255,255,${.45*gw})`;ctx.beginPath();ctx.arc(n.x,n.y,2,0,Math.PI*2);ctx.fill();
+  // Draw nodes
+  for (const n of nodes) {
+    const gw = .6 + .4 * Math.sin(n.phase);
+    // Glow halo
+    const rg = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
+    rg.addColorStop(0, `rgba(142,99,180,${.16 * gw})`);
+    rg.addColorStop(1, 'rgba(142,99,180,0)');
+    ctx.fillStyle = rg;
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2); ctx.fill();
+    // Ring
+    ctx.strokeStyle = `rgba(142,99,180,${.6 * gw})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = `rgba(142,99,180,${.2 * gw})`;
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+    // Center dot
+    ctx.fillStyle = `rgba(255,255,255,${.4 * gw})`;
+    ctx.beginPath(); ctx.arc(n.x, n.y, 2, 0, Math.PI * 2); ctx.fill();
   }
 
-  ball.angle+=ball.vel;
-  ball.timer++;
-  if(ball.timer>=ball.cooldown){ball.timer=0;snapNearest();}
-  bx=ball.pivot.x+Math.cos(ball.angle)*ball.ropLen;
-  by=ball.pivot.y+Math.sin(ball.angle)*ball.ropLen;
+  // ── Ball physics ─────────────────────────────────────────────────────
+  if (ball.snapping && ball.targetNode) {
+    // Smoothly slide the virtual pivot toward the target node
+    const dx = ball.targetNode.x - ball.px;
+    const dy = ball.targetNode.y - ball.py;
+    ball.px += dx * .055;
+    ball.py += dy * .055;
+    ball.angle += ball.vel;
+    bx = ball.px + Math.cos(ball.angle) * ball.ropLen;
+    by = ball.py + Math.sin(ball.angle) * ball.ropLen;
 
-  ctx.beginPath();ctx.moveTo(ball.pivot.x,ball.pivot.y);ctx.lineTo(bx,by);
-  ctx.strokeStyle='rgba(255,155,0,.4)';ctx.lineWidth=1.5;ctx.stroke();
+    // Complete snap once the virtual pivot reaches the target
+    if (Math.abs(dx) < 1.2 && Math.abs(dy) < 1.2) {
+      ball.pivotNode = ball.targetNode;
+      ball.px = ball.pivotNode.x;
+      ball.py = ball.pivotNode.y;
+      ball.angle = Math.atan2(by - ball.py, bx - ball.px);
+      ball.targetNode = null;
+      ball.snapping = false;
+      ball.timer = 0;
+      ball.cooldown = 220 + Math.floor(Math.random() * 150);
+      ball.vel = .016 + Math.random() * .018;
+      ball.ropLen = 58 + Math.random() * 50;
+    }
+  } else {
+    // Normal swing — follow the drifting pivot node
+    ball.px += (ball.pivotNode.x - ball.px) * .12;
+    ball.py += (ball.pivotNode.y - ball.py) * .12;
+    ball.angle += ball.vel;
+    ball.timer++;
+    bx = ball.px + Math.cos(ball.angle) * ball.ropLen;
+    by = ball.py + Math.sin(ball.angle) * ball.ropLen;
 
-  const bg=ctx.createRadialGradient(bx,by,0,bx,by,20);
-  bg.addColorStop(0,'rgba(255,175,0,.45)');bg.addColorStop(1,'rgba(255,140,0,0)');
-  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(bx,by,20,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#FF8C00';ctx.beginPath();ctx.arc(bx,by,7,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='rgba(255,228,110,.8)';ctx.beginPath();ctx.arc(bx-2,by-2,2.5,0,Math.PI*2);ctx.fill();
+    if (ball.timer >= ball.cooldown) {
+      ball.targetNode = pickNext();
+      ball.snapping = true;
+    }
+  }
+
+  // Rope with gentle sag
+  const midX = (ball.px + bx) / 2;
+  const midY = (ball.py + by) / 2 + Math.hypot(bx - ball.px, by - ball.py) * .08;
+  ctx.beginPath();
+  ctx.moveTo(ball.px, ball.py);
+  ctx.quadraticCurveTo(midX, midY, bx, by);
+  ctx.strokeStyle = 'rgba(255,155,0,.36)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Ball trail
+  trail.push({x: bx, y: by});
+  if (trail.length > TRAIL_LEN) trail.shift();
+  for (let i = 0; i < trail.length - 1; i++) {
+    const t = (i + 1) / TRAIL_LEN;
+    ctx.beginPath();
+    ctx.arc(trail[i].x, trail[i].y, 4.5 * t, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,160,20,${t * .28})`;
+    ctx.fill();
+  }
+
+  // Ball glow
+  const bg = ctx.createRadialGradient(bx, by, 0, bx, by, 20);
+  bg.addColorStop(0, 'rgba(255,175,0,.48)');
+  bg.addColorStop(1, 'rgba(255,140,0,0)');
+  ctx.fillStyle = bg;
+  ctx.beginPath(); ctx.arc(bx, by, 20, 0, Math.PI * 2); ctx.fill();
+  // Ball body
+  ctx.fillStyle = '#FF8C00';
+  ctx.beginPath(); ctx.arc(bx, by, 7, 0, Math.PI * 2); ctx.fill();
+  // Highlight
+  ctx.fillStyle = 'rgba(255,228,110,.8)';
+  ctx.beginPath(); ctx.arc(bx - 2, by - 2, 2.5, 0, Math.PI * 2); ctx.fill();
 
   requestAnimationFrame(draw);
 }

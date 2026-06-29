@@ -72,6 +72,15 @@ footer a:hover{color:var(--orange)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
+/* Challenge banner (shown only when ?challenge=N) */
+.challenge-banner{display:none;max-width:460px;width:100%;background:linear-gradient(135deg,rgba(229,57,53,.2),rgba(142,99,180,.16));border:1px solid rgba(229,57,53,.42);border-radius:20px;padding:22px 24px;margin-bottom:30px;text-align:center;animation:fadeUp .7s ease both;box-shadow:0 14px 50px rgba(229,57,53,.2)}
+.challenge-banner.show{display:block}
+.cb-label{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#FF7043;margin-bottom:8px}
+.cb-score{font-size:3.4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#FF8C00,#F4A926);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.cb-text{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.5;margin-bottom:16px}
+.cb-cta{display:inline-block;font-size:.8rem;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--accent),#6A3D9A);padding:12px 28px;border-radius:30px;text-decoration:none;letter-spacing:.5px;animation:cbPulse 2s ease-in-out infinite;cursor:pointer}
+@keyframes cbPulse{0%,100%{box-shadow:0 0 0 0 rgba(142,99,180,.5)}50%{box-shadow:0 0 22px 4px rgba(142,99,180,.5)}}
+
 @media(max-width:420px){
   .features{grid-template-columns:repeat(2,1fr)}
   .badge{padding:11px 18px;font-size:.84rem}
@@ -83,6 +92,13 @@ footer a:hover{color:var(--orange)}
 <canvas id="bg"></canvas>
 
 <div class="wrap">
+
+  <div class="challenge-banner" id="challengeBanner">
+    <div class="cb-label" id="cbLabel">A friend challenged you</div>
+    <div class="cb-score">🎯 <span id="cbScore">0</span></div>
+    <div class="cb-text" id="cbText">Beat this score in Swing &amp; Snap!</div>
+    <a class="cb-cta" id="cbCta" href="#get">Play free ↓</a>
+  </div>
 
   <div class="hero">
     <img class="app-icon" src="icon.png" alt="Swing &amp; Snap">
@@ -178,6 +194,34 @@ footer a:hover{color:var(--orange)}
 </div>
 
 <script>
+// ── Challenge banner — shown when opened from a shared "?challenge=N" link ──
+(function () {
+  var c = parseInt(new URLSearchParams(location.search).get('challenge'), 10);
+  if (!c || c <= 0 || c > 100000) return;
+  // Localized into the 6 game languages, picked from the visitor's browser.
+  var L = {
+    en: ['A friend challenged you', 'Beat their score of {N} pivots — download free and play!', 'Play free ↓'],
+    fr: ['Un ami t’a défié', 'Bats son score de {N} pivots — télécharge et joue gratuitement !', 'Jouer gratuitement ↓'],
+    de: ['Ein Freund fordert dich heraus', 'Schlag seinen Score von {N} Pivots — gratis herunterladen und spielen!', 'Kostenlos spielen ↓'],
+    es: ['Un amigo te ha retado', 'Supera su puntuación de {N} pivotes — ¡descarga gratis y juega!', 'Jugar gratis ↓'],
+    it: ['Un amico ti ha sfidato', 'Batti il suo punteggio di {N} pivot — scarica gratis e gioca!', 'Gioca gratis ↓'],
+    pt: ['Um amigo te desafiou', 'Supera a pontuação de {N} pivots — baixa grátis e joga!', 'Jogar grátis ↓']
+  };
+  var t = L[(navigator.language || 'en').slice(0, 2).toLowerCase()] || L.en;
+  document.getElementById('cbLabel').textContent = t[0];
+  document.getElementById('cbScore').textContent = c;
+  document.getElementById('cbText').textContent = t[1].replace('{N}', c);
+  var cta = document.getElementById('cbCta');
+  cta.textContent = t[2];
+  cta.addEventListener('click', function (e) {
+    e.preventDefault();
+    var b = document.querySelector('.badges');
+    if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  document.getElementById('challengeBanner').classList.add('show');
+  document.title = 'Beat ' + c + ' pivots — Swing & Snap';
+})();
+
 // ── Card expand/collapse ──────────────────────────────────────────────
 function toggleFeat(el) {
   const wasOpen = el.classList.contains('open');

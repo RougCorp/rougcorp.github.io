@@ -110,6 +110,20 @@
   .stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 10px;flex:1 1 170px;min-width:140px;text-align:center;box-shadow:0 8px 26px rgba(60,40,90,.07)}
   .stat-num{font-size:2.15rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .stat-label{margin-top:6px;font-size:.76rem;font-weight:800;color:var(--muted);line-height:1.3}
+  /* ---- How to play (3 steps) ---- */
+  .howto{max-width:900px;margin:52px auto 8px}
+  .howto-title{text-align:center;font-size:1.35rem;font-weight:900;color:var(--text);margin:0 0 4px}
+  .howto-sub{text-align:center;font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 24px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:step}
+  @media(max-width:640px){ .steps{grid-template-columns:1fr} }
+  .step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 18px 20px;text-align:center;box-shadow:0 8px 26px rgba(60,40,90,.07);transition:transform .2s ease,box-shadow .2s ease}
+  .step:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(60,40,90,.14)}
+  .step-num{counter-increment:step;position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--gold));color:#fff;font-weight:900;font-size:.9rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(142,99,180,.4)}
+  .step-num::before{content:counter(step)}
+  .step-ico{width:52px;height:52px;margin:4px auto 12px;display:block}
+  .step-title{font-weight:900;font-size:1.02rem;margin-bottom:5px;color:var(--text)}
+  .step-txt{font-size:.82rem;color:var(--muted);font-weight:600;line-height:1.5}
   /* ---- Floating decorative balls ---- */
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
   .balls svg{animation:bob 3.2s ease-in-out infinite}
@@ -231,6 +245,47 @@
 
   </section>
 
+  <section class="howto reveal">
+    <h2 class="howto-title" id="htTitle">Trois gestes, c'est tout</h2>
+    <p class="howto-sub" id="htSub">Facile à prendre en main, impossible à lâcher</p>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num"></span>
+        <svg class="step-ico" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="26" cy="9" r="4" fill="#8E63B4"/>
+          <path d="M26 13 Q14 30 22 44" stroke="#C9B4E0" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="22" cy="44" r="6" fill="url(#stg1)"/>
+          <defs><radialGradient id="stg1" cx="35%" cy="30%"><stop offset="0" stop-color="#E1BEE7"/><stop offset="100%" stop-color="#7E57C2"/></radialGradient></defs>
+        </svg>
+        <div class="step-title" id="h1t">Balance-toi</div>
+        <div class="step-txt" id="h1x">Accroché à la corde, prends de l'élan et vise le prochain pivot.</div>
+      </div>
+      <div class="step">
+        <span class="step-num"></span>
+        <svg class="step-ico" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="26" cy="12" r="6" fill="url(#stg2)"/>
+          <path d="M26 21 L26 40" stroke="#F4A926" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 5"/>
+          <path d="M20 34 L26 42 L32 34" stroke="#F4A926" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <defs><radialGradient id="stg2" cx="35%" cy="30%"><stop offset="0" stop-color="#FFF176"/><stop offset="100%" stop-color="#FF9800"/></radialGradient></defs>
+        </svg>
+        <div class="step-title" id="h2t">Lâche au bon moment</div>
+        <div class="step-txt" id="h2x">Relâche au parfait instant pour atterrir dans la zone dorée.</div>
+      </div>
+      <div class="step">
+        <span class="step-num"></span>
+        <svg class="step-ico" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="20" cy="30" r="3" fill="#8E63B4"/>
+          <circle cx="34" cy="20" r="6" fill="url(#stg3)"/>
+          <path d="M22.5 28.5 L31.5 22" stroke="#C9B4E0" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M42 12 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 z" fill="#F4A926"/>
+          <defs><radialGradient id="stg3" cx="35%" cy="30%"><stop offset="0" stop-color="#E1BEE7"/><stop offset="100%" stop-color="#7E57C2"/></radialGradient></defs>
+        </svg>
+        <div class="step-title" id="h3t">Enchaîne les parfaits</div>
+        <div class="step-txt" id="h3x">Accroche-toi, garde le combo et grimpe au classement mondial.</div>
+      </div>
+    </div>
+  </section>
+
   <footer class="reveal">
     <p><span id="tMade">Fait avec</span> <span class="heart">♥</span> <span id="tBy">par</span> <b>RougCorp</b> &nbsp;·&nbsp; <a href="privacy.html" id="tPriv">Confidentialité</a> &nbsp;·&nbsp; <a href="mailto:rougcorp@gmail.com" id="tSupp">Support</a></p>
   </footer>
@@ -258,6 +313,7 @@ var I18N = {
       ['Collection', "Gemmes, balles, traînées, fonds, emblèmes et bonus.", "Gagne des gemmes via les missions et les séries quotidiennes. Débloque 59 balles, des traînées et des fonds animés, plus des dizaines d'emblèmes et de bannières. Termine des missions de progression à paliers pour des récompenses supplémentaires."]
     ],
     st: ['cosmétiques à débloquer', 'modes de jeu', 'ligues compétitives', 'langues'],
+    ht: { title: "Trois gestes, c'est tout", sub: 'Facile à prendre en main, impossible à lâcher', steps: [['Balance-toi', "Accroché à la corde, prends de l'élan et vise le prochain pivot."], ['Lâche au bon moment', 'Relâche au parfait instant pour atterrir dans la zone dorée.'], ['Enchaîne les parfaits', 'Accroche-toi, garde le combo et grimpe au classement mondial.']] },
     cb: ['Un ami t’a défié', 'Bats son score de {N} pivots — télécharge et joue gratuitement !', 'Jouer gratuitement ↓', 'Bats {N} pivots — Swing & Snap']
   },
   en: {
@@ -276,6 +332,7 @@ var I18N = {
       ['Collection', "Gems, balls, trails, backgrounds, emblems and bonuses.", "Earn gems through missions and daily streaks. Unlock 59 balls, animated trails and backgrounds, plus dozens of emblems and banners. Complete tiered progression missions for extra rewards."]
     ],
     st: ['cosmetics to unlock', 'game modes', 'competitive leagues', 'languages'],
+    ht: { title: 'Three moves, that’s it', sub: 'Easy to pick up, impossible to put down', steps: [['Swing', 'Hang from the rope, build momentum and line up the next pivot.'], ['Snap at the right time', 'Release at the perfect moment to land in the golden zone.'], ['Chain your perfects', 'Snap on, keep the combo going and climb the global leaderboard.']] },
     cb: ['A friend challenged you', 'Beat their score of {N} pivots — download free and play!', 'Play free ↓', 'Beat {N} pivots — Swing & Snap']
   },
   es: {
@@ -294,6 +351,7 @@ var I18N = {
       ['Colección', "Gemas, bolas, estelas, fondos, emblemas y bonos.", "Gana gemas con las misiones y las rachas diarias. Desbloquea 59 bolas, estelas y fondos animados, además de decenas de emblemas y estandartes. Completa misiones de progreso por niveles para conseguir recompensas extra."]
     ],
     st: ['cosméticos por desbloquear', 'modos de juego', 'ligas competitivas', 'idiomas'],
+    ht: { title: 'Tres gestos, nada más', sub: 'Fácil de aprender, imposible de soltar', steps: [['Baláncea', 'Colgado de la cuerda, toma impulso y apunta al siguiente pivote.'], ['Suelta en el momento justo', 'Suéltate en el instante perfecto para caer en la zona dorada.'], ['Encadena los perfectos', 'Engánchate, mantén el combo y sube en la clasificación mundial.']] },
     cb: ['Un amigo te ha retado', 'Supera su puntuación de {N} pivotes — ¡descarga gratis y juega!', 'Jugar gratis ↓', 'Supera {N} pivotes — Swing & Snap']
   },
   de: {
@@ -312,6 +370,7 @@ var I18N = {
       ['Sammlung', "Edelsteine, Bälle, Spuren, Hintergründe, Embleme und Boni.", "Verdiene Edelsteine über Missionen und tägliche Serien. Schalte 59 Bälle, animierte Spuren und Hintergründe sowie Dutzende Embleme und Banner frei. Schließe gestufte Fortschrittsmissionen für zusätzliche Belohnungen ab."]
     ],
     st: ['Kosmetika zum Freischalten', 'Spielmodi', 'Wettkampfligen', 'Sprachen'],
+    ht: { title: 'Drei Bewegungen, mehr nicht', sub: 'Leicht zu lernen, unmöglich wegzulegen', steps: [['Schwinge', 'Häng am Seil, hol Schwung und ziele auf den nächsten Pivot.'], ['Lass im richtigen Moment los', 'Lös dich im perfekten Augenblick, um in der goldenen Zone zu landen.'], ['Verkette deine Perfekten', 'Häng dich ein, halt die Combo und steig in der Weltrangliste auf.']] },
     cb: ['Ein Freund fordert dich heraus', 'Schlag seinen Score von {N} Pivots — gratis herunterladen und spielen!', 'Kostenlos spielen ↓', 'Schlag {N} Pivots — Swing & Snap']
   },
   it: {
@@ -330,6 +389,7 @@ var I18N = {
       ['Collezione', "Gemme, palle, scie, sfondi, emblemi e bonus.", "Guadagna gemme tramite le missioni e le serie giornaliere. Sblocca 59 palle, scie e sfondi animati, oltre a decine di emblemi e stendardi. Completa missioni di progressione a livelli per ricompense extra."]
     ],
     st: ['cosmetici da sbloccare', 'modalità di gioco', 'leghe competitive', 'lingue'],
+    ht: { title: 'Tre gesti, tutto qui', sub: 'Facile da imparare, impossibile da mollare', steps: [['Dòndolati', 'Aggrappato alla corda, prendi slancio e mira al prossimo perno.'], ['Molla al momento giusto', "Lasciati andare nell'istante perfetto per atterrare nella zona dorata."], ['Concatena i perfetti', 'Aggànciati, tieni la combo e scala la classifica mondiale.']] },
     cb: ['Un amico ti ha sfidato', 'Batti il suo punteggio di {N} pivot — scarica gratis e gioca!', 'Gioca gratis ↓', 'Batti {N} pivot — Swing & Snap']
   },
   pt: {
@@ -348,6 +408,7 @@ var I18N = {
       ['Coleção', "Gemas, bolas, rastos, fundos, emblemas e bónus.", "Ganha gemas através das missões e das sequências diárias. Desbloqueia 59 bolas, rastos e fundos animados, além de dezenas de emblemas e estandartes. Completa missões de progressão por níveis para recompensas extra."]
     ],
     st: ['cosméticos para desbloquear', 'modos de jogo', 'ligas competitivas', 'idiomas'],
+    ht: { title: 'Três gestos, só isso', sub: 'Fácil de aprender, impossível de largar', steps: [['Balança', 'Preso à corda, ganha impulso e mira no próximo pivô.'], ['Solta na hora certa', 'Solta-te no momento perfeito para cair na zona dourada.'], ['Encadeia os perfeitos', 'Engata, mantém o combo e sobe na classificação mundial.']] },
     cb: ['Um amigo te desafiou', 'Supera a pontuação de {N} pivôs — baixa grátis e joga!', 'Jogar grátis ↓', 'Supera {N} pivôs — Swing & Snap']
   }
 };
@@ -368,6 +429,13 @@ var I18N = {
     set('f' + (i + 1) + 'x', d.f[i][2]);
   }
   if (d.st) for (var j = 0; j < d.st.length; j++) set('s' + (j + 1), d.st[j]);
+  if (d.ht) {
+    set('htTitle', d.ht.title); set('htSub', d.ht.sub);
+    for (var k = 0; k < d.ht.steps.length; k++) {
+      set('h' + (k + 1) + 't', d.ht.steps[k][0]);
+      set('h' + (k + 1) + 'x', d.ht.steps[k][1]);
+    }
+  }
 })();
 
 // ── Apparition au défilement + comptage des chiffres ───────────────────

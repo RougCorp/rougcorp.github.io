@@ -133,7 +133,76 @@
   .balls svg:nth-child(3){animation-delay:.7s}
   .balls svg:nth-child(4){animation-delay:1.05s}
   .balls svg:nth-child(5){animation-delay:1.4s}
-  @media (prefers-reduced-motion: reduce){ html.js .reveal{opacity:1;transform:none;transition:none} .balls svg,.app-icon{animation:none} }
+
+  /* ===== Extra animations (tasteful, GPU-friendly, reduced-motion safe) ===== */
+  /* Animated gradient sweeping through the "&" */
+  .logo .amp{background:linear-gradient(120deg,var(--accent),var(--gold),var(--accent2),var(--accent));background-size:280% 280%;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:ampShift 6s ease-in-out infinite}
+  @keyframes ampShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  /* Shared entrance keyframe — ends on opacity only so hover transforms stay free */
+  @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1}}
+
+  /* Staggered feature-card reveal (section handled by children, not the wrapper) */
+  html.js .features.reveal{opacity:1;transform:none;transition:none}
+  html.js .features .feat{opacity:0}
+  html.js .features.in .feat{animation:cardIn .55s cubic-bezier(.2,.7,.3,1) forwards}
+  .features.in .feat:nth-child(1){animation-delay:.05s}
+  .features.in .feat:nth-child(2){animation-delay:.11s}
+  .features.in .feat:nth-child(3){animation-delay:.17s}
+  .features.in .feat:nth-child(4){animation-delay:.23s}
+  .features.in .feat:nth-child(5){animation-delay:.29s}
+  .features.in .feat:nth-child(6){animation-delay:.35s}
+  .features.in .feat:nth-child(7){animation-delay:.41s}
+
+  /* Staggered how-to reveal */
+  html.js .howto.reveal{opacity:1;transform:none;transition:none}
+  html.js .howto.reveal>*{opacity:0}
+  html.js .howto.in>*{animation:cardIn .55s cubic-bezier(.2,.7,.3,1) forwards}
+  .howto.in>*:nth-child(1){animation-delay:.05s}
+  .howto.in>*:nth-child(2){animation-delay:.13s}
+  .howto.in>*:nth-child(3){animation-delay:.21s}
+
+  /* Stats appear in cascade (count-up still runs) */
+  html.js .stats.reveal{opacity:1;transform:none;transition:none}
+  html.js .stats .stat{opacity:0}
+  html.js .stats.in .stat{animation:cardIn .5s cubic-bezier(.2,.7,.3,1) forwards}
+  .stats.in .stat:nth-child(1){animation-delay:.05s}
+  .stats.in .stat:nth-child(2){animation-delay:.11s}
+  .stats.in .stat:nth-child(3){animation-delay:.17s}
+  .stats.in .stat:nth-child(4){animation-delay:.23s}
+
+  /* Light sweep + icon pop on card hover */
+  .feat{position:relative;overflow:hidden}
+  .feat::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;pointer-events:none;opacity:0;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg)}
+  .feat:hover::after{animation:shine .8s ease}
+  @keyframes shine{0%{left:-60%;opacity:.85}100%{left:135%;opacity:0}}
+  .feat-icon{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+  .feat:hover .feat-icon{transform:scale(1.16) rotate(-6deg)}
+
+  /* Store buttons: light sweep on hover */
+  .store{position:relative;overflow:hidden}
+  .store::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;pointer-events:none;opacity:0;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg)}
+  .store:hover::after{animation:shine .7s ease}
+
+  /* Chips: subtle lift on hover */
+  .chip{transition:transform .18s ease, box-shadow .18s ease}
+  .chip:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(60,40,90,.12)}
+
+  /* QR card: gentle breathing glow to draw the eye to the CTA */
+  .qr-card{animation:qrGlow 3.6s ease-in-out infinite}
+  @keyframes qrGlow{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 14px 44px rgba(142,99,180,.26)}}
+
+  @media (prefers-reduced-motion: reduce){
+    html.js .reveal{opacity:1;transform:none;transition:none}
+    .balls svg,.app-icon,.logo .amp,.qr-card{animation:none}
+    html.js .features .feat,html.js .howto.reveal>*,html.js .stats .stat{opacity:1;animation:none}
+    .logo .amp{-webkit-text-fill-color:var(--accent2);color:var(--accent2)}
+    .feat::after,.store::after{display:none}
+    .feat:hover .feat-icon{transform:none}
+  }
   /* ---- Footer ---- */
   footer{text-align:center;margin-top:44px;color:var(--muted);font-size:.82rem;font-weight:700}
   footer a{color:var(--accent);text-decoration:none}

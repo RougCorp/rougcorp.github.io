@@ -209,11 +209,29 @@
   footer a:hover{text-decoration:underline}
   .heart{color:#E5539A}
   @media(max-width:520px){ .store{min-width:0;width:100%} .stores{width:100%} }
+  /* ===== Premium interactions ===== */
+  #scrollbar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;border-radius:0 3px 3px 0;
+    background:linear-gradient(90deg,var(--accent),var(--gold));box-shadow:0 0 10px rgba(142,99,180,.5);transition:width .08s linear;pointer-events:none}
+  #floatCta{position:fixed;left:50%;bottom:20px;z-index:60;transform:translateX(-50%) translateY(28px);opacity:0;pointer-events:none;
+    display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+    font-weight:900;font-size:1rem;padding:13px 26px;border-radius:40px;text-decoration:none;white-space:nowrap;
+    box-shadow:0 12px 34px rgba(142,99,180,.45);transition:opacity .35s ease, transform .4s cubic-bezier(.2,.8,.3,1)}
+  #floatCta.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  #floatCta:hover{transform:translateX(-50%) translateY(-3px)}
+  #floatCta:active{transform:translateX(-50%) translateY(1px) scale(.97)}
+  .feat{will-change:transform}
+  @keyframes statPop{0%{transform:scale(1)}45%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .stat-num.done{animation:statPop .55s cubic-bezier(.34,1.56,.64,1)}
+  @media (prefers-reduced-motion: reduce){
+    #scrollbar{transition:none} #floatCta{transition:opacity .2s} .stat-num.done{animation:none}
+  }
 </style>
 </head>
 <body>
 
 <canvas id="bg"></canvas>
+<div id="scrollbar"></div>
+<a id="floatCta" href="#get">Jouer</a>
 
 <div class="wrap">
 
@@ -534,7 +552,7 @@ document.documentElement.className += ' js';
       if (!start) start = ts;
       var p = Math.min((ts - start) / dur, 1), e = 1 - Math.pow(1 - p, 3);
       el.textContent = Math.round(to * e) + suf;
-      if (p < 1) requestAnimationFrame(step);
+      if (p < 1) requestAnimationFrame(step); else el.classList.add('done');
     }
     requestAnimationFrame(step);
   }
@@ -581,6 +599,76 @@ function toggleFeat(el) {
   document.querySelectorAll('.feat.open').forEach(function (f) { f.classList.remove('open'); });
   if (!wasOpen) el.classList.add('open');
 }
+
+// ── Interactions premium : barre de scroll, CTA flottant, inclinaison 3D, parallaxe ──
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bar = document.getElementById('scrollbar');
+  var fcta = document.getElementById('floatCta');
+  var getEl = document.getElementById('get');
+  var footer = document.querySelector('footer');
+  try { var d = (I18N[LANG] || I18N.en); if (fcta && d.cb && d.cb[2]) fcta.textContent = d.cb[2]; } catch (e) {}
+  if (fcta) fcta.addEventListener('click', function (e) {
+    e.preventDefault(); if (getEl) getEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      var st = window.scrollY || document.documentElement.scrollTop || 0;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.width = (docH > 0 ? (st / docH * 100) : 0) + '%';
+      if (fcta) {
+        var getR = getEl ? getEl.getBoundingClientRect() : null;
+        var getVisible = getR ? (getR.bottom > 60 && getR.top < window.innerHeight - 40) : false;
+        var nearBottom = footer ? footer.getBoundingClientRect().top < window.innerHeight + 30 : false;
+        if (st > 520 && !getVisible && !nearBottom) fcta.classList.add('show');
+        else fcta.classList.remove('show');
+      }
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+
+  // Inclinaison 3D des cartes (pointeur précis + mouvement autorisé)
+  if (!reduce && window.matchMedia && matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('.feat').forEach(function (card) {
+      var raf = null;
+      card.addEventListener('pointermove', function (ev) {
+        var r = card.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - .5;
+        var py = (ev.clientY - r.top) / r.height - .5;
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          card.style.transform = 'perspective(760px) rotateX(' + (-py * 6).toFixed(2) + 'deg) rotateY(' + (px * 7).toFixed(2) + 'deg) translateY(-6px) scale(1.015)';
+          raf = null;
+        });
+      });
+      card.addEventListener('pointerleave', function () {
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        card.style.transform = '';
+      });
+    });
+  }
+
+  // Parallaxe douce sur la bande de balles décoratives
+  if (!reduce) {
+    var balls = document.querySelector('.balls');
+    if (balls) {
+      var pT = false;
+      window.addEventListener('scroll', function () {
+        if (pT) return; pT = true;
+        requestAnimationFrame(function () {
+          balls.style.transform = 'translateY(' + ((window.scrollY || 0) * -0.05).toFixed(1) + 'px)';
+          pT = false;
+        });
+      }, { passive: true });
+    }
+  }
+})();
 
 // ── Fond animé — une balle se balance de pivot en pivot (thème clair) ──
 (function () {

@@ -88,6 +88,8 @@
   .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;max-width:960px;margin:0 auto}
   @media(max-width:820px){ .features{grid-template-columns:repeat(2,1fr)} }
   @media(max-width:520px){ .features{grid-template-columns:1fr} }
+  /* centre la 7e carte orpheline quand la grille est en 3 colonnes */
+  @media(min-width:821px){ .features .feat:nth-child(7):last-child{grid-column:2} }
   .feat{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 18px 16px;text-align:left;cursor:pointer;user-select:none;-webkit-user-select:none;
     box-shadow:0 8px 26px rgba(60,40,90,.08);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
   .feat:hover{transform:translateY(-4px);border-color:rgba(142,99,180,.4);box-shadow:0 16px 40px rgba(60,40,90,.16)}
@@ -192,7 +194,7 @@
   </div>
 
   <section class="stats reveal">
-    <div class="stat"><div class="stat-num" data-to="250" data-suffix="+">0</div><div class="stat-label" id="s1">cosmétiques à débloquer</div></div>
+    <div class="stat"><div class="stat-num" data-to="290" data-suffix="+">0</div><div class="stat-label" id="s1">cosmétiques à débloquer</div></div>
     <div class="stat"><div class="stat-num" data-to="4">0</div><div class="stat-label" id="s2">modes de jeu</div></div>
     <div class="stat"><div class="stat-num" data-to="9">0</div><div class="stat-label" id="s3">ligues compétitives</div></div>
     <div class="stat"><div class="stat-num" data-to="20">0</div><div class="stat-label" id="s4">langues</div></div>
@@ -241,6 +243,13 @@
       <div class="feat-head"><div class="feat-title" id="f6t">Collection</div><span class="feat-arrow">›</span></div>
       <div class="feat-desc" id="f6d">Gemmes, balles, traînées, fonds, emblèmes et bonus.</div>
       <div class="feat-detail" id="f6x">Gagne des gemmes via les missions et les séries quotidiennes. Débloque 59 balles, des traînées et des fonds animés, plus des dizaines d'emblèmes et de bannières. Termine des missions de progression à paliers pour des récompenses supplémentaires.</div>
+    </div>
+
+    <div class="feat" onclick="toggleFeat(this)">
+      <span class="feat-icon">👥</span>
+      <div class="feat-head"><div class="feat-title" id="f7t">Amis &amp; ligues</div><span class="feat-arrow">›</span></div>
+      <div class="feat-desc" id="f7d">Ajoute des amis par code, défie-les et suis ton bilan.</div>
+      <div class="feat-detail" id="f7x">Ajoute tes amis par code, lance-leur un duel et prends ta revanche autant de fois que tu veux, tout en suivant votre bilan tête-à-tête. Grimpe les divisions de ligue, du Fer jusqu'à Radiant, chacune avec son propre univers de fond.</div>
     </div>
 
   </section>
@@ -310,7 +319,8 @@ var I18N = {
       ['Campagne infinie', "Des dizaines de niveaux, des étoiles et un défi quotidien.", "Grimpe du sol jusqu'à l'espace à travers des dizaines de niveaux répartis en mondes thématiques. Gagne jusqu'à 3 étoiles par niveau en atteignant les objectifs de score. Un nouveau défi quotidien renouvelle le plaisir chaque jour."],
       ['Classements', "Classements hebdomadaires, scores Blitz, records généraux.", "Quatre classements en direct : Classique hebdo, Blitz hebdo, Classique général et Blitz général. Atteins le Top 3 hebdomadaire pour décrocher la récompense de progression Podium."],
       ['Duels en ligne', "Affronte des joueurs du monde entier en duels en temps réel.", "Affronte en tête-à-tête des joueurs du monde entier dans des duels de score rapides, premier à 30 points. Grimpe la ligue compétitive du Fer jusqu'à Radiant, et défie tes amis directement pour voir qui domine."],
-      ['Collection', "Gemmes, balles, traînées, fonds, emblèmes et bonus.", "Gagne des gemmes via les missions et les séries quotidiennes. Débloque 59 balles, des traînées et des fonds animés, plus des dizaines d'emblèmes et de bannières. Termine des missions de progression à paliers pour des récompenses supplémentaires."]
+      ['Collection', "Gemmes, balles, traînées, fonds, emblèmes et bonus.", "Gagne des gemmes via les missions et les séries quotidiennes. Débloque 59 balles, des traînées et des fonds animés, plus des dizaines d'emblèmes et de bannières. Termine des missions de progression à paliers pour des récompenses supplémentaires."],
+      ['Amis & ligues', "Ajoute des amis par code, défie-les et suis ton bilan.", "Ajoute tes amis par code, lance-leur un duel et prends ta revanche autant de fois que tu veux, tout en suivant votre bilan tête-à-tête. Grimpe les divisions de ligue, du Fer jusqu'à Radiant, chacune avec son propre univers de fond."]
     ],
     st: ['cosmétiques à débloquer', 'modes de jeu', 'ligues compétitives', 'langues'],
     ht: { title: "Trois gestes, c'est tout", sub: 'Facile à prendre en main, impossible à lâcher', steps: [['Balance-toi', "Accroché à la corde, prends de l'élan et vise le prochain pivot."], ['Lâche au bon moment', 'Relâche au parfait instant pour atterrir dans la zone dorée.'], ['Enchaîne les parfaits', 'Accroche-toi, garde le combo et grimpe au classement mondial.']] },
@@ -329,7 +339,8 @@ var I18N = {
       ['Endless Campaign', "Dozens of levels, stars, and a daily challenge.", "Climb from the ground all the way to space across dozens of levels spread over themed worlds. Earn up to 3 stars per level by hitting the score targets. A fresh daily challenge keeps things new every day."],
       ['Leaderboards', "Weekly rankings, Blitz scores, all-time records.", "Four live leaderboards: Weekly Classic, Weekly Blitz, All-Time Classic and All-Time Blitz. Reach the weekly Top 3 to unlock the Podium progression reward."],
       ['Online Duels', "Take on players from around the world in real-time duels.", "Face players worldwide head-to-head in fast score duels, first to 30 points. Climb the competitive ladder from Iron to Radiant, and challenge your friends directly to see who's on top."],
-      ['Collection', "Gems, balls, trails, backgrounds, emblems and bonuses.", "Earn gems through missions and daily streaks. Unlock 59 balls, animated trails and backgrounds, plus dozens of emblems and banners. Complete tiered progression missions for extra rewards."]
+      ['Collection', "Gems, balls, trails, backgrounds, emblems and bonuses.", "Earn gems through missions and daily streaks. Unlock 59 balls, animated trails and backgrounds, plus dozens of emblems and banners. Complete tiered progression missions for extra rewards."],
+      ['Friends & leagues', "Add friends by code, challenge them and track your record.", "Add friends by code, send them a duel and rematch as many times as you like while following your head-to-head record. Climb the league divisions from Iron to Radiant, each with its own background universe."]
     ],
     st: ['cosmetics to unlock', 'game modes', 'competitive leagues', 'languages'],
     ht: { title: 'Three moves, that’s it', sub: 'Easy to pick up, impossible to put down', steps: [['Swing', 'Hang from the rope, build momentum and line up the next pivot.'], ['Snap at the right time', 'Release at the perfect moment to land in the golden zone.'], ['Chain your perfects', 'Snap on, keep the combo going and climb the global leaderboard.']] },
@@ -348,7 +359,8 @@ var I18N = {
       ['Campaña infinita', "Decenas de niveles, estrellas y un reto diario.", "Sube desde el suelo hasta el espacio a través de decenas de niveles repartidos en mundos temáticos. Consigue hasta 3 estrellas por nivel alcanzando los objetivos de puntuación. Un nuevo reto diario renueva la diversión cada día."],
       ['Clasificaciones', "Rankings semanales, puntuaciones Blitz, récords históricos.", "Cuatro clasificaciones en directo: Clásico semanal, Blitz semanal, Clásico histórico y Blitz histórico. Alcanza el Top 3 semanal para desbloquear la recompensa de progreso Podio."],
       ['Duelos en línea', "Enfréntate a jugadores de todo el mundo en duelos en tiempo real.", "Enfréntate cara a cara con jugadores de todo el mundo en duelos rápidos de puntuación, el primero en llegar a 30 puntos. Sube en la liga competitiva de Hierro a Radiante y reta a tus amigos directamente para ver quién manda."],
-      ['Colección', "Gemas, bolas, estelas, fondos, emblemas y bonos.", "Gana gemas con las misiones y las rachas diarias. Desbloquea 59 bolas, estelas y fondos animados, además de decenas de emblemas y estandartes. Completa misiones de progreso por niveles para conseguir recompensas extra."]
+      ['Colección', "Gemas, bolas, estelas, fondos, emblemas y bonos.", "Gana gemas con las misiones y las rachas diarias. Desbloquea 59 bolas, estelas y fondos animados, además de decenas de emblemas y estandartes. Completa misiones de progreso por niveles para conseguir recompensas extra."],
+      ['Amigos y ligas', "Añade amigos por código, rétalos y sigue tu balance.", "Añade amigos por código, mándales un duelo y repite la revancha las veces que quieras mientras sigues vuestro cara a cara. Sube las divisiones de liga, de Hierro a Radiante, cada una con su propio universo de fondo."]
     ],
     st: ['cosméticos por desbloquear', 'modos de juego', 'ligas competitivas', 'idiomas'],
     ht: { title: 'Tres gestos, nada más', sub: 'Fácil de aprender, imposible de soltar', steps: [['Baláncea', 'Colgado de la cuerda, toma impulso y apunta al siguiente pivote.'], ['Suelta en el momento justo', 'Suéltate en el instante perfecto para caer en la zona dorada.'], ['Encadena los perfectos', 'Engánchate, mantén el combo y sube en la clasificación mundial.']] },
@@ -367,7 +379,8 @@ var I18N = {
       ['Endlose Kampagne', "Dutzende Level, Sterne und eine tägliche Herausforderung.", "Steige vom Boden bis ins All über Dutzende Level in thematischen Welten auf. Verdiene bis zu 3 Sterne pro Level, indem du die Punkteziele erreichst. Eine neue tägliche Herausforderung bringt jeden Tag frischen Spaß."],
       ['Bestenlisten', "Wochenranglisten, Blitz-Scores, Allzeit-Rekorde.", "Vier Live-Ranglisten: Klassik wöchentlich, Blitz wöchentlich, Klassik Allzeit und Blitz Allzeit. Erreiche die wöchentlichen Top 3, um die Podium-Fortschrittsbelohnung freizuschalten."],
       ['Online-Duelle', "Tritt gegen Spieler aus aller Welt in Echtzeit-Duellen an.", "Tritt Kopf an Kopf gegen Spieler weltweit in schnellen Punkte-Duellen an, wer zuerst 30 Punkte hat. Steige in der Rangliste von Eisen bis Radiant auf und fordere deine Freunde direkt heraus, um zu sehen, wer oben steht."],
-      ['Sammlung', "Edelsteine, Bälle, Spuren, Hintergründe, Embleme und Boni.", "Verdiene Edelsteine über Missionen und tägliche Serien. Schalte 59 Bälle, animierte Spuren und Hintergründe sowie Dutzende Embleme und Banner frei. Schließe gestufte Fortschrittsmissionen für zusätzliche Belohnungen ab."]
+      ['Sammlung', "Edelsteine, Bälle, Spuren, Hintergründe, Embleme und Boni.", "Verdiene Edelsteine über Missionen und tägliche Serien. Schalte 59 Bälle, animierte Spuren und Hintergründe sowie Dutzende Embleme und Banner frei. Schließe gestufte Fortschrittsmissionen für zusätzliche Belohnungen ab."],
+      ['Freunde & Ligen', "Füge Freunde per Code hinzu, fordere sie heraus und verfolge deine Bilanz.", "Füge Freunde per Code hinzu, fordere sie zum Duell und so oft du willst zur Revanche, während du eure Kopf-an-Kopf-Bilanz verfolgst. Steige durch die Liga-Divisionen von Eisen bis Radiant, jede mit ihrem eigenen Hintergrund-Universum."]
     ],
     st: ['Kosmetika zum Freischalten', 'Spielmodi', 'Wettkampfligen', 'Sprachen'],
     ht: { title: 'Drei Bewegungen, mehr nicht', sub: 'Leicht zu lernen, unmöglich wegzulegen', steps: [['Schwinge', 'Häng am Seil, hol Schwung und ziele auf den nächsten Pivot.'], ['Lass im richtigen Moment los', 'Lös dich im perfekten Augenblick, um in der goldenen Zone zu landen.'], ['Verkette deine Perfekten', 'Häng dich ein, halt die Combo und steig in der Weltrangliste auf.']] },
@@ -386,7 +399,8 @@ var I18N = {
       ['Campagna infinita', "Decine di livelli, stelle e una sfida quotidiana.", "Sali da terra fino allo spazio attraverso decine di livelli distribuiti in mondi a tema. Guadagna fino a 3 stelle per livello raggiungendo gli obiettivi di punteggio. Una nuova sfida quotidiana rinnova il divertimento ogni giorno."],
       ['Classifiche', "Classifiche settimanali, punteggi Blitz, record assoluti.", "Quattro classifiche dal vivo: Classica settimanale, Blitz settimanale, Classica assoluta e Blitz assoluta. Raggiungi la Top 3 settimanale per sbloccare la ricompensa di progressione Podio."],
       ['Duelli online', "Sfida giocatori di tutto il mondo in duelli in tempo reale.", "Affronta testa a testa giocatori di tutto il mondo in rapidi duelli di punteggio, primo a 30 punti. Scala la lega competitiva da Ferro a Radiante e sfida i tuoi amici direttamente per vedere chi comanda."],
-      ['Collezione', "Gemme, palle, scie, sfondi, emblemi e bonus.", "Guadagna gemme tramite le missioni e le serie giornaliere. Sblocca 59 palle, scie e sfondi animati, oltre a decine di emblemi e stendardi. Completa missioni di progressione a livelli per ricompense extra."]
+      ['Collezione', "Gemme, palle, scie, sfondi, emblemi e bonus.", "Guadagna gemme tramite le missioni e le serie giornaliere. Sblocca 59 palle, scie e sfondi animati, oltre a decine di emblemi e stendardi. Completa missioni di progressione a livelli per ricompense extra."],
+      ['Amici e leghe', "Aggiungi amici con un codice, sfidali e segui il tuo bilancio.", "Aggiungi amici con un codice, mandagli un duello e ripeti la rivincita quante volte vuoi seguendo il vostro testa a testa. Scala le divisioni di lega, dal Ferro a Radiante, ognuna con il proprio universo di sfondo."]
     ],
     st: ['cosmetici da sbloccare', 'modalità di gioco', 'leghe competitive', 'lingue'],
     ht: { title: 'Tre gesti, tutto qui', sub: 'Facile da imparare, impossibile da mollare', steps: [['Dòndolati', 'Aggrappato alla corda, prendi slancio e mira al prossimo perno.'], ['Molla al momento giusto', "Lasciati andare nell'istante perfetto per atterrare nella zona dorata."], ['Concatena i perfetti', 'Aggànciati, tieni la combo e scala la classifica mondiale.']] },
@@ -405,7 +419,8 @@ var I18N = {
       ['Campanha infinita', "Dezenas de níveis, estrelas e um desafio diário.", "Sobe do chão até ao espaço através de dezenas de níveis distribuídos por mundos temáticos. Ganha até 3 estrelas por nível ao atingir os objetivos de pontuação. Um novo desafio diário renova a diversão todos os dias."],
       ['Classificações', "Rankings semanais, pontuações Blitz, recordes gerais.", "Quatro classificações ao vivo: Clássico semanal, Blitz semanal, Clássico geral e Blitz geral. Alcança o Top 3 semanal para desbloquear a recompensa de progressão Pódio."],
       ['Duelos online', "Enfrenta jogadores do mundo inteiro em duelos em tempo real.", "Enfrenta jogadores de todo o mundo frente a frente em duelos rápidos de pontuação, primeiro a 30 pontos. Sobe na liga competitiva de Ferro a Radiante e desafia os teus amigos diretamente para ver quem manda."],
-      ['Coleção', "Gemas, bolas, rastos, fundos, emblemas e bónus.", "Ganha gemas através das missões e das sequências diárias. Desbloqueia 59 bolas, rastos e fundos animados, além de dezenas de emblemas e estandartes. Completa missões de progressão por níveis para recompensas extra."]
+      ['Coleção', "Gemas, bolas, rastos, fundos, emblemas e bónus.", "Ganha gemas através das missões e das sequências diárias. Desbloqueia 59 bolas, rastos e fundos animados, além de dezenas de emblemas e estandartes. Completa missões de progressão por níveis para recompensas extra."],
+      ['Amigos e ligas', "Adiciona amigos por código, desafia-os e segue o teu registo.", "Adiciona amigos por código, envia-lhes um duelo e volta à desforra as vezes que quiseres enquanto segues o vosso frente a frente. Sobe as divisões de liga, do Ferro ao Radiante, cada uma com o seu próprio universo de fundo."]
     ],
     st: ['cosméticos para desbloquear', 'modos de jogo', 'ligas competitivas', 'idiomas'],
     ht: { title: 'Três gestos, só isso', sub: 'Fácil de aprender, impossível de largar', steps: [['Balança', 'Preso à corda, ganha impulso e mira no próximo pivô.'], ['Solta na hora certa', 'Solta-te no momento perfeito para cair na zona dourada.'], ['Encadeia os perfeitos', 'Engata, mantém o combo e sobe na classificação mundial.']] },

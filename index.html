@@ -841,14 +841,39 @@ function toggleFeat(el) {
   var first = makePivot(null); pivots.push(first);
   while (pivots[pivots.length-1].wx < W*1.4) pivots.push(makePivot(pivots[pivots.length-1]));
 
-  // État de la balle
+  // État de la balle — enchaînement scripté : balancier → lâcher tangent → arc de vol
+  var OMEGA = 1.9;                     // vitesse angulaire du balancier (rad/s)
   var cur = 0;                         // index du pivot courant (accroché)
-  var ball = { wx: pivots[0].wx + R, wy: pivots[0].wy, angle: 0, state: 'swing', vx: 0, vy: 0, swung: 0 };
-  var OMEGA = 2.0;                     // vitesse angulaire (rad/s)
+  var ball = { wx: pivots[0].wx + R, wy: pivots[0].wy, state: 'swing', theta: 0, thetaRel: 0, fly: null };
   var camX = ball.wx - W*0.36;
   var trail = [];
 
   function target(){ return pivots[cur+1]; }
+  function angTo(a, b){ return Math.atan2(b.wy - a.wy, b.wx - a.wx); }
+
+  // Balancier autour du pivot courant, avec un lâcher dont la tangente vise le pivot suivant
+  function setupSwing(){
+    var P = pivots[cur], Q = pivots[cur+1];
+    var rel = angTo(P, Q) - Math.PI/2;          // tangente CCW à cet angle => pointe pile vers Q
+    var d = rel - ball.theta; d = ((d % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+    if (d < 0.7) d += Math.PI*2;                // garantit un vrai arc, jamais un micro-balancier
+    ball.thetaRel = ball.theta + d;
+    ball.state = 'swing';
+  }
+
+  // Arc de vol (Bézier cubique) : quitte P tangentiellement, rejoint Q tangentiellement → zéro à-coup
+  function setupFly(){
+    var P = pivots[cur], Q = pivots[cur+1];
+    var br = { x: P.wx + Math.cos(ball.thetaRel)*R, y: P.wy + Math.sin(ball.thetaRel)*R };
+    var td = { x: -Math.sin(ball.thetaRel), y: Math.cos(ball.thetaRel) };   // tangente de départ (CCW)
+    var phi = Math.atan2(br.y - Q.wy, br.x - Q.wx);                          // angle d'arrivée autour de Q
+    var ba = { x: Q.wx + Math.cos(phi)*R, y: Q.wy + Math.sin(phi)*R };
+    var ta = { x: -Math.sin(phi), y: Math.cos(phi) };                        // tangente d'arrivée (CCW)
+    var L = Math.hypot(ba.x-br.x, ba.y-br.y), k = L*0.4;
+    ball.fly = { t: 0, dur: Math.max(0.4, Math.min(1.4, L/(OMEGA*R))), phi: phi,
+      p0: br, p3: ba, p1: { x: br.x + td.x*k, y: br.y + td.y*k }, p2: { x: ba.x - ta.x*k, y: ba.y - ta.y*k } };
+    ball.state = 'fly';
+  }
 
   function maintain(){
     // toujours garder des pivots devant
@@ -907,37 +932,23 @@ function toggleFeat(el) {
     ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.ellipse(X-3*SCALE,Y-4*SCALE,2.4*SCALE,1.5*SCALE,-.5,0,6.28); ctx.fill();
   }
 
+  function bez(a,b,c,d,u){ var m=1-u; return m*m*m*a + 3*m*m*u*b + 3*m*u*u*c + u*u*u*d; }
+
   function step(dt, now){
-    var p = pivots[cur], tp = target();
-    if (ball.state === 'swing'){
-      ball.angle += OMEGA*dt; ball.swung += dt;
-      ball.wx = p.wx + Math.cos(ball.angle)*R;
-      ball.wy = p.wy + Math.sin(ball.angle)*R;
-      // direction tangentielle actuelle
-      var tx = -Math.sin(ball.angle), ty = Math.cos(ball.angle);
-      var vdx = tp.wx-ball.wx, vdy = tp.wy-ball.wy, vd = Math.hypot(vdx,vdy)||1;
-      var aligned = (tx*vdx + ty*vdy)/vd;
-      if ((ball.swung > 0.5 && aligned > 0.985) || ball.swung > 3.2){
-        var spd = OMEGA*R*1.25;
-        ball.vx = tx*spd; ball.vy = ty*spd; ball.state = 'fly';
-      }
-    } else {
-      // vol : léger guidage vers le pivot cible (le grand rayon de snap du jeu pardonne)
-      var dx = tp.wx-ball.wx, dy = tp.wy-ball.wy, d = Math.hypot(dx,dy)||1;
-      ball.vx += (dx/d)*140*SCALE*dt; ball.vy += (dy/d)*140*SCALE*dt;
-      var sp = Math.hypot(ball.vx,ball.vy), cap = OMEGA*R*1.7;
-      if (sp > cap){ ball.vx *= cap/sp; ball.vy *= cap/sp; }
-      ball.wx += ball.vx*dt; ball.wy += ball.vy*dt;
-      if (d <= R + 4*SCALE){
-        cur++; var np = pivots[cur];
-        ball.wx = np.wx + Math.cos(Math.atan2(ball.wy-np.wy, ball.wx-np.wx))*R;
-        ball.angle = Math.atan2(ball.wy-np.wy, ball.wx-np.wx);
-        ball.state = 'swing'; ball.swung = 0;
-      }
-    }
-    // caméra suit la balle horizontalement
-    camX += ((ball.wx - W*0.36) - camX) * Math.min(1, dt*3.2);
     maintain();
+    if (ball.state === 'swing'){
+      ball.theta += OMEGA*dt;
+      if (ball.theta >= ball.thetaRel){ ball.theta = ball.thetaRel; setupFly(); }
+      else { var P = pivots[cur]; ball.wx = P.wx + Math.cos(ball.theta)*R; ball.wy = P.wy + Math.sin(ball.theta)*R; }
+    }
+    if (ball.state === 'fly'){
+      var f = ball.fly; f.t += dt; var u = Math.min(1, f.t/f.dur);
+      ball.wx = bez(f.p0.x, f.p1.x, f.p2.x, f.p3.x, u);
+      ball.wy = bez(f.p0.y, f.p1.y, f.p2.y, f.p3.y, u);
+      if (u >= 1){ cur++; ball.theta = f.phi; maintain(); setupSwing(); }
+    }
+    // caméra suit la balle horizontalement (doux)
+    camX += ((ball.wx - W*0.36) - camX) * Math.min(1, dt*3.5);
     // traînée
     trail.push({ x: ball.wx, y: ball.wy }); if (trail.length > 22) trail.shift();
   }
@@ -974,9 +985,10 @@ function toggleFeat(el) {
     step(dt, now); render(now);
     requestAnimationFrame(loop);
   }
+  setupSwing();   // amorce le premier balancier vers le pivot suivant
   if (reduce){
-    // image fixe : balle accrochée + pivot cible, sans animation
-    ball.angle = -0.6; ball.wx = pivots[0].wx + Math.cos(ball.angle)*R; ball.wy = pivots[0].wy + Math.sin(ball.angle)*R;
+    // image fixe : balle en plein balancier + pivot cible, sans animation
+    ball.theta = -0.6; ball.wx = pivots[0].wx + Math.cos(ball.theta)*R; ball.wy = pivots[0].wy + Math.sin(ball.theta)*R;
     render(performance.now());
   } else {
     requestAnimationFrame(loop);

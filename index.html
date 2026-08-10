@@ -237,10 +237,49 @@
     background:radial-gradient(circle, rgba(255,255,255,.5), rgba(255,255,255,0) 70%);animation:rippleGo .6s ease-out forwards}
   @keyframes rippleGo{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
   @media (prefers-reduced-motion: reduce){ .feat::before{display:none} .ripple{display:none;animation:none} }
+
+  /* ===== Round 4: profondeur aurore, entrée du héros, éclat de gemmes ===== */
+  /* Halos d'aurore lents en arrière-plan (derrière la balle du canvas) */
+  .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .aurora span{position:absolute;border-radius:50%;filter:blur(64px);will-change:transform}
+  .aurora .a1{width:46vmax;height:46vmax;left:-12vmax;top:-16vmax;opacity:.42;
+    background:radial-gradient(circle,rgba(142,99,180,.55),transparent 68%);animation:auroraA 24s ease-in-out infinite}
+  .aurora .a2{width:40vmax;height:40vmax;right:-14vmax;top:-6vmax;opacity:.34;
+    background:radial-gradient(circle,rgba(244,169,38,.5),transparent 68%);animation:auroraB 30s ease-in-out infinite}
+  .aurora .a3{width:38vmax;height:38vmax;left:20vmax;bottom:-20vmax;opacity:.3;
+    background:radial-gradient(circle,rgba(0,200,140,.42),transparent 68%);animation:auroraA 34s ease-in-out infinite reverse}
+  @keyframes auroraA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vmax,4vmax) scale(1.14)}}
+  @keyframes auroraB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vmax,5vmax) scale(1.1)}}
+  @media (prefers-color-scheme: dark){ .aurora .a1{opacity:.5} .aurora .a2{opacity:.4} .aurora .a3{opacity:.36} }
+
+  /* Entrée en cascade du héros au premier affichage */
+  @keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  html.js .app-icon{animation:heroIn .7s cubic-bezier(.2,.7,.3,1) both, float 3.4s ease-in-out .85s infinite}
+  html.js .logo{animation:heroIn .7s cubic-bezier(.2,.7,.3,1) .08s both}
+  html.js .tag{animation:heroIn .7s cubic-bezier(.2,.7,.3,1) .16s both}
+  html.js .sub{animation:heroIn .7s cubic-bezier(.2,.7,.3,1) .24s both}
+  html.js .cta-row{animation:heroIn .75s cubic-bezier(.2,.7,.3,1) .32s both}
+
+  /* Balles décoratives : petit spin au survol */
+  .balls svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1);cursor:default}
+  .balls svg:hover{transform:scale(1.2) rotate(10deg)}
+
+  /* Éclat de gemmes projetées (créées en JS au clic) */
+  .gem{position:fixed;top:0;left:0;width:11px;height:11px;border-radius:50%;z-index:70;pointer-events:none;
+    box-shadow:0 2px 8px rgba(60,40,90,.3);will-change:transform,opacity}
+
+  @media (prefers-reduced-motion: reduce){
+    .aurora span{animation:none}
+    html.js .app-icon,html.js .logo,html.js .tag,html.js .sub,html.js .cta-row{animation:none;opacity:1;transform:none}
+    html.js .app-icon{animation:none}
+    .balls svg:hover{transform:none}
+    .gem{display:none}
+  }
 </style>
 </head>
 <body>
 
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 <canvas id="bg"></canvas>
 <div id="scrollbar"></div>
 <a id="floatCta" href="#get">Jouer</a>
@@ -726,6 +765,45 @@ function toggleFeat(el) {
       });
     }, { passive: true });
   }
+})();
+
+// ── Éclat de gemmes projetées au clic sur un bouton d'action ─────────
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  var COLORS = ['#00C853', '#1976D2', '#FF9800', '#E53935', '#7E57C2', '#F4A926', '#8E63B4'];
+
+  function burst(x, y) {
+    var n = 16;
+    for (var i = 0; i < n; i++) {
+      var g = document.createElement('span');
+      g.className = 'gem';
+      g.style.background = COLORS[(Math.random() * COLORS.length) | 0];
+      document.body.appendChild(g);
+      var ang = (Math.PI * 2 * i) / n + Math.random() * 0.5;
+      var dist = 60 + Math.random() * 80;
+      var dx = Math.cos(ang) * dist;
+      var dy = Math.sin(ang) * dist - 40; // biais vers le haut
+      var sc = 0.5 + Math.random() * 0.9;
+      g.animate([
+        { transform: 'translate(' + x + 'px,' + y + 'px) scale(1)', opacity: 1 },
+        { transform: 'translate(' + (x + dx) + 'px,' + (y + dy) + 'px) scale(' + sc + ')', opacity: 0 }
+      ], { duration: 620 + Math.random() * 320, easing: 'cubic-bezier(.2,.7,.3,1)' })
+        .onfinish = function () { this.effect.target.remove(); };
+    }
+  }
+
+  function hook(el) {
+    if (!el) return;
+    el.addEventListener('click', function (e) {
+      var cx = e.clientX, cy = e.clientY;
+      if (!cx && !cy) { var r = el.getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; }
+      burst(cx, cy);
+    });
+  }
+  document.querySelectorAll('.store').forEach(hook);
+  hook(document.getElementById('floatCta'));
+  hook(document.getElementById('cbCta'));
 })();
 
 // ── Fond animé — une balle se balance de pivot en pivot (thème clair) ──

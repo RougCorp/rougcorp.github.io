@@ -225,6 +225,18 @@
   @media (prefers-reduced-motion: reduce){
     #scrollbar{transition:none} #floatCta{transition:opacity .2s} .stat-num.done{animation:none}
   }
+
+  /* Cursor spotlight on cards (pairs with 3D tilt) + click ripple */
+  .feat::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .3s ease;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(142,99,180,.16), transparent 60%)}
+  .feat:hover::before{opacity:1}
+  .feat>*{position:relative;z-index:1}
+  .feat::after{z-index:2}
+  #floatCta{overflow:hidden}
+  .ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);pointer-events:none;z-index:3;
+    background:radial-gradient(circle, rgba(255,255,255,.5), rgba(255,255,255,0) 70%);animation:rippleGo .6s ease-out forwards}
+  @keyframes rippleGo{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+  @media (prefers-reduced-motion: reduce){ .feat::before{display:none} .ripple{display:none;animation:none} }
 </style>
 </head>
 <body>
@@ -644,6 +656,8 @@ function toggleFeat(el) {
         if (raf) return;
         raf = requestAnimationFrame(function () {
           card.style.transform = 'perspective(760px) rotateX(' + (-py * 6).toFixed(2) + 'deg) rotateY(' + (px * 7).toFixed(2) + 'deg) translateY(-6px) scale(1.015)';
+          card.style.setProperty('--mx', ((px + .5) * 100).toFixed(1) + '%');
+          card.style.setProperty('--my', ((py + .5) * 100).toFixed(1) + '%');
           raf = null;
         });
       });
@@ -667,6 +681,50 @@ function toggleFeat(el) {
         });
       }, { passive: true });
     }
+  }
+})();
+
+// ── Bouton flottant magnétique + effet ripple au clic ────────────────
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia && matchMedia('(pointer:fine)').matches;
+
+  function addRipple(el) {
+    el.addEventListener('click', function (e) {
+      if (reduce) return;
+      var r = el.getBoundingClientRect();
+      var d = Math.max(r.width, r.height) * 2;
+      var sp = document.createElement('span');
+      sp.className = 'ripple';
+      sp.style.width = sp.style.height = d + 'px';
+      sp.style.left = (e.clientX - r.left) + 'px';
+      sp.style.top = (e.clientY - r.top) + 'px';
+      el.appendChild(sp);
+      setTimeout(function () { sp.remove(); }, 650);
+    });
+  }
+  document.querySelectorAll('.store').forEach(addRipple);
+  var fcta = document.getElementById('floatCta');
+  if (fcta) addRipple(fcta);
+
+  // Magnétisme : le CTA flottant est légèrement attiré par le curseur
+  if (!reduce && fine && fcta) {
+    var mraf = null;
+    window.addEventListener('mousemove', function (e) {
+      if (mraf) return;
+      mraf = requestAnimationFrame(function () {
+        mraf = null;
+        if (!fcta.classList.contains('show')) { fcta.style.transform = ''; return; }
+        var r = fcta.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2);
+        var dy = e.clientY - (r.top + r.height / 2);
+        if (Math.hypot(dx, dy) < 135) {
+          fcta.style.transform = 'translate(calc(-50% + ' + (dx * 0.28).toFixed(1) + 'px), ' + (dy * 0.28 - 3).toFixed(1) + 'px)';
+        } else {
+          fcta.style.transform = '';
+        }
+      });
+    }, { passive: true });
   }
 })();
 

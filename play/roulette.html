@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Prototype roulette — Swing & Snap</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body{font-family:'Nunito',sans-serif;background:radial-gradient(130% 100% at 50% 0%,#FBF7F0,#EFE6D8);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;overflow:hidden;color:#4A3728}
+.wrap{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:16px}
+h1{font-size:2.1rem;font-weight:900;letter-spacing:-1px;line-height:.95;text-align:center}
+h1 span{color:#8E63B4}
+.hint{font-size:.8rem;font-weight:800;color:#9A8574}
+/* carousel */
+.stage{position:relative;width:100%;height:340px;overflow:hidden}
+.track{position:absolute;top:0;left:50%;height:100%;display:flex;align-items:center;gap:20px;will-change:transform;transition:transform .42s cubic-bezier(.22,1,.3,1)}
+.card{position:relative;flex:0 0 268px;height:314px;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;
+  box-shadow:0 16px 34px rgba(60,40,25,.28),inset 0 2px 0 rgba(255,255,255,.35);transition:transform .42s cubic-bezier(.22,1,.3,1),opacity .42s,filter .42s;transform:scale(.82);opacity:.5;filter:saturate(.85)}
+.card.active{transform:scale(1);opacity:1;filter:none}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% -10%,rgba(255,255,255,.4),rgba(255,255,255,0) 55%);pointer-events:none}
+.medallion{width:118px;height:118px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4rem;
+  background:radial-gradient(circle at 38% 32%,rgba(255,255,255,.6),rgba(255,255,255,.12) 60%,rgba(0,0,0,.08));box-shadow:inset 0 3px 8px rgba(255,255,255,.5),inset 0 -6px 14px rgba(0,0,0,.18),0 6px 14px rgba(0,0,0,.16)}
+.c-name{font-size:1.6rem;font-weight:900;letter-spacing:.5px;text-shadow:0 2px 4px rgba(0,0,0,.22)}
+.c-desc{font-size:.86rem;font-weight:800;line-height:1.3;text-align:center;padding:0 26px;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.18)}
+.c-stat{font-size:.76rem;font-weight:900;letter-spacing:.4px;padding:6px 15px;border-radius:20px;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.4);backdrop-filter:blur(4px)}
+/* arrows */
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.92);
+  box-shadow:0 5px 14px rgba(60,40,25,.22);font-size:1.5rem;font-weight:900;color:#6A4C93;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
+.arrow:active{transform:translateY(-50%) scale(.9)}
+.arrow.l{left:6px}.arrow.r{right:6px}
+/* dots */
+.dots{display:flex;gap:9px}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(74,55,40,.2);transition:.3s;cursor:pointer}
+.dot.on{width:26px;border-radius:9px}
+/* play */
+.play{width:100%;max-width:340px;padding:18px;border:none;border-radius:20px;font-family:inherit;font-weight:900;font-size:1.25rem;letter-spacing:1px;color:#fff;cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,.22),inset 0 2px 0 rgba(255,255,255,.35);transition:transform .12s,background .42s,box-shadow .42s;display:flex;align-items:center;justify-content:center;gap:10px}
+.play:active{transform:scale(.97)}
+/* secondary */
+.sec{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;width:100%;max-width:340px}
+.sbtn{aspect-ratio:1;border:1.5px solid rgba(0,0,0,.06);border-radius:16px;background:#fff;box-shadow:0 2px 6px rgba(74,55,40,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-size:1.4rem}
+.sbtn span{font-size:.56rem;font-weight:900;color:#7D6555;letter-spacing:.2px}
+.sbtn:active{transform:scale(.94)}
+</style></head>
+<body>
+<div class="wrap">
+  <h1>SWING <span>&</span> SNAP</h1>
+  <div class="hint">← swipe ou flèches pour choisir un mode →</div>
+  <div class="stage" id="stage">
+    <div class="track" id="track"></div>
+    <button class="arrow l" id="prev" aria-label="Précédent">‹</button>
+    <button class="arrow r" id="next" aria-label="Suivant">›</button>
+  </div>
+  <div class="dots" id="dots"></div>
+  <button class="play" id="play">▶ <span id="playLabel">JOUER</span></button>
+  <div class="sec">
+    <div class="sbtn">🎨<span>COLLECTION</span></div>
+    <div class="sbtn">🎯<span>MISSIONS</span></div>
+    <div class="sbtn">🛍️<span>BOUTIQUE</span></div>
+    <div class="sbtn">🏆<span>CLASSEMENT</span></div>
+  </div>
+</div>
+<script>
+const MODES=[
+  {key:'classic', name:'Classique', emoji:'🎯', desc:'Enchaîne les pivots sans tomber. Bats ton record.', stat:'🏅 Record : 128', a1:'#A883D0', a2:'#7A4FA0'},
+  {key:'duel',    name:'Duels',     emoji:'⚔️', desc:'Affronte d\'autres joueurs en temps réel.',        stat:'🎖️ Ligue Argent', a1:'#8A8DF5', a2:'#4F46C4'},
+  {key:'campaign',name:'Campagne',  emoji:'🗺️', desc:'Traverse les mondes, niveau par niveau.',          stat:'🌍 Monde 1 · 4/12', a1:'#38C3AC', a2:'#0F8074'},
+  {key:'blitz',   name:'Blitz',     emoji:'⚡', desc:'Un maximum de points en 60 secondes chrono.',      stat:'⏱️ Record : 74',  a1:'#FF7A7A', a2:'#D62828'},
+];
+const CW=268,GAP=20,STEP=CW+GAP;
+const track=document.getElementById('track'),dots=document.getElementById('dots'),play=document.getElementById('play'),playLabel=document.getElementById('playLabel');
+let idx=0;
+MODES.forEach((m,i)=>{
+  const c=document.createElement('div');c.className='card';c.style.background='linear-gradient(160deg,'+m.a1+','+m.a2+')';
+  c.innerHTML='<div class="medallion">'+m.emoji+'</div><div class="c-name">'+m.name+'</div><div class="c-desc">'+m.desc+'</div><div class="c-stat">'+m.stat+'</div>';
+  c.addEventListener('click',()=>{ if(i===idx) go(); else set(i); });
+  track.appendChild(c);
+  const d=document.createElement('div');d.className='dot';d.addEventListener('click',()=>set(i));dots.appendChild(d);
+});
+const cards=[...track.children],dotEls=[...dots.children];
+function render(){
+  track.style.transform='translateX('+(-idx*STEP - CW/2)+'px)';
+  cards.forEach((c,i)=>c.classList.toggle('active',i===idx));
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===idx));
+  const m=MODES[idx];
+  play.style.background='linear-gradient(180deg,'+m.a1+','+m.a2+')';
+  play.style.boxShadow='0 10px 24px '+hexA(m.a2,.4)+',inset 0 2px 0 rgba(255,255,255,.35)';
+  playLabel.textContent='JOUER · '+m.name.toUpperCase();
+}
+function hexA(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
+function set(i){idx=(i+MODES.length)%MODES.length;render();}
+function go(){play.animate([{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}],{duration:180});
+  const t=document.createElement('div');t.textContent='▶ Lancement : '+MODES[idx].name;
+  t.style.cssText='position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#2b2b3a;color:#fff;padding:10px 20px;border-radius:22px;font-weight:900;font-size:.85rem;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.3)';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),1100);}
+document.getElementById('prev').addEventListener('click',()=>set(idx-1));
+document.getElementById('next').addEventListener('click',()=>set(idx+1));
+play.addEventListener('click',go);
+// swipe / drag
+const stage=document.getElementById('stage');let sx=0,dragging=false,moved=0;
+stage.addEventListener('pointerdown',e=>{dragging=true;sx=e.clientX;moved=0;track.style.transition='none';});
+window.addEventListener('pointermove',e=>{if(!dragging)return;moved=e.clientX-sx;track.style.transform='translateX('+(-idx*STEP-CW/2+moved)+'px)';});
+window.addEventListener('pointerup',()=>{if(!dragging)return;dragging=false;track.style.transition='';if(Math.abs(moved)>50)set(idx+(moved<0?1:-1));else render();});
+// keyboard
+window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')set(idx-1);if(e.key==='ArrowRight')set(idx+1);if(e.key==='Enter'||e.key===' ')go();});
+render();
+</script>
+</body></html>

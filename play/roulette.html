@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Prototype roulette — Swing & Snap</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Titan+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Bagel+Fat+One&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{height:100%}
 body{font-family:'Nunito',sans-serif;background:radial-gradient(130% 90% at 50% 0%,#FBF7F0,#EFE6D8);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));overflow:hidden;color:#4A3728}
@@ -16,9 +16,9 @@ body{font-family:'Nunito',sans-serif;background:radial-gradient(130% 90% at 50% 
 .gem-d{width:11px;height:11px;transform:rotate(45deg);border-radius:2px}
 /* wrap */
 .wrap{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:min(2vh,14px);margin-top:min(6vh,40px)}
-h1{font-family:'Titan One',sans-serif;font-weight:400;font-size:clamp(2.1rem,9.5vw,2.85rem);letter-spacing:.5px;line-height:1;text-align:center;color:#7A4FA0;
-  text-shadow:0 2px 0 #5E3B82,0 4px 0 #4E3070,0 6px 12px rgba(78,48,112,.45);animation:titleIn .62s cubic-bezier(.2,1.65,.4,1) both}
-h1 .amp{color:#EC5AA6;text-shadow:0 2px 0 #B23C82,0 4px 0 #93276A,0 6px 12px rgba(147,39,106,.45)}
+h1{font-family:'Bagel Fat One',cursive;font-weight:400;font-size:clamp(2rem,9vw,2.7rem);letter-spacing:0;line-height:1.02;text-align:center;color:#7A4FA0;
+  text-shadow:0 3px 0 rgba(94,59,130,.22),0 6px 12px rgba(78,48,112,.32);animation:titleIn .62s cubic-bezier(.2,1.65,.4,1) both}
+h1 .amp{color:#EC5AA6}
 @keyframes titleIn{0%{opacity:0;transform:scale(.5) translateY(-14px)}68%{transform:scale(1.09)}100%{opacity:1;transform:none}}
 /* bandeau pseudo */
 .namebar{display:flex;align-items:center;gap:9px;width:100%;max-width:400px;background:linear-gradient(135deg,#EDE7F6,#E3F2FD);border:1.5px solid rgba(126,87,194,.30);border-radius:16px;padding:10px 14px;cursor:pointer;box-shadow:0 3px 10px rgba(74,55,40,.06)}
@@ -71,7 +71,7 @@ h1 .amp{color:#EC5AA6;text-shadow:0 2px 0 #B23C82,0 4px 0 #93276A,0 6px 12px rgb
   <div class="chip"><span class="gem-d" style="background:#F4A926;box-shadow:0 0 6px rgba(244,169,38,.5)"></span>168<span class="gem-d" style="background:#29B6F6;box-shadow:0 0 6px rgba(41,182,246,.5);margin-left:4px"></span>46</div>
 </div>
 <div class="wrap">
-  <h1 id="title">SWING & SNAP</h1>
+  <h1 id="title">SWING <span class="amp">&amp;</span> SNAP</h1>
   <div class="namebar" id="namebar" role="button">
     <span class="ic" id="nameIc">🏷️</span>
     <span class="tx" id="nameTx">Choisis ton pseudo pour jouer en ligne</span>

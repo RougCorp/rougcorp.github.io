@@ -95,6 +95,22 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 .btn-secondary:active{transform:scale(.97);box-shadow:0 1px 4px rgba(74,55,40,.12)}
 .btn-outline{background:transparent;border:2px solid var(--accent2);color:var(--accent2)}
 .btn-danger{background:var(--danger);color:#fff;box-shadow:0 6px 20px rgba(239, 83, 80, 0.3)}
+/* ── Roulette de modes (menu) ── */
+.mc-stage{position:relative;width:100%;height:min(30vh,210px);overflow:hidden;touch-action:pan-y}
+.mc-track{position:absolute;top:0;left:50%;height:100%;display:flex;align-items:center;gap:16px;transition:transform .42s cubic-bezier(.22,1,.3,1)}
+.mc-card{position:relative;flex:0 0 210px;height:100%;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:min(1.3vh,8px);color:#fff;box-shadow:0 12px 24px rgba(60,40,25,.24),inset 0 2px 0 rgba(255,255,255,.32);transition:transform .42s cubic-bezier(.22,1,.3,1),opacity .42s,filter .42s;transform:scale(.83);opacity:.5;filter:saturate(.85);cursor:pointer}
+.mc-card.on{transform:scale(1);opacity:1;filter:none}
+.mc-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% -10%,rgba(255,255,255,.4),rgba(255,255,255,0) 55%);pointer-events:none}
+.mc-med{width:min(9vh,70px);height:min(9vh,70px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:min(4.8vh,2.3rem);background:radial-gradient(circle at 38% 32%,rgba(255,255,255,.6),rgba(255,255,255,.12) 60%,rgba(0,0,0,.08));box-shadow:inset 0 3px 8px rgba(255,255,255,.5),inset 0 -6px 14px rgba(0,0,0,.18)}
+.mc-name{font-size:1.28rem;font-weight:900;letter-spacing:.3px;text-shadow:0 2px 4px rgba(0,0,0,.22)}
+.mc-stat{font-size:.68rem;font-weight:900;letter-spacing:.3px;padding:4px 11px;border-radius:16px;background:rgba(0,0,0,.18);border:1.5px solid rgba(255,255,255,.32)}
+.mc-stat:empty{display:none}
+.mc-arrow{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.94);box-shadow:0 4px 12px rgba(60,40,25,.2);font-size:1.3rem;font-weight:900;color:#6A4C93;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;padding-bottom:3px;font-family:'Nunito',sans-serif}
+.mc-arrow:active{transform:translateY(-50%) scale(.9)}
+.mc-arrow.l{left:2px}.mc-arrow.r{right:2px}
+.mc-dots{display:flex;gap:7px;justify-content:center}
+.mc-dot{width:7px;height:7px;border-radius:50%;background:rgba(74,55,40,.2);transition:.3s;cursor:pointer}
+.mc-dot.on{width:22px;border-radius:7px;background:var(--accent)}
 .record-text{font-size:.9rem;color:var(--text-light)}.record-text b{color:var(--text);font-size:1.1rem}
 .go-score{font-family:'Bagel Fat One',cursive;font-weight:400;font-size:4.3rem;color:var(--text);line-height:1}
 .go-label{font-size:.8rem;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;font-weight:700}
@@ -333,16 +349,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 <div class="record-text"><span data-i18n="best_score">Meilleur score</span> : <b id="menuHighScore">0</b></div>
 <div id="streakBadge" style="display:none;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#FF6D00,#FF8F00);color:#fff;border-radius:20px;padding:6px 16px;font-weight:900;font-size:.9rem;letter-spacing:.5px;cursor:pointer;margin-bottom:2px" onclick="showStreakPopup(DataManager.data.streak,DataManager.data._streakGemReward,false)"><span style="font-size:1.1rem">🔥</span><span id="streakCount">1</span> <span id="streakBadgeText">day(s) in a row!</span></div>
 <div id="menuNudge" style="display:none;align-items:center;gap:9px;width:100%;background:linear-gradient(135deg,#EDE7F6,#E3F2FD);border:1.5px solid rgba(126,87,194,.28);border-radius:16px;padding:9px 13px;margin-bottom:2px;cursor:pointer;box-sizing:border-box;animation:slideDown .4s ease"><span id="menuNudgeIcon" style="font-size:1.35rem">🏷️</span><span id="menuNudgeText" style="flex:1;text-align:left;font-size:.8rem;font-weight:800;color:var(--text);line-height:1.25"></span><span style="font-size:1.1rem;color:var(--text-light);font-weight:900">›</span></div>
+<div id="mcHidden" style="display:none">
 <button class="btn btn-primary" id="btnPlay" data-i18n="play">JOUER</button>
+<button class="btn" id="btnDuel"><span data-i18n="duel_menu_btn">DUELS</span></button>
+<button class="btn" id="btnCampaign"><span data-i18n="campaign">CAMPAGNE</span><span id="btnCampWorld"></span></button>
+<button class="btn" id="btnTimeAttack">BLITZ <span id="taMenuBest"></span></button>
+</div>
+<div class="mc-stage" id="mcStage"><div class="mc-track" id="mcTrack"></div><button class="mc-arrow l" id="mcPrev" aria-label="Précédent">‹</button><button class="mc-arrow r" id="mcNext" aria-label="Suivant">›</button></div>
+<div class="mc-dots" id="mcDots"></div>
+<button class="btn btn-primary" id="mcPlay">▶ <span id="mcPlayLabel">JOUER</span></button>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%">
-<button class="btn btn-secondary" id="btnDuel" style="color:#6A4C93;padding:14px 8px">⚔️ <span data-i18n="duel_menu_btn">DUELS</span></button>
-<button class="btn btn-secondary" id="btnCampaign" style="color:#8E63B4;padding:14px 8px"><span data-i18n="campaign">CAMPAGNE</span><span id="btnCampWorld" style="display:block;font-size:.56rem;font-weight:800;letter-spacing:.3px;margin-top:2px;opacity:.92"></span></button>
-<button class="btn btn-secondary" id="btnTimeAttack" style="color:#E53935;padding:14px 8px">⚡ BLITZ <span id="taMenuBest" style="font-size:.75em;opacity:.7"></span></button>
-<button class="btn btn-secondary" id="btnLeaderboard" style="color:#C8860B;padding:14px 8px">🏆 <span data-i18n="leaderboard_btn">LEADERBOARD</span></button>
 <button class="btn btn-secondary" id="btnShop" style="color:#0F8074;padding:14px 8px">🎨 <span data-i18n="shop">COLLECTION</span></button>
 <button class="btn btn-secondary" id="btnMissions" style="position:relative;overflow:visible;color:#E07B00;padding:14px 8px">🎯 <span data-i18n="missions">MISSIONS</span><span id="missionDot" class="mission-dot"></span></button>
+<button class="btn btn-secondary" id="btnLeaderboard" style="color:#C8860B;padding:14px 8px">🏆 <span data-i18n="leaderboard_btn">LEADERBOARD</span></button>
+<button class="btn btn-secondary" id="btnIAP" style="position:relative;overflow:visible;color:#C2185B;padding:14px 8px">🛍️ <span data-i18n="packs">BOUTIQUE</span><span id="rouletteDot" class="mission-dot" style="background:#FF9800;box-shadow:0 0 8px rgba(255,152,0,.75)">🎰</span></button>
 </div>
-<button class="btn btn-secondary" id="btnIAP" style="position:relative;overflow:visible;color:#C2185B">🛍️ <span data-i18n="packs">BOUTIQUE</span><span id="rouletteDot" class="mission-dot" style="background:#FF9800;box-shadow:0 0 8px rgba(255,152,0,.75)">🎰</span></button>
 <div style="display:flex;gap:8px;width:100%">
 <button class="btn btn-secondary" id="btnStats" style="flex:1;color:#2B7CB3" data-i18n="stats">📊 STATS</button>
 <button class="btn btn-outline" id="btnSettings" style="flex:1" data-i18n="settings">⚙️ OPTIONS</button>
@@ -7787,6 +7808,72 @@ const LiveDuel=(function(){
     <button id="modeTutoBtn" onclick="ModeTutorial.dismiss()" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:18px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;cursor:pointer;letter-spacing:.5px">JOUER !</button>
   </div>
 </div>
+<script>
+/* ── Roulette de modes : couche visuelle qui déclenche les vrais boutons cachés ── */
+(function(){
+  var stage=document.getElementById('mcStage'); if(!stage) return;
+  var track=document.getElementById('mcTrack'), dots=document.getElementById('mcDots');
+  var play=document.getElementById('mcPlay'), playLabel=document.getElementById('mcPlayLabel');
+  var MODES=[
+    {id:'btnPlay',       emoji:'🎯', a1:'#A883D0', a2:'#7A4FA0'},
+    {id:'btnDuel',       emoji:'⚔️', a1:'#8A8DF5', a2:'#4F46C4'},
+    {id:'btnCampaign',   emoji:'🗺️', a1:'#38C3AC', a2:'#0F8074'},
+    {id:'btnTimeAttack', emoji:'⚡', a1:'#FF7A7A', a2:'#D62828'}
+  ];
+  var CW=210, GAP=16, STEP=CW+GAP, idx=0;
+  function nameOf(m){
+    var b=document.getElementById(m.id); if(!b) return '';
+    if(m.id==='btnTimeAttack') return 'BLITZ';
+    var s=b.querySelector('[data-i18n]'); return (s?s.textContent:b.textContent).trim();
+  }
+  function statOf(m){
+    if(m.id==='btnPlay'){var h=document.getElementById('menuHighScore');var v=h?h.textContent.trim():'';return v&&v!=='0'?'🏅 '+v:'';}
+    if(m.id==='btnCampaign'){var e=document.getElementById('btnCampWorld');return e?e.textContent.trim():'';}
+    if(m.id==='btnTimeAttack'){var t=document.getElementById('taMenuBest');return t?t.textContent.trim():'';}
+    return '';
+  }
+  MODES.forEach(function(m,i){
+    var c=document.createElement('div'); c.className='mc-card'; c.style.background='linear-gradient(160deg,'+m.a1+','+m.a2+')';
+    c.innerHTML='<div class="mc-med">'+m.emoji+'</div><div class="mc-name"></div><div class="mc-stat"></div>';
+    c.addEventListener('click',function(){ if(i===idx) launch(); else set(i); });
+    track.appendChild(c);
+    var d=document.createElement('div'); d.className='mc-dot'; d.addEventListener('click',function(){set(i);}); dots.appendChild(d);
+  });
+  var cards=[].slice.call(track.children), dotEls=[].slice.call(dots.children);
+  function hexA(h,a){var n=parseInt(h.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
+  function refresh(){
+    cards.forEach(function(c,i){
+      c.querySelector('.mc-name').textContent=nameOf(MODES[i]);
+      c.querySelector('.mc-stat').textContent=statOf(MODES[i]);
+    });
+    var m=MODES[idx];
+    playLabel.textContent=nameOf(m);
+    play.style.background='linear-gradient(180deg,'+m.a1+','+m.a2+')';
+    play.style.boxShadow='0 8px 20px '+hexA(m.a2,.42)+',inset 0 1px 0 rgba(255,255,255,.28)';
+  }
+  function render(){
+    track.style.transform='translateX('+(-idx*STEP - CW/2)+'px)';
+    cards.forEach(function(c,i){c.classList.toggle('on',i===idx);});
+    dotEls.forEach(function(d,i){d.classList.toggle('on',i===idx);});
+    refresh();
+  }
+  function set(i){ idx=(i+MODES.length)%MODES.length; render(); }
+  function launch(){ var b=document.getElementById(MODES[idx].id); if(b) b.click(); }
+  document.getElementById('mcPrev').addEventListener('click',function(){set(idx-1);});
+  document.getElementById('mcNext').addEventListener('click',function(){set(idx+1);});
+  play.addEventListener('click',launch);
+  // swipe horizontal (le scroll vertical reste au menu)
+  var sx=0,sy=0,drag=false,moved=0,axis=0;
+  stage.addEventListener('pointerdown',function(e){drag=true;sx=e.clientX;sy=e.clientY;moved=0;axis=0;track.style.transition='none';});
+  window.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-sx,dy=e.clientY-sy;if(!axis&&(Math.abs(dx)>7||Math.abs(dy)>7))axis=Math.abs(dx)>Math.abs(dy)?'h':'v';if(axis!=='h')return;moved=dx;track.style.transform='translateX('+(-idx*STEP-CW/2+moved)+'px)';});
+  function end(){if(!drag)return;drag=false;track.style.transition='';if(axis==='h'&&Math.abs(moved)>46)set(idx+(moved<0?1:-1));else render();}
+  window.addEventListener('pointerup',end); window.addEventListener('pointercancel',end);
+  // rafraîchit quand le menu (ré)apparaît + à l'ouverture
+  var menu=document.getElementById('menuScreen');
+  if(menu&&window.MutationObserver){ new MutationObserver(function(){ if(menu.classList.contains('active')) setTimeout(refresh,60); }).observe(menu,{attributes:true,attributeFilter:['class']}); }
+  render(); setTimeout(refresh,400); setTimeout(refresh,1200);
+})();
+</script>
 <script>
 // ── Build web : contrôle clavier (Espace / Entrée = lâcher la corde) ──
 // Le clic souris est déjà géré par le jeu ; on relaie le clavier vers le canvas.

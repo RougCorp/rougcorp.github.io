@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Choix typo — Swing & Snap</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@800&family=Bagel+Fat+One&family=DM+Serif+Display:ital@0;1&family=Titan+One&family=Nunito:wght@800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:radial-gradient(130% 90% at 50% 0%,#FBF7F0,#EFE6D8);min-height:100vh;padding:30px 20px 60px;color:#4A3728}
+.row{max-width:760px;margin:0 auto 30px;background:#fff;border-radius:20px;padding:26px 22px 30px;box-shadow:0 6px 18px rgba(74,55,40,.08);text-align:center}
+.lab{font-size:.8rem;font-weight:900;letter-spacing:.5px;color:#9A8574;text-transform:uppercase;margin-bottom:16px}
+.lab b{color:#7A4FA0}
+.t{line-height:1.05}
+/* A — Bulles 2D (HELLO) */
+.tA{font-family:'Luckiest Guy',cursive;font-size:3rem;color:#EC5AA6;letter-spacing:1px;
+  text-shadow:2px 2px 0 #C13B84,4px 4px 0 #C13B84,6px 6px 0 #93276A,8px 11px 14px rgba(0,0,0,.22)}
+.tA .spk{color:#8E63B4;font-size:1.4rem;vertical-align:top;text-shadow:none}
+/* B — Multicolore déstructuré (RIVA) */
+.tB{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:3.1rem;letter-spacing:1px}
+.tB i{display:inline-block;font-style:normal}
+/* C — Groovy (sparkz) */
+.tC{font-family:'Bagel Fat One',cursive;font-size:3rem;color:#7A4FA0;letter-spacing:0;text-shadow:0 3px 0 rgba(94,59,130,.25)}
+.tC .amp{color:#EC5AA6}
+/* D — Élégant entrelacé (HUSH) */
+.tD{font-family:'DM Serif Display',serif;font-size:3.2rem;color:#3A2A20;letter-spacing:1px}
+.tD .amp{font-style:italic;color:#8E63B4}
+/* E — Bold rond + relief (Titan One, l'actuel) */
+.tE{font-family:'Titan One',sans-serif;font-size:2.9rem;color:#7A4FA0;letter-spacing:.5px;text-shadow:0 2px 0 #5E3B82,0 4px 0 #4E3070,0 6px 12px rgba(78,48,112,.45)}
+.tE .amp{color:#EC5AA6;text-shadow:0 2px 0 #B23C82,0 4px 0 #93276A}
+/* F — Groovy coloré (sparkz + RIVA) */
+.tF{font-family:'Bagel Fat One',cursive;font-size:3rem;letter-spacing:0}
+.tF i{display:inline-block;font-style:normal}
+</style></head>
+<body>
+<div class="row"><div class="lab">A — Bulles 2D + étincelles <b>(style « HELLO »)</b></div><div class="t tA"><span class="spk">✦</span> SWING &amp; SNAP <span class="spk">✦</span></div></div>
+<div class="row"><div class="lab">B — Multicolore déstructuré <b>(style « RIVA »)</b></div><div class="t tB" id="tB"></div></div>
+<div class="row"><div class="lab">C — Groovy funky <b>(style « sparkz »)</b></div><div class="t tC">SWING <span class="amp">&amp;</span> SNAP</div></div>
+<div class="row"><div class="lab">D — Élégant serif <b>(style « HUSH »)</b></div><div class="t tD">Swing <span class="amp">&amp;</span> Snap</div></div>
+<div class="row"><div class="lab">E — Bold arrondi 3D <b>(l'actuel, Titan One)</b></div><div class="t tE">SWING <span class="amp">&amp;</span> SNAP</div></div>
+<div class="row"><div class="lab">F — Groovy MULTICOLORE <b>(sparkz + RIVA mélangés)</b></div><div class="t tF" id="tF"></div></div>
+<script>
+const cols=['#F4511E','#1E88E5','#43A047','#EC407A','#8E24AA','#00ACC1','#F9A825','#D81B60','#3949AB','#00897B'];
+function build(id,rot){const el=document.getElementById(id);const s='SWING & SNAP';let n=0;[...s].forEach(ch=>{if(ch===' '){el.appendChild(document.createTextNode(' '));return;}const i=document.createElement('i');i.textContent=ch;i.style.color=cols[n%cols.length];if(rot)i.style.transform='rotate('+((n%2?1:-1)*4)+'deg)';n++;el.appendChild(i);});}
+build('tB',true);build('tF',false);
+</script>
+</body></html>

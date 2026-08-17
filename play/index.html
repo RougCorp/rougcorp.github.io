@@ -2418,30 +2418,29 @@ constructor(x,y,isTarget=false){this.pos=new Vector(x,y);this.isTarget=isTarget;
 draw(ctx){this.pulse+=.035;this.sc=Math.min(1,this.sc+.06);let e=1-Math.pow(1-this.sc,3);ctx.save();ctx.translate(this.pos.x,this.pos.y);ctx.scale(e,e);
 if(this.isTarget){
 const r=CONFIG.snapRadius+Math.sin(this.pulse)*3;
-// ZONE autour (snap) : disque vert translucide, plus dense au centre → une AIRE bien visible
-// (une aire de couleur ressort sur n'importe quel fond, contrairement à un simple trait fin)
-const zg=ctx.createRadialGradient(0,0,r*0.1,0,0,r);
-zg.addColorStop(0,'rgba(124,179,66,0.34)');zg.addColorStop(0.8,'rgba(124,179,66,0.20)');zg.addColorStop(1,'rgba(124,179,66,0.12)');
+// ZONE autour (snap) : disque vert vif, lumineux au centre → une AIRE qui ressort sur tout fond
+const zg=ctx.createRadialGradient(0,0,r*0.05,0,0,r);
+zg.addColorStop(0,'rgba(150,205,80,0.32)');zg.addColorStop(0.72,'rgba(124,179,66,0.18)');zg.addColorStop(1,'rgba(124,179,66,0.09)');
 ctx.fillStyle=zg;ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.fill();
-// ZONE PERFECT (cône doré) : wedge lumineux, dessiné SOUS l'anneau
+// ZONE PERFECT (cône doré) : wedge lumineux dessiné SOUS l'anneau
 const halfCone=Math.asin(Math.min(0.98,effPerfectRadius()/CONFIG.snapRadius));
 ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.closePath();
-const cg=ctx.createRadialGradient(0,0,0,0,0,r);cg.addColorStop(0,'rgba(255,214,90,0.34)');cg.addColorStop(1,'rgba(255,165,0,0.62)');
+const cg=ctx.createRadialGradient(0,0,0,0,0,r);cg.addColorStop(0,'rgba(255,224,120,0.40)');cg.addColorStop(1,'rgba(255,168,0,0.66)');
 ctx.fillStyle=cg;ctx.fill();
-// UN SEUL anneau net entoure la zone (vert profond) + les 2 bords du cône, même trait
-// → lisible sur fond clair (savane) comme sombre, sans empilement de liserés
-ctx.lineCap='round';ctx.lineWidth=3.5;ctx.strokeStyle='#3F6B18';
+// UN SEUL anneau net (vert vif) — aucun 2e liseré ni halo → jamais de « double anneau »
+ctx.lineCap='round';ctx.lineWidth=3.4;ctx.strokeStyle='#5FA02A';
 ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
-ctx.lineWidth=2.2;ctx.strokeStyle='#C98A00';
+// Bords du cône (un seul liseré doré, même logique de trait unique)
+ctx.lineCap='round';ctx.lineWidth=2.2;ctx.strokeStyle='#E39A00';
 const _e1x=Math.cos(this.coneAngle-halfCone)*r,_e1y=Math.sin(this.coneAngle-halfCone)*r,_e2x=Math.cos(this.coneAngle+halfCone)*r,_e2y=Math.sin(this.coneAngle+halfCone)*r;
 ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(_e1x,_e1y);ctx.moveTo(0,0);ctx.lineTo(_e2x,_e2y);ctx.stroke();
 ctx.beginPath();ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.stroke();
 // PIVOT central — bille verte brillante (le point à viser)
 ctx.shadowBlur=0;
-ctx.beginPath();ctx.arc(0,0,14,0,6.28);ctx.fillStyle='rgba(255,255,255,.95)';ctx.fill();
-const tg=ctx.createRadialGradient(-3,-4,0.5,0,0,10.5);tg.addColorStop(0,'#EAFBC8');tg.addColorStop(.45,'#8BC34A');tg.addColorStop(1,'#356312');ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fillStyle=tg;ctx.fill();
-ctx.lineWidth=1.8;ctx.strokeStyle='rgba(20,50,10,.9)';ctx.stroke();
-ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.ellipse(-3,-4,2.4,1.5,-.5,0,6.28);ctx.fill();
+ctx.beginPath();ctx.arc(0,0,13.5,0,6.28);ctx.fillStyle='rgba(255,255,255,.96)';ctx.fill();
+const tg=ctx.createRadialGradient(-2.8,-3.8,0.5,0,0,10);tg.addColorStop(0,'#F0FCD0');tg.addColorStop(.42,'#8BC34A');tg.addColorStop(1,'#33620F');ctx.beginPath();ctx.arc(0,0,9.5,0,6.28);ctx.fillStyle=tg;ctx.fill();
+ctx.lineWidth=1.7;ctx.strokeStyle='rgba(20,50,10,.9)';ctx.stroke();
+ctx.fillStyle='rgba(255,255,255,.92)';ctx.beginPath();ctx.ellipse(-2.8,-3.8,2.3,1.4,-.5,0,6.28);ctx.fill();
 }else{ctx.shadowBlur=0;ctx.beginPath();ctx.arc(0,0,12,0,6.28);ctx.fillStyle='rgba(255,255,255,.5)';ctx.fill();const pg=ctx.createRadialGradient(-3,-3.5,0.5,0,0,10.5);pg.addColorStop(0,'#FCF8F4');pg.addColorStop(.55,CONFIG.colors.pivot);pg.addColorStop(1,'#B9AB9F');ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fillStyle=pg;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(40,30,20,.45)';ctx.stroke();ctx.fillStyle='rgba(255,255,255,.7)';ctx.beginPath();ctx.arc(-3,-3.6,2.1,0,6.28);ctx.fill();}ctx.restore();}
 }
 
@@ -3898,9 +3897,8 @@ if(this.fx.length>140)this.fx.splice(0,this.fx.length-140);
 // « ping » discret quand une nouvelle cible apparaît (anneau vert qui s'ouvre)
 spawnTargetFx(x,y){
 if(!this.fx)this.fx=[];
-if(DataManager.data.reduceFx)return;
-this.fx.push({k:0,x,y,r:CONFIG.snapRadius*0.28,rMax:CONFIG.snapRadius*1.15,life:22,max:22,col:'124,179,66',lw:2.2});
-if(this.fx.length>140)this.fx.splice(0,this.fx.length-140);
+// Anneau d'apparition retiré : la cible a déjà son animation de scale-in → on évite tout
+// effet de « double anneau » concentrique autour de la cible.
 },
 // « Réduire les effets » : rend le fond une seule fois dans un canvas hors-écran et le
 // réutilise figé à chaque frame → plus AUCUNE pulsation/scintillement de fond (utile pour

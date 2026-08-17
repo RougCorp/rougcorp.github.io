@@ -766,9 +766,6 @@ L.en.toast_pstreak_locked='🎯 Chain {0} perfects in a row to unlock';L.fr.toas
 L.en.unlock_pstreak='Chain {0} perfects in a row';L.fr.unlock_pstreak='Enchaîne {0} perfects d\'affilée';L.es&&(L.es.unlock_pstreak='Encadena {0} perfectos seguidos');L.de&&(L.de.unlock_pstreak='{0} Perfects in Folge');L.it&&(L.it.unlock_pstreak='Concatena {0} perfetti di fila');L.pt&&(L.pt.unlock_pstreak='Encadeie {0} perfeitos seguidos');
 L.en.src_pstreak='Reward: {0} perfects in a row';L.fr.src_pstreak='Récompense : {0} perfects d\'affilée';L.es&&(L.es.src_pstreak='Recompensa: {0} perfectos seguidos');L.de&&(L.de.src_pstreak='Belohnung: {0} Perfects in Folge');L.it&&(L.it.src_pstreak='Ricompensa: {0} perfetti di fila');L.pt&&(L.pt.src_pstreak='Recompensa: {0} perfeitos seguidos');
 L.en.stat_pstreak='Best Perfect Streak';L.fr.stat_pstreak='Meilleure série de perfects';L.es&&(L.es.stat_pstreak='Mejor racha de perfectos');L.de&&(L.de.stat_pstreak='Beste Perfect-Serie');L.it&&(L.it.stat_pstreak='Miglior serie di perfetti');L.pt&&(L.pt.stat_pstreak='Melhor sequência de perfeitos');
-L.en.lvl_badge='Lv {0}';L.fr.lvl_badge='Niv {0}';L.es&&(L.es.lvl_badge='Niv {0}');L.de&&(L.de.lvl_badge='Stufe {0}');L.it&&(L.it.lvl_badge='Liv {0}');L.pt&&(L.pt.lvl_badge='Nív {0}');
-L.en.toast_locked_level='🔒 Reach level {0} to unlock this item';L.fr.toast_locked_level='🔒 Atteins le niveau {0} pour débloquer cet article';L.es&&(L.es.toast_locked_level='🔒 Alcanza el nivel {0} para desbloquear');L.de&&(L.de.toast_locked_level='🔒 Erreiche Stufe {0} zum Freischalten');L.it&&(L.it.toast_locked_level='🔒 Raggiungi il livello {0} per sbloccare');L.pt&&(L.pt.toast_locked_level='🔒 Alcança o nível {0} para desbloquear');
-L.en.unlock_level='Reach level {0} (Campaign or games played)';L.fr.unlock_level='Atteins le niveau {0} (Campagne ou parties jouées)';L.es&&(L.es.unlock_level='Alcanza el nivel {0} (Campaña o partidas)');L.de&&(L.de.unlock_level='Erreiche Stufe {0} (Kampagne oder Spiele)');L.it&&(L.it.unlock_level='Raggiungi il livello {0} (Campagna o partite)');L.pt&&(L.pt.unlock_level='Alcança o nível {0} (Campanha ou partidas)');
 // Nouvelles catégories de missions (Blitz / Compétition) — sorties de Progression
 L.en.mg_blitz='Blitz';L.fr.mg_blitz='Blitz';L.es&&(L.es.mg_blitz='Blitz');L.de&&(L.de.mg_blitz='Blitz');L.it&&(L.it.mg_blitz='Blitz');L.pt&&(L.pt.mg_blitz='Blitz');L.nl&&(L.nl.mg_blitz='Blitz');
 L.en.mg_compet='Competition';L.fr.mg_compet='Compétition';L.es&&(L.es.mg_compet='Competición');L.de&&(L.de.mg_compet='Wettkampf');L.it&&(L.it.mg_compet='Competizione');L.pt&&(L.pt.mg_compet='Competição');L.nl&&(L.nl.mg_compet='Competitie');
@@ -2557,7 +2554,7 @@ c.fillStyle='rgba(255,255,255,0.8)';c.beginPath();c.arc(-2.4,-3.2,0.7,0,6.28);c.
 // ===== Nouveaux skins premium (v2.0) =====
 'eclipse':{price:2600,name:'Éclipse',draw:c=>{c.save();const g=c.createRadialGradient(0,0,4,0,0,13);g.addColorStop(0,'#16162a');g.addColorStop(.55,'#0c0c18');g.addColorStop(.7,'#FF8F00');g.addColorStop(.82,'#FFE082');g.addColorStop(1,'rgba(255,224,130,0)');c.fillStyle=g;c.beginPath();c.arc(0,0,13,0,6.28);c.fill();c.fillStyle='#08080f';c.beginPath();c.arc(0,0,7.5,0,6.28);c.fill();c.strokeStyle='rgba(255,213,79,.95)';c.lineWidth=1.2;c.shadowBlur=9;c.shadowColor='#FFB300';c.beginPath();c.arc(0,0,8,0,6.28);c.stroke();c.shadowBlur=0;c.restore();},color:'#FFB300'},
 'prism':{price:3200,name:'Prisme',draw:c=>{c.save();c.rotate(-0.25);const g=c.createLinearGradient(-9,9,9,-9);g.addColorStop(0,'#FF1744');g.addColorStop(.25,'#FFD600');g.addColorStop(.5,'#00E676');g.addColorStop(.75,'#00B0FF');g.addColorStop(1,'#D500F9');c.fillStyle=g;c.shadowBlur=8;c.shadowColor='rgba(0,176,255,.5)';c.beginPath();c.moveTo(0,-11);c.lineTo(9.5,7);c.lineTo(-9.5,7);c.closePath();c.fill();c.shadowBlur=0;c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=1;c.stroke();c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.moveTo(0,-11);c.lineTo(3,-2);c.lineTo(-2.5,2);c.closePath();c.fill();c.restore();},color:'#00B0FF'},
-'venom':{price:2900,name:'Venin',draw:c=>{const g=c.createRadialGradient(-3,-3,0,0,0,12);g.addColorStop(0,'#DBFFB0');g.addColorStop(.4,'#76FF03');g.addColorStop(.78,'#2E5E12');g.addColorStop(1,'#0c1a00');c.fillStyle=g;c.beginPath();c.arc(0,0,10,0,6.28);c.fill();
+'venom':{price:0,type:'mission',name:'Venin',draw:c=>{const g=c.createRadialGradient(-3,-3,0,0,0,12);g.addColorStop(0,'#DBFFB0');g.addColorStop(.4,'#76FF03');g.addColorStop(.78,'#2E5E12');g.addColorStop(1,'#0c1a00');c.fillStyle=g;c.beginPath();c.arc(0,0,10,0,6.28);c.fill();
 c.save();c.beginPath();c.arc(0,0,10,0,6.28);c.clip();
 // coulures de venin sombres
 c.fillStyle='rgba(20,55,0,.5)';c.beginPath();c.moveTo(-6,-10);c.bezierCurveTo(-4,-2,-8,3,-5,10);c.lineTo(-1,10);c.bezierCurveTo(-3,3,0,-3,-2,-10);c.closePath();c.fill();
@@ -2625,7 +2622,7 @@ this.trailSkins={
 // ===== Nouvelles traînées premium (v2.0) =====
 'eclipse':{price:2600,name:'Couronne',spawnMs:6,decay:0.02,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.85;c.fillStyle='#FFB300';c.shadowBlur=8*t.life;c.shadowColor='#FFE082';c.beginPath();c.arc(t.x,t.y,4.5*t.life,0,6.28);c.fill();c.shadowBlur=0;c.globalAlpha=t.life*.45;c.strokeStyle='#FFE082';c.lineWidth=1.4*t.life;c.beginPath();c.arc(t.x,t.y,7*t.life,0,6.28);c.stroke();c.restore();},color:'#FFB300'},
 'prism':{price:3200,name:'Éclats Prisme',spawnMs:5,decay:0.024,draw:(c,t)=>{c.save();c.globalAlpha=t.life;c.translate(t.x,t.y);c.rotate(t.x*0.12);c.fillStyle='hsl('+Math.floor((t.x*6+t.y*3)%360)+',92%,62%)';const s=3.4*t.life;c.fillRect(-s/2,-s/2,s,s);c.restore();},color:'#00B0FF'},
-'venom':{price:2900,name:'Gouttes Toxiques',spawnMs:7,decay:0.018,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.85;const r=t.life;c.shadowBlur=8*r;c.shadowColor='#B2FF59';const g=c.createRadialGradient(t.x-1*r,t.y-1.5*r,0,t.x,t.y,4.5*r);g.addColorStop(0,'#EAFFC4');g.addColorStop(.5,'#76FF03');g.addColorStop(1,'#33691E');c.fillStyle=g;c.beginPath();c.ellipse(t.x,t.y,3*r,4.6*r,0,0,6.28);c.fill();c.shadowBlur=0;c.fillStyle='rgba(255,255,255,.7)';c.beginPath();c.arc(t.x-1*r,t.y-1.6*r,0.9*r,0,6.28);c.fill();c.restore();},color:'#76FF03'},
+'venom':{price:0,type:'mission',name:'Gouttes Toxiques',spawnMs:7,decay:0.018,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.85;const r=t.life;c.shadowBlur=8*r;c.shadowColor='#B2FF59';const g=c.createRadialGradient(t.x-1*r,t.y-1.5*r,0,t.x,t.y,4.5*r);g.addColorStop(0,'#EAFFC4');g.addColorStop(.5,'#76FF03');g.addColorStop(1,'#33691E');c.fillStyle=g;c.beginPath();c.ellipse(t.x,t.y,3*r,4.6*r,0,0,6.28);c.fill();c.shadowBlur=0;c.fillStyle='rgba(255,255,255,.7)';c.beginPath();c.arc(t.x-1*r,t.y-1.6*r,0.9*r,0,6.28);c.fill();c.restore();},color:'#76FF03'},
 // ===== Traînées sport (assorties aux balles) =====
 'soccer':{price:900,name:'Football',spawnMs:10,decay:0.014,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.9;const r=3.4*t.life;const g=c.createRadialGradient(t.x-r*.35,t.y-r*.4,0,t.x,t.y,r);g.addColorStop(0,'#fff');g.addColorStop(.7,'#f2f2f2');g.addColorStop(1,'#c8c8c8');c.fillStyle=g;c.beginPath();c.arc(t.x,t.y,r,0,6.28);c.fill();c.fillStyle='rgba(20,20,20,.8)';c.beginPath();c.arc(t.x,t.y,r*0.38,0,6.28);c.fill();c.fillStyle='rgba(255,255,255,.85)';c.beginPath();c.arc(t.x-r*.35,t.y-r*.4,r*0.28,0,6.28);c.fill();c.restore();},color:'#ffffff'},
 'basketball':{price:950,name:'Basket',spawnMs:10,decay:0.015,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.9;const r=3.4*t.life;const g=c.createRadialGradient(t.x-r*.35,t.y-r*.4,0,t.x,t.y,r);g.addColorStop(0,'#FFB74D');g.addColorStop(.7,'#FB8C00');g.addColorStop(1,'#C25E00');c.fillStyle=g;c.beginPath();c.arc(t.x,t.y,r,0,6.28);c.fill();c.strokeStyle='rgba(50,25,8,.75)';c.lineWidth=0.7*t.life;c.beginPath();c.moveTo(t.x-r,t.y);c.lineTo(t.x+r,t.y);c.stroke();c.beginPath();c.arc(t.x,t.y,r,0,6.28);c.stroke();c.fillStyle='rgba(255,240,210,.8)';c.beginPath();c.arc(t.x-r*.35,t.y-r*.4,r*0.26,0,6.28);c.fill();c.restore();},color:'#FB8C00'},
@@ -4126,7 +4123,6 @@ items.forEach(id=>{
 const item=skins[id],has=owned.includes(id),sel=cur===id;
 const price=shopItemPrice(item);
 let locked=false,pd='',li='🔒',lc='lock-badge';
-const _lvlReq=gemLevelReq(cfg,item,id,has);
 if(!has&&id!=='classic'){
 if(item.type==='pack'){locked=true;pd='PACK';li='📦';lc+=' lock-pack';}
 else if(item.type==='mission'){locked=true;pd='MISSION';li='🎯';lc+=' lock-mission';}
@@ -4134,7 +4130,6 @@ else if(item.type==='campaign'){locked=true;pd=I18N.t('camp_level_badge')+item.c
 else if(item.type==='division'){locked=true;pd=(()=>{try{return DuelManager.rankFor(item.divPts).name;}catch(e){return '🏆';}})();li='🏆';lc+=' lock-campaign';}
 else if(item.type==='streak'){locked=true;pd='🔥 14 JOURS';li='🔥';lc+=' lock-mission';}
 else if(item.type==='pstreak'){locked=true;pd='🎯 '+item.streakReq;li='🎯';lc+=' lock-mission';}
-else if(_lvlReq){locked=true;pd=I18N.t('lvl_badge',_lvlReq);li='🔒';lc+=' lock-campaign';}
 else pd=price+' '+gemIco;
 }else pd='✓';
 // Achat générique (gemmes jaunes ou bleues selon l'onglet) puis sélection.
@@ -4340,7 +4335,6 @@ function openSkinPreview(id){
   const sub=$('skinPreviewSub'),act=$('skinPreviewAction');act.disabled=false;act.style.opacity='';
   const packLocked=(!has&&item.type==='pack');
   const specialLocked=(!has&&id!=='classic'&&['mission','campaign','division','streak','pstreak'].indexOf(item.type)>=0);
-  const lvlReq=gemLevelReq(cfg,item,id,has);
   const _rt={balls:'ball',trails:'trail',bgs:'bg',emblems:'emblem',banners:'banner'}[tab];
   if(has||id==='classic'){
     // Possédé : on montre la PROVENANCE + un bouton Équiper (ou « déjà équipé »).
@@ -4355,10 +4349,6 @@ function openSkinPreview(id){
     // Verrouillé (mission/campagne/duel/série) : on montre à quoi il ressemble ET comment l'obtenir.
     sub.innerHTML=cosmSource(item,false,id,_rt)||'🔒';
     act.className='btn';act.style.opacity='.55';act.textContent='🔒';act.onclick=()=>{showToast(sub.textContent||'🔒');};
-  }else if(lvlReq){
-    // Cosmétique en gemmes encore verrouillé par le niveau de progression.
-    sub.innerHTML='🔒 '+I18N.t('unlock_level',lvlReq);
-    act.className='btn';act.style.opacity='.55';act.textContent='🔒 '+I18N.t('lvl_badge',lvlReq);act.onclick=()=>{showToast(I18N.t('toast_locked_level',lvlReq));};
   }else{
     // Achetable avec des gemmes.
     sub.innerHTML=price+' '+gemIco;
@@ -4758,14 +4748,6 @@ function checkPerfectStreakUnlocks(chain){
   if(changed){DataManager.save();try{showToast(I18N.t('toast_pstreak_unlock',best));}catch(e){}try{Haptic.heavy&&Haptic.heavy();}catch(e){}}
   return changed;
 }
-
-// ═══════ NIVEAU DE PROGRESSION (déblocage étalé des cosmétiques en gemmes) ═══════
-// Les cosmétiques payables en gemmes ne sont plus tous accessibles d'entrée : ils se débloquent
-// au fil de la progression (niveau de Campagne OU parties jouées) pour éviter de tout ouvrir d'un coup.
-function playerProgressLevel(){const d=DataManager.data;const camp=d.campaignLevel||1;const byRuns=1+Math.floor(((d.stats&&d.stats.totalRuns)||0)/4);return Math.max(camp,byRuns);}
-function gemGateLevel(price){if(!price||price<=0)return 1;if(price<=1200)return 1;if(price<=1800)return 3;if(price<=2400)return 6;if(price<=3200)return 10;if(price<=4200)return 14;return 18;}
-// Un item en gemmes jaunes, non possédé, sans type spécial, est verrouillé tant que le niveau requis n'est pas atteint.
-function gemLevelReq(cfg,item,id,has){if(has||id==='classic'||cfg.blue||item.type)return 0;const p=(item.price||0);if(p<=0)return 0;const req=gemGateLevel(p);return playerProgressLevel()<req?req:0;}
 
 // ═══════ CAMPAIGN SCREEN ═══════
 const CAMP_WORLDS=[

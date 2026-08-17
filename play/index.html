@@ -2415,27 +2415,41 @@ constructor(x,y,isTarget=false){this.pos=new Vector(x,y);this.isTarget=isTarget;
 draw(ctx){this.pulse+=.035;this.sc=Math.min(1,this.sc+.06);let e=1-Math.pow(1-this.sc,3);ctx.save();ctx.translate(this.pos.x,this.pos.y);ctx.scale(e,e);
 if(this.isTarget){
 const r=CONFIG.snapRadius+Math.sin(this.pulse)*4;
-// Zone de snap (verte) — DOUBLE liseré (sombre dessous + blanc dessus) → lisible sur fond clair ET sombre
-ctx.fillStyle=CONFIG.colors.targetRing;ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.fill();
-ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,.32)';ctx.stroke();
-ctx.lineWidth=1.4;ctx.strokeStyle='rgba(255,255,255,.75)';ctx.stroke();
-// Cône parfait (doré) — fill plus marqué + bords/arc en double liseré (ressort sur fond jaune ET sombre)
+const _s=Math.sin(this.pulse),_s2=Math.sin(this.pulse*0.9);
+// Halo de contraste : léger disque sombre en dégradé → la cible RESSORT sur fond clair (savane) comme sombre
+const bg=ctx.createRadialGradient(0,0,r*0.5,0,0,r*1.08);
+bg.addColorStop(0,'rgba(18,38,8,0)');bg.addColorStop(1,'rgba(18,38,8,0.15)');
+ctx.fillStyle=bg;ctx.beginPath();ctx.arc(0,0,r*1.08,0,6.28);ctx.fill();
+// Zone de snap (verte) — dégradé radial plus dense au centre → guide l'œil vers la cible
+const zg=ctx.createRadialGradient(0,0,0,0,0,r);
+zg.addColorStop(0,'rgba(124,179,66,0.34)');zg.addColorStop(0.7,'rgba(124,179,66,0.19)');zg.addColorStop(1,'rgba(124,179,66,0.05)');
+ctx.fillStyle=zg;ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.fill();
+// Anneau de bord — double liseré épais (sombre dessous + blanc dessus) → toujours lisible
+ctx.lineWidth=4;ctx.strokeStyle='rgba(18,48,8,.42)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
+ctx.lineWidth=2;ctx.strokeStyle='rgba(255,255,255,.88)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
+// Anneau « phare » pulsé, s'ouvre vers l'extérieur → attire le regard
+ctx.lineWidth=2.5;ctx.strokeStyle='rgba(124,179,66,'+Math.max(0,0.4+_s2*0.22).toFixed(3)+')';ctx.beginPath();ctx.arc(0,0,r+7+_s2*3,0,6.28);ctx.stroke();
+// Cône parfait (doré) — dégradé marqué + bords/arc en double liseré (ressort sur fond jaune ET sombre)
 const halfCone=Math.asin(Math.min(0.98,effPerfectRadius()/CONFIG.snapRadius));
 ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.closePath();
-ctx.fillStyle='rgba(255,190,30,0.42)';ctx.fill();
+const cg=ctx.createRadialGradient(0,0,0,0,0,r);cg.addColorStop(0,'rgba(255,201,40,0.16)');cg.addColorStop(1,'rgba(255,168,0,0.52)');
+ctx.fillStyle=cg;ctx.fill();
 ctx.lineCap='round';
 const _e1x=Math.cos(this.coneAngle-halfCone)*r,_e1y=Math.sin(this.coneAngle-halfCone)*r,_e2x=Math.cos(this.coneAngle+halfCone)*r,_e2y=Math.sin(this.coneAngle+halfCone)*r;
 const _coneStroke=(col,w)=>{ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(_e1x,_e1y);ctx.moveTo(0,0);ctx.lineTo(_e2x,_e2y);ctx.stroke();ctx.beginPath();ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.stroke();};
-_coneStroke('rgba(0,0,0,.4)',3);_coneStroke('rgba(255,236,120,.95)',1.4);
-// Pastille centrale — halo blanc (ressort sur fond sombre) + cœur coloré + liseré sombre (ressort sur fond clair)
+_coneStroke('rgba(60,40,0,.5)',3.5);_coneStroke('rgba(255,242,150,.98)',1.5);
+// Pastille centrale — plus grosse + glow vert pulsé + halo blanc + cœur brillant + liseré sombre
 ctx.shadowBlur=0;
-ctx.beginPath();ctx.arc(0,0,13,0,6.28);ctx.fillStyle='rgba(255,255,255,.92)';ctx.fill();
-const tg=ctx.createRadialGradient(-2.5,-3,0.5,0,0,9.5);tg.addColorStop(0,'#C5F088');tg.addColorStop(.5,CONFIG.colors.target);tg.addColorStop(1,'#4E7E1E');ctx.beginPath();ctx.arc(0,0,9.5,0,6.28);ctx.fillStyle=tg;ctx.fill();
-ctx.lineWidth=2;ctx.strokeStyle='rgba(12,38,8,.9)';ctx.stroke();
-ctx.fillStyle='rgba(255,255,255,.75)';ctx.beginPath();ctx.arc(-2.6,-3.2,1.8,0,6.28);ctx.fill();
+ctx.beginPath();ctx.arc(0,0,17,0,6.28);ctx.fillStyle='rgba(124,179,66,'+Math.max(0,0.2+_s*0.08).toFixed(3)+')';ctx.fill();
+ctx.beginPath();ctx.arc(0,0,15,0,6.28);ctx.fillStyle='rgba(255,255,255,.95)';ctx.fill();
+const tg=ctx.createRadialGradient(-3,-3.5,0.5,0,0,11);tg.addColorStop(0,'#DFF6B0');tg.addColorStop(.5,CONFIG.colors.target);tg.addColorStop(1,'#3E6A16');ctx.beginPath();ctx.arc(0,0,11,0,6.28);ctx.fillStyle=tg;ctx.fill();
+ctx.lineWidth=2.4;ctx.strokeStyle='rgba(12,38,8,.92)';ctx.stroke();
+ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(-3,-3.6,2.1,0,6.28);ctx.fill();
 }else{ctx.shadowBlur=0;ctx.beginPath();ctx.arc(0,0,12,0,6.28);ctx.fillStyle='rgba(255,255,255,.5)';ctx.fill();const pg=ctx.createRadialGradient(-3,-3.5,0.5,0,0,10.5);pg.addColorStop(0,'#FCF8F4');pg.addColorStop(.55,CONFIG.colors.pivot);pg.addColorStop(1,'#B9AB9F');ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fillStyle=pg;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(40,30,20,.45)';ctx.stroke();ctx.fillStyle='rgba(255,255,255,.7)';ctx.beginPath();ctx.arc(-3,-3.6,2.1,0,6.28);ctx.fill();}ctx.restore();}
 }
 
+// hex '#rrggbb' → 'rgba(r,g,b,a)' (utilitaire global pour traînées/effets)
+function _colA(h,a){var n=parseInt(h.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
 
 // === PLAYER CLASS WITH ALL SKINS - 32 THEMES ===
 class Player{
@@ -2553,7 +2567,7 @@ c.fillStyle='rgba(230,255,190,.9)';c.beginPath();c.ellipse(-3.2,-3.6,2.2,1.4,-0.
 // 32 TRAIL SKINS - One for each theme
 // ============================================
 this.trailSkins={
-'classic':{price:0,name:'Classique',spawnMs:9.5,decay:0.014,draw:(c,t)=>{c.save();c.globalAlpha=t.life*.75;c.shadowBlur=6*t.life;c.shadowColor=C.ball;const g=c.createRadialGradient(t.x,t.y,0,t.x,t.y,7*t.life);g.addColorStop(0,'#fff');g.addColorStop(.5,C.ball);g.addColorStop(1,C.ball);c.fillStyle=g;c.beginPath();c.arc(t.x,t.y,6.8*t.life,0,6.28);c.fill();c.restore();},color:C.ball},
+'classic':{price:0,name:'Classique',stepPx:5,decay:0.02,maxLen:30,draw:(c,t)=>{c.save();const R=8.2*t.life;c.globalAlpha=Math.min(1,t.life*0.9);c.shadowBlur=7*t.life;c.shadowColor=C.ball;const g=c.createRadialGradient(t.x,t.y,0,t.x,t.y,R);g.addColorStop(0,'rgba(255,255,255,'+(0.85*t.life).toFixed(3)+')');g.addColorStop(.42,C.ball);g.addColorStop(1,_colA(C.ball,0));c.fillStyle=g;c.beginPath();c.arc(t.x,t.y,R,0,6.28);c.fill();c.restore();},color:C.ball},
 'night':{price:400,name:'Étincelles',spawnMs:7.5,decay:0.017,draw:(c,t)=>{const p=1-t.life;c.shadowBlur=8*t.life;c.shadowColor='rgba(200,150,0,0.6)';for(let i=0;i<5;i++){const a=i*1.256+p*6;const dist=(3+i*2.5+p*8)*t.life;const sz=(2.5-i*0.3)*t.life;const px=t.x+Math.cos(a)*dist;const py=t.y+Math.sin(a)*dist;c.fillStyle=`rgba(${255-i*10},${200-i*20},${50+i*10},${t.life*(0.9-i*0.1)})`;c.beginPath();c.moveTo(px,py-sz);c.lineTo(px+sz*0.5,py);c.lineTo(px,py+sz);c.lineTo(px-sz*0.5,py);c.closePath();c.fill();}c.shadowBlur=0;c.fillStyle=`rgba(255,240,180,${t.life*.9})`;c.strokeStyle=`rgba(180,130,0,${t.life*.5})`;c.lineWidth=0.8;const sz=3*t.life;c.beginPath();c.moveTo(t.x,t.y-sz);c.lineTo(t.x+sz*0.4,t.y);c.lineTo(t.x,t.y+sz);c.lineTo(t.x-sz*0.4,t.y);c.closePath();c.fill();c.stroke();},color:'#FFD700'},
 'sunset':{price:700,name:'Rayons Soleil',spawnMs:8,decay:0.016,draw:(c,t)=>{c.save();c.translate(t.x,t.y);const rotation=(1-t.life)*4;c.rotate(rotation);for(let i=0;i<8;i++){c.save();c.rotate(i*0.785);const rayLen=8+(1-t.life)*15;c.fillStyle=`rgba(255,111,0,${t.life*.6})`;c.beginPath();c.moveTo(0,0);c.lineTo(1.9*t.life,-rayLen*t.life);c.lineTo(0,-rayLen*t.life*0.8);c.lineTo(-1.9*t.life,-rayLen*t.life);c.closePath();c.fill();c.restore();}c.restore();},color:'#FF6F00'},
 'ocean':{price:1000,name:'Bulles',spawnMs:14.5,decay:0.011,draw:(c,t)=>{const rise=(1-t.life)*18;const wobble=Math.sin((1-t.life)*8)*4;const bx=t.x+wobble,by=t.y-rise;const r=7*t.life;c.save();c.shadowBlur=3*t.life;c.shadowColor='rgba(0,80,160,0.3)';c.strokeStyle=`rgba(40,140,200,${t.life*.7})`;c.lineWidth=1.8*t.life;c.beginPath();c.arc(bx,by,r,0,6.28);c.stroke();c.shadowBlur=0;const g=c.createRadialGradient(bx-r*0.3,by-r*0.3,0,bx,by,r);g.addColorStop(0,`rgba(220,240,255,${t.life*.35})`);g.addColorStop(0.6,`rgba(100,180,230,${t.life*.15})`);g.addColorStop(1,`rgba(50,130,200,${t.life*.08})`);c.fillStyle=g;c.beginPath();c.arc(bx,by,r,0,6.28);c.fill();c.fillStyle=`rgba(255,255,255,${t.life*.75})`;c.beginPath();c.ellipse(bx-r*0.3,by-r*0.3,r*0.35,r*0.2,-0.5,0,6.28);c.fill();c.fillStyle=`rgba(255,255,255,${t.life*.3})`;c.beginPath();c.arc(bx+r*0.2,by+r*0.25,r*0.12,0,6.28);c.fill();c.restore();},color:'#2196F3'},
@@ -3323,10 +3337,18 @@ ctx.strokeStyle='rgba(60,30,20,.5)';ctx.lineWidth=1;for(let i=0;i<4;i++){const b
 // Sans ça, les particules restées calées sur l'ancienne dimension se groupent dans un coin.
 Object.keys(this.bgSkins).forEach(k=>{const b=this.bgSkins[k];if(b&&typeof b.init==='function'&&!b.__wrapped){const _init=b.init,_draw=b.draw;b.__wrapped=true;b.draw=function(ctx,w,h,t){if(this.__iw!==w||this.__ih!==h){try{_init.call(this,ctx,w,h);}catch(e){}this.__iw=w;this.__ih=h;}return _draw.call(this,ctx,w,h,t);};}});
 }
-reset(){this.pos=new Vector(0,0);this.vel=new Vector(0,0);this.rope=null;this.angle=0;this.trailArr=[];}
+reset(){this.pos=new Vector(0,0);this.vel=new Vector(0,0);this.rope=null;this.angle=0;this.trailArr=[];this._lastTrailPos=null;}
 getCurrentSpeed(score){const T=CONFIG.speedTiers;let cur=T[0];for(let i=T.length-1;i>=0;i--){if(score>=T[i].score){cur=T[i];break;}}return cur.speed;}
 getTier(score){const T=CONFIG.speedTiers;let cur=T[0];for(let i=T.length-1;i>=0;i--){if(score>=T[i].score){cur=T[i];break;}}return cur;}
-update(dt){this.prevPos=new Vector(this.pos.x,this.pos.y);let spd=this.getCurrentSpeed(Game.score);if(this.rope){this.angle+=spd*dt;this.pos.x=this.rope.pos.x+Math.cos(this.angle)*CONFIG.ropeLength;this.pos.y=this.rope.pos.y+Math.sin(this.angle)*CONFIG.ropeLength;let s=spd*CONFIG.ropeLength;this.vel.x=-Math.sin(this.angle)*s;this.vel.y=Math.cos(this.angle)*s;}else{this.pos=this.pos.add(this.vel.mult(dt));}if(!this._trailT)this._trailT=0;this._trailT+=dt;const _ts=this.trailSkins[DataManager.data.currentTrail]||this.trailSkins['classic'];const _si=_ts.spawnMs||5;const _dc=_ts.decay||0.02;let _sc=5;while(this._trailT>=_si&&_sc-->0){const vl=Math.sqrt(this.vel.x*this.vel.x+this.vel.y*this.vel.y)||1;const ox=this.vel.x/vl*12;const oy=this.vel.y/vl*12;this.trailArr.push({x:this.pos.x-ox,y:this.pos.y-oy,life:0.88});this._trailT-=_si;}for(let i=this.trailArr.length-1;i>=0;i--){this.trailArr[i].life-=_dc*dt;if(this.trailArr[i].life<=0)this.trailArr.splice(i,1);}}
+update(dt){this.prevPos=new Vector(this.pos.x,this.pos.y);let spd=this.getCurrentSpeed(Game.score);if(this.rope){this.angle+=spd*dt;this.pos.x=this.rope.pos.x+Math.cos(this.angle)*CONFIG.ropeLength;this.pos.y=this.rope.pos.y+Math.sin(this.angle)*CONFIG.ropeLength;let s=spd*CONFIG.ropeLength;this.vel.x=-Math.sin(this.angle)*s;this.vel.y=Math.cos(this.angle)*s;}else{this.pos=this.pos.add(this.vel.mult(dt));}// Traînée espacée par DISTANCE parcourue (et non par temps) → régulière, jamais en paquets, et bien allongée
+const _ts=this.trailSkins[DataManager.data.currentTrail]||this.trailSkins['classic'];const _dc=_ts.decay||0.02;
+const STEP=_ts.stepPx||Math.max(4,(_ts.spawnMs||9)*0.7);const MAX=_ts.maxLen||28;
+if(!this._lastTrailPos)this._lastTrailPos={x:this.pos.x,y:this.pos.y};
+let _dx=this.pos.x-this._lastTrailPos.x,_dy=this.pos.y-this._lastTrailPos.y,_dist=Math.sqrt(_dx*_dx+_dy*_dy);
+if(_dist>320){this._lastTrailPos.x=this.pos.x;this._lastTrailPos.y=this.pos.y;} // téléport (revive/reset) → pas de traînée qui traverse l'écran
+else{let _g=48;while(_dist>=STEP&&_g-->0){const nx=this._lastTrailPos.x+_dx/_dist*STEP,ny=this._lastTrailPos.y+_dy/_dist*STEP;this.trailArr.push({x:nx,y:ny,life:1});this._lastTrailPos.x=nx;this._lastTrailPos.y=ny;_dx=this.pos.x-nx;_dy=this.pos.y-ny;_dist=Math.sqrt(_dx*_dx+_dy*_dy);}}
+if(this.trailArr.length>MAX)this.trailArr.splice(0,this.trailArr.length-MAX);
+for(let i=this.trailArr.length-1;i>=0;i--){this.trailArr[i].life-=_dc*dt;if(this.trailArr[i].life<=0)this.trailArr.splice(i,1);}}
 draw(ctx){if(this.rope){ctx.beginPath();ctx.moveTo(this.rope.pos.x,this.rope.pos.y);ctx.lineTo(this.pos.x,this.pos.y);ctx.strokeStyle=CONFIG.colors.rope;ctx.lineWidth=2.5;ctx.stroke();}const ts=this.trailSkins[DataManager.data.currentTrail]||this.trailSkins['classic'];ctx.fillStyle=ts.color;this.trailArr.forEach(t=>ts.draw(ctx,t));const bs=this.ballSkins[DataManager.data.currentSkin]||this.ballSkins['classic'];
 // Halo lumineux coloré derrière la balle (rendu premium, valable pour tous les skins)
 ctx.save();ctx.translate(this.pos.x,this.pos.y);const _hg=ctx.createRadialGradient(0,0,2,0,0,22);_hg.addColorStop(0,bs.color);_hg.addColorStop(1,'rgba(0,0,0,0)');ctx.globalAlpha=.26;ctx.fillStyle=_hg;ctx.beginPath();ctx.arc(0,0,22,0,6.28);ctx.fill();ctx.restore();

@@ -2415,36 +2415,27 @@ constructor(x,y,isTarget=false){this.pos=new Vector(x,y);this.isTarget=isTarget;
 draw(ctx){this.pulse+=.035;this.sc=Math.min(1,this.sc+.06);let e=1-Math.pow(1-this.sc,3);ctx.save();ctx.translate(this.pos.x,this.pos.y);ctx.scale(e,e);
 if(this.isTarget){
 const r=CONFIG.snapRadius+Math.sin(this.pulse)*4;
-const _s=Math.sin(this.pulse),_s2=Math.sin(this.pulse*0.9);
-// Halo de contraste : léger disque sombre en dégradé → la cible RESSORT sur fond clair (savane) comme sombre
-const bg=ctx.createRadialGradient(0,0,r*0.5,0,0,r*1.08);
-bg.addColorStop(0,'rgba(18,38,8,0)');bg.addColorStop(1,'rgba(18,38,8,0.15)');
-ctx.fillStyle=bg;ctx.beginPath();ctx.arc(0,0,r*1.08,0,6.28);ctx.fill();
-// Zone de snap (verte) — dégradé radial plus dense au centre → guide l'œil vers la cible
-const zg=ctx.createRadialGradient(0,0,0,0,0,r);
-zg.addColorStop(0,'rgba(124,179,66,0.34)');zg.addColorStop(0.7,'rgba(124,179,66,0.19)');zg.addColorStop(1,'rgba(124,179,66,0.05)');
+// Zone de snap (verte) — léger dégradé, un peu plus dense au centre → net et discret
+const zg=ctx.createRadialGradient(0,0,r*0.15,0,0,r);
+zg.addColorStop(0,'rgba(124,179,66,0.26)');zg.addColorStop(1,'rgba(124,179,66,0.12)');
 ctx.fillStyle=zg;ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.fill();
-// Anneau de bord — double liseré épais (sombre dessous + blanc dessus) → toujours lisible
-ctx.lineWidth=4;ctx.strokeStyle='rgba(18,48,8,.42)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
-ctx.lineWidth=2;ctx.strokeStyle='rgba(255,255,255,.88)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
-// Anneau « phare » pulsé, s'ouvre vers l'extérieur → attire le regard
-ctx.lineWidth=2.5;ctx.strokeStyle='rgba(124,179,66,'+Math.max(0,0.4+_s2*0.22).toFixed(3)+')';ctx.beginPath();ctx.arc(0,0,r+7+_s2*3,0,6.28);ctx.stroke();
-// Cône parfait (doré) — dégradé marqué + bords/arc en double liseré (ressort sur fond jaune ET sombre)
+// Bord — double liseré fin (sombre dessous + blanc dessus) → lisible sur fond clair ET sombre
+ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,.32)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
+ctx.lineWidth=1.5;ctx.strokeStyle='rgba(255,255,255,.82)';ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.stroke();
+// Cône parfait (doré) — fill + bords/arc en double liseré (ressort sur fond jaune ET sombre)
 const halfCone=Math.asin(Math.min(0.98,effPerfectRadius()/CONFIG.snapRadius));
 ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.closePath();
-const cg=ctx.createRadialGradient(0,0,0,0,0,r);cg.addColorStop(0,'rgba(255,201,40,0.16)');cg.addColorStop(1,'rgba(255,168,0,0.52)');
-ctx.fillStyle=cg;ctx.fill();
+ctx.fillStyle='rgba(255,190,30,0.44)';ctx.fill();
 ctx.lineCap='round';
 const _e1x=Math.cos(this.coneAngle-halfCone)*r,_e1y=Math.sin(this.coneAngle-halfCone)*r,_e2x=Math.cos(this.coneAngle+halfCone)*r,_e2y=Math.sin(this.coneAngle+halfCone)*r;
 const _coneStroke=(col,w)=>{ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(_e1x,_e1y);ctx.moveTo(0,0);ctx.lineTo(_e2x,_e2y);ctx.stroke();ctx.beginPath();ctx.arc(0,0,r,this.coneAngle-halfCone,this.coneAngle+halfCone);ctx.stroke();};
-_coneStroke('rgba(60,40,0,.5)',3.5);_coneStroke('rgba(255,242,150,.98)',1.5);
-// Pastille centrale — plus grosse + glow vert pulsé + halo blanc + cœur brillant + liseré sombre
+_coneStroke('rgba(0,0,0,.42)',3);_coneStroke('rgba(255,236,120,.95)',1.4);
+// Pastille centrale — halo blanc + cœur vert brillant + liseré sombre (comme avant, un poil plus grosse)
 ctx.shadowBlur=0;
-ctx.beginPath();ctx.arc(0,0,17,0,6.28);ctx.fillStyle='rgba(124,179,66,'+Math.max(0,0.2+_s*0.08).toFixed(3)+')';ctx.fill();
-ctx.beginPath();ctx.arc(0,0,15,0,6.28);ctx.fillStyle='rgba(255,255,255,.95)';ctx.fill();
-const tg=ctx.createRadialGradient(-3,-3.5,0.5,0,0,11);tg.addColorStop(0,'#DFF6B0');tg.addColorStop(.5,CONFIG.colors.target);tg.addColorStop(1,'#3E6A16');ctx.beginPath();ctx.arc(0,0,11,0,6.28);ctx.fillStyle=tg;ctx.fill();
-ctx.lineWidth=2.4;ctx.strokeStyle='rgba(12,38,8,.92)';ctx.stroke();
-ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(-3,-3.6,2.1,0,6.28);ctx.fill();
+ctx.beginPath();ctx.arc(0,0,14,0,6.28);ctx.fillStyle='rgba(255,255,255,.94)';ctx.fill();
+const tg=ctx.createRadialGradient(-2.6,-3.1,0.5,0,0,10);tg.addColorStop(0,'#C5F088');tg.addColorStop(.5,CONFIG.colors.target);tg.addColorStop(1,'#4E7E1E');ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fillStyle=tg;ctx.fill();
+ctx.lineWidth=2;ctx.strokeStyle='rgba(12,38,8,.9)';ctx.stroke();
+ctx.fillStyle='rgba(255,255,255,.78)';ctx.beginPath();ctx.arc(-2.7,-3.3,1.8,0,6.28);ctx.fill();
 }else{ctx.shadowBlur=0;ctx.beginPath();ctx.arc(0,0,12,0,6.28);ctx.fillStyle='rgba(255,255,255,.5)';ctx.fill();const pg=ctx.createRadialGradient(-3,-3.5,0.5,0,0,10.5);pg.addColorStop(0,'#FCF8F4');pg.addColorStop(.55,CONFIG.colors.pivot);pg.addColorStop(1,'#B9AB9F');ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fillStyle=pg;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(40,30,20,.45)';ctx.stroke();ctx.fillStyle='rgba(255,255,255,.7)';ctx.beginPath();ctx.arc(-3,-3.6,2.1,0,6.28);ctx.fill();}ctx.restore();}
 }
 
@@ -3823,7 +3814,7 @@ if(this.mode==='timeattack'){
   // rapides, une pub 1/3 reviendrait trop vite). Marqué « dû » ; montré AVANT la partie suivante
   // (au clic Rejouer/Menu), jamais par-dessus le jeu (plus de temps Blitz perdu).
   if(!DataManager.data.noAds){const _br=DataManager.data.stats.blitzRuns||0;if(_br>0&&_br%4===0)this._adDue=true;}
-  DataManager.save();showTimeAttackResult(this.displayScore,this.gemsCollected,isNewTABest);return;
+  DataManager.save();try{FriendManager.syncProfile();}catch(e){}showTimeAttackResult(this.displayScore,this.gemsCollected,isNewTABest);return;
 }
 animateCountUp($('finalScore'),this.displayScore,Math.min(1100,400+this.displayScore*12));animateCountUp($('finalGems'),this.gemsCollected,900);
 $('newBestBadge').className=isNewBest?'new-best show':'new-best';
@@ -3838,6 +3829,7 @@ WeeklyLeaderboard.submitAllTime(Math.max(this.displayScore,DataManager.data.high
 $('gameOverScreen').classList.add('active');
 try{checkChallengeResult(this.displayScore);}catch(e){}
 DataManager.save();setTimeout(()=>{Achievements.check();updateMissionDot();},300);
+try{FriendManager.syncProfile();}catch(e){} // pousse tout de suite le nouveau meilleur score / nb de parties sur le profil public
 // Interstitiel toutes les 3 parties — marqué « dû » ; montré AVANT la partie suivante (clic
 // Rejouer/Menu), jamais par-dessus le jeu.
 if(!DataManager.data.noAds){const _runs=DataManager.data.stats.totalRuns||0;if(_runs>0&&_runs%3===0)this._adDue=true;}
@@ -5750,6 +5742,7 @@ function showNameGate(){
   const ok=document.createElement('button');ok.className='btn btn-primary';ok.style.cssText='width:100%;margin:0 0 8px';ok.textContent=I18N.t('name_gate_ok');
   const submit=async()=>{
     const v=inp.value.trim();if(!v){showToast(I18N.t('name_enter_valid'));inp.focus();return;}
+    if(!duelHasName())DataManager.data.nameIsLocked=false; // legacy : a déjà joué en duel mais sans pseudo (état verrouillé-vide) → on rouvre la saisie
     renderSettingsName();                    // matérialise #settingsNameInput si l'utilisateur n'a jamais ouvert les Réglages
     const si=$('settingsNameInput');if(si)si.value=v;
     ok.disabled=true;

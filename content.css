@@ -1,0 +1,62 @@
+/* Feuille de style partagée par les pages de contenu (Comment jouer, Astuces, FAQ, À propos).
+   Reprend les mêmes tokens que la page d'accueil pour une identité cohérente + mode sombre. */
+:root{
+  --bg1:#FBF7F0; --bg2:#EFE6D8; --card:#ffffff; --text:#2e2440; --muted:#7a6f86;
+  --accent:#6A4C93; --accent2:#8E63B4; --gold:#F4A926; --orange:#FF8C00; --line:rgba(0,0,0,.08);
+  --shadow:0 18px 50px rgba(60,40,90,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg1:#141020; --bg2:#0d0a16; --card:#1e1830; --text:#f0ebfa; --muted:#a99fc0;
+         --accent:#b79ae6; --accent2:#caa8ff; --line:rgba(255,255,255,.10); --shadow:0 18px 50px rgba(0,0,0,.5); }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:ui-rounded,"SF Pro Rounded","Segoe UI",Nunito,system-ui,-apple-system,sans-serif;
+  color:var(--text);
+  background:radial-gradient(130% 100% at 50% 0%,var(--bg1),var(--bg2)) fixed;
+  min-height:100vh;overflow-x:hidden;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:20px 20px 60px}
+
+/* ---- Barre de navigation ---- */
+.nav{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px 20px 10px;border-bottom:1px solid var(--line)}
+.nav .brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:900;font-size:1.05rem}
+.nav .brand img{width:38px;height:38px;border-radius:11px;box-shadow:var(--shadow)}
+.nav .brand .n1{font-family:'Bagel Fat One',ui-rounded,cursive;font-weight:400;color:#74822E;letter-spacing:.3px}
+@media (prefers-color-scheme:dark){ .nav .brand .n1{color:#AEC65A} }
+.nav a.lnk{font-weight:800;font-size:.9rem;color:var(--muted);padding:6px 4px}
+.nav a.lnk:hover,.nav a.lnk[aria-current="page"]{color:var(--accent);text-decoration:none}
+
+/* ---- Titres & article ---- */
+h1{font-family:'Bagel Fat One',ui-rounded,cursive;font-weight:400;line-height:1.05;
+   font-size:clamp(1.9rem,6vw,2.9rem);color:#74822E;margin:26px 0 6px}
+h1 .amp{color:#8E63B4}
+@media (prefers-color-scheme:dark){ h1{color:#AEC65A} h1 .amp{color:#B79AE6} }
+.lede{font-size:1.08rem;color:var(--muted);font-weight:600;margin:0 0 8px}
+h2{font-size:1.35rem;font-weight:900;margin:34px 0 6px;color:var(--text)}
+h3{font-size:1.05rem;font-weight:900;margin:20px 0 2px;color:var(--accent)}
+p,li{font-size:1rem}
+ul,ol{padding-left:22px;margin:8px 0}
+li{margin:6px 0}
+strong{color:var(--text)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:16px 0;box-shadow:var(--shadow)}
+.tip{background:linear-gradient(135deg,rgba(142,99,180,.10),rgba(244,169,38,.08));
+     border:1px solid rgba(142,99,180,.25);border-radius:16px;padding:14px 18px;margin:16px 0}
+.tip b{color:var(--accent)}
+.faq q{display:block;font-weight:900;color:var(--text);font-size:1.05rem;margin-top:18px}
+.faq q:before{content:"›  ";color:var(--accent)}
+.badges{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+       border-radius:12px;padding:8px 14px;font-weight:800;font-size:.9rem;box-shadow:var(--shadow)}
+.cta-line{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 4px}
+.cta-line a{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:900;
+            border-radius:14px;padding:11px 18px;box-shadow:var(--shadow)}
+.cta-line a.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.cta-line a:hover{text-decoration:none;filter:brightness(1.05)}
+footer{text-align:center;margin-top:48px;padding-top:18px;border-top:1px solid var(--line);
+       color:var(--muted);font-size:.82rem;font-weight:700}
+footer a{color:var(--accent)}
+footer .fnav{margin-bottom:8px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}

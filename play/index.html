@@ -904,7 +904,7 @@ return{
 
 // === SOUND MANAGER ===
 const SoundManager={
-ctx:null,masterSFXGain:null,musicGain:null,sfxVolume:0.75,musicVolume:0.1,currentTheme:'ethereal',_sfxBuf:{},_musicBuf:{},_musicSrc:null,_unlocked:false,
+ctx:null,masterSFXGain:null,musicGain:null,sfxVolume:0.75,musicVolume:0.1,currentTheme:'ethereal',_sfxBuf:{},_musicBuf:{},_musicSrc:null,_musicPending:null,_unlocked:false,
 themes:{
 ethereal:{label:'Mélodie',src:'assets/music/ethereal.mp3'},
 arcade:{label:'Arcade',src:'assets/music/arcade.mp3'},
@@ -936,9 +936,13 @@ catch(e){return false;}
 },
 _startMusic(name){
 if(this._musicSrc){try{this._musicSrc.stop();}catch(e){}try{this._musicSrc.disconnect();}catch(e){}this._musicSrc=null;}
+this._musicPending=null; // annule tout démarrage asynchrone en attente (sinon 2 décodages concurrents créent 2 pistes qui se superposent, et « Aucune » n'en coupe qu'une)
 if(!name||name==='none')return;
 const src=this.themes[name]&&this.themes[name].src;if(!src||!this.ctx)return;
-const play=(buf)=>{if(this.currentTheme!==name)return;try{const s=this.ctx.createBufferSource();s.buffer=buf;s.loop=true;s.connect(this.musicGain||this.ctx.destination);s.start();this._musicSrc=s;}catch(e){}};
+const token={};this._musicPending=token;
+const play=(buf)=>{if(this.currentTheme!==name||this._musicPending!==token)return; // requête périmée → on ignore
+  if(this._musicSrc){try{this._musicSrc.stop();}catch(e){}try{this._musicSrc.disconnect();}catch(e){}this._musicSrc=null;}
+  try{const s=this.ctx.createBufferSource();s.buffer=buf;s.loop=true;s.connect(this.musicGain||this.ctx.destination);s.start();this._musicSrc=s;this._musicPending=null;}catch(e){}};
 if(this._musicBuf[name])play(this._musicBuf[name]);
 else this._decode(src).then(b=>{this._musicBuf[name]=b;play(b);}).catch(()=>{});
 },

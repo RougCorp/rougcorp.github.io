@@ -82,6 +82,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 .streak-cell.done{background:linear-gradient(135deg,#FF6D00,#FF8F00);color:#fff;border-color:#FF6D00}
 .streak-cell.today{background:linear-gradient(135deg,#FF8F00,#FFB300);color:#fff;border-color:#FFB300;box-shadow:0 0 8px rgba(255,143,0,.6)}
 .streak-cell.future{background:rgba(0,0,0,.05);color:var(--text-light)}
+.streak-cell.empty{border-style:dashed;border-color:rgba(0,0,0,.12);opacity:.55}
+.streak-cell.empty .sc-rew{opacity:.6}
+.streak-cell.done.empty{background:rgba(255,109,0,.18);color:var(--text-light);border-color:rgba(255,109,0,.3)}
+.chest-cell{border-radius:12px;border:2px solid rgba(0,0,0,.12);background:var(--card,#fff);padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:66px;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .1s}
+.chest-cell:active{transform:scale(.94)}
+.chest-cell.empty{cursor:default;border-style:dashed;box-shadow:none;background:rgba(0,0,0,.03)}
+.chest-cell .chest-emoji{font-size:1.7rem;line-height:1}
+.chest-cell .chest-time{font-size:.56rem;font-weight:800;color:var(--text-light);font-variant-numeric:tabular-nums}
+.chest-cell .chest-act{font-size:.58rem;font-weight:900;line-height:1.1}
+.chest-cell.ready{animation:chestReady 1s ease-in-out infinite;border-color:#66BB6A;background:linear-gradient(135deg,rgba(102,187,106,.18),rgba(102,187,106,.06))}
+@keyframes chestReady{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes perfectAnim{0%{opacity:0;transform:translate(-50%,-46%) scale(.5)}16%{opacity:1;transform:translate(-50%,-54%) scale(1.28)}30%{transform:translate(-50%,-53%) scale(.96)}40%{transform:translate(-50%,-54%) scale(1.04)}50%{transform:translate(-50%,-54%) scale(1)}74%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-98%) scale(.9)}}
 @keyframes duelFlashPop{0%{transform:scale(1.5)}60%{transform:scale(.94)}100%{transform:scale(1)}}
 @keyframes multPop{0%{transform:translateX(-50%) scale(1.55)}55%{transform:translateX(-50%) scale(.9)}78%{transform:translateX(-50%) scale(1.06)}100%{transform:translateX(-50%) scale(1)}}
@@ -792,6 +803,19 @@ L.en.perk_slow='-{0}% speed after {1} pts (solo only)';L.fr.perk_slow='-{0}% de 
 L.en.perk_req_score='Reach {0} pts ({1}/{0})';L.fr.perk_req_score='Atteins {0} pts ({1}/{0})';L.es&&(L.es.perk_req_score='Alcanza {0} pts ({1}/{0})');L.de&&(L.de.perk_req_score='Erreiche {0} Pkt ({1}/{0})');L.it&&(L.it.perk_req_score='Raggiungi {0} pt ({1}/{0})');L.pt&&(L.pt.perk_req_score='Atinge {0} pts ({1}/{0})');
 L.en.perk_req_gems='Collect {0} gems ({1}/{0})';L.fr.perk_req_gems='Récolte {0} gemmes ({1}/{0})';L.es&&(L.es.perk_req_gems='Recoge {0} gemas ({1}/{0})');L.de&&(L.de.perk_req_gems='Sammle {0} Edelsteine ({1}/{0})');L.it&&(L.it.perk_req_gems='Raccogli {0} gemme ({1}/{0})');L.pt&&(L.pt.perk_req_gems='Recolhe {0} gemas ({1}/{0})');
 L.en.perk_req_podium='Weekly Top 3 ×{0} ({1}/{0})';L.fr.perk_req_podium='Top 3 hebdo ×{0} ({1}/{0})';L.es&&(L.es.perk_req_podium='Top 3 semanal ×{0} ({1}/{0})');L.de&&(L.de.perk_req_podium='Wöchentl. Top 3 ×{0} ({1}/{0})');L.it&&(L.it.perk_req_podium='Top 3 settim. ×{0} ({1}/{0})');L.pt&&(L.pt.perk_req_podium='Top 3 semanal ×{0} ({1}/{0})');
+L.en.perk_req_runs='Play {0} games ({1}/{0})';L.fr.perk_req_runs='Joue {0} parties ({1}/{0})';L.es&&(L.es.perk_req_runs='Juega {0} partidas ({1}/{0})');L.de&&(L.de.perk_req_runs='Spiele {0} Runden ({1}/{0})');L.it&&(L.it.perk_req_runs='Gioca {0} partite ({1}/{0})');L.pt&&(L.pt.perk_req_runs='Joga {0} partidas ({1}/{0})');
+// ===== Coffres de duel =====
+L.en.chest_bar_title='Duel Chests';L.fr.chest_bar_title='Coffres de duel';L.es&&(L.es.chest_bar_title='Cofres de duelo');L.de&&(L.de.chest_bar_title='Duell-Truhen');L.it&&(L.it.chest_bar_title='Forzieri duello');L.pt&&(L.pt.chest_bar_title='Baús de duelo');
+L.en.chest_common='Common Chest';L.fr.chest_common='Coffre commun';L.es&&(L.es.chest_common='Cofre común');L.de&&(L.de.chest_common='Gewöhnliche Truhe');L.it&&(L.it.chest_common='Forziere comune');L.pt&&(L.pt.chest_common='Baú comum');
+L.en.chest_rare='Rare Chest';L.fr.chest_rare='Coffre rare';L.es&&(L.es.chest_rare='Cofre raro');L.de&&(L.de.chest_rare='Seltene Truhe');L.it&&(L.it.chest_rare='Forziere raro');L.pt&&(L.pt.chest_rare='Baú raro');
+L.en.chest_epic='Epic Chest';L.fr.chest_epic='Coffre épique';L.es&&(L.es.chest_epic='Cofre épico');L.de&&(L.de.chest_epic='Epische Truhe');L.it&&(L.it.chest_epic='Forziere epico');L.pt&&(L.pt.chest_epic='Baú épico');
+L.en.chest_legend='Legendary Chest';L.fr.chest_legend='Coffre légendaire';L.es&&(L.es.chest_legend='Cofre legendario');L.de&&(L.de.chest_legend='Legendäre Truhe');L.it&&(L.it.chest_legend='Forziere leggendario');L.pt&&(L.pt.chest_legend='Baú lendário');
+L.en.chest_open='OPEN';L.fr.chest_open='OUVRIR';L.es&&(L.es.chest_open='ABRIR');L.de&&(L.de.chest_open='ÖFFNEN');L.it&&(L.it.chest_open='APRI');L.pt&&(L.pt.chest_open='ABRIR');
+L.en.chest_start='Start';L.fr.chest_start='Démarrer';L.es&&(L.es.chest_start='Iniciar');L.de&&(L.de.chest_start='Starten');L.it&&(L.it.chest_start='Avvia');L.pt&&(L.pt.chest_start='Iniciar');
+L.en.chest_won='🎁 Chest won!';L.fr.chest_won='🎁 Coffre gagné !';L.es&&(L.es.chest_won='🎁 ¡Cofre ganado!');L.de&&(L.de.chest_won='🎁 Truhe gewonnen!');L.it&&(L.it.chest_won='🎁 Forziere vinto!');L.pt&&(L.pt.chest_won='🎁 Baú ganho!');
+L.en.chest_full='Chest slots full — open one!';L.fr.chest_full='Emplacements pleins — ouvres-en un !';L.es&&(L.es.chest_full='¡Ranuras llenas — abre uno!');L.de&&(L.de.chest_full='Plätze voll — öffne eine!');L.it&&(L.it.chest_full='Slot pieni — aprine uno!');L.pt&&(L.pt.chest_full='Ranhuras cheias — abre um!');
+L.en.chest_opened='{0} opened!';L.fr.chest_opened='{0} ouvert !';L.es&&(L.es.chest_opened='¡{0} abierto!');L.de&&(L.de.chest_opened='{0} geöffnet!');L.it&&(L.it.chest_opened='{0} aperto!');L.pt&&(L.pt.chest_opened='{0} aberto!');
+L.en.chest_confirm_open='Open now for {0} blue gems?';L.fr.chest_confirm_open='Ouvrir tout de suite pour {0} gemmes bleues ?';L.es&&(L.es.chest_confirm_open='¿Abrir ahora por {0} gemas azules?');L.de&&(L.de.chest_confirm_open='Jetzt für {0} blaue Edelsteine öffnen?');L.it&&(L.it.chest_confirm_open='Aprire ora per {0} gemme blu?');L.pt&&(L.pt.chest_confirm_open='Abrir agora por {0} gemas azuis?');
 L.en.ball_zen='Zen';L.fr.ball_zen='Zen';L.es&&(L.es.ball_zen='Zen');L.de&&(L.de.ball_zen='Zen');L.it&&(L.it.ball_zen='Zen');L.pt&&(L.pt.ball_zen='Zen');L.nl&&(L.nl.ball_zen='Zen');
 L.en.ball_prospector='Prospector';L.fr.ball_prospector='Prospecteur';L.es&&(L.es.ball_prospector='Buscador');L.de&&(L.de.ball_prospector='Schürfer');L.it&&(L.it.ball_prospector='Cercatore');L.pt&&(L.pt.ball_prospector='Garimpeiro');L.nl&&(L.nl.ball_prospector='Zoeker');
 L.en.ball_laurel='Laureate';L.fr.ball_laurel='Lauréat';L.es&&(L.es.ball_laurel='Laureado');L.de&&(L.de.ball_laurel='Preisträger');L.it&&(L.it.ball_laurel='Laureato');L.pt&&(L.pt.ball_laurel='Laureado');L.nl&&(L.nl.ball_laurel='Laureaat');
@@ -801,6 +825,14 @@ L.en.tourn_weekly='WEEKLY TOURNAMENT';L.fr.tourn_weekly='TOURNOI DE LA SEMAINE';
 L.en.tourn_prize='🎁 Chests for the Top 3';L.fr.tourn_prize='🎁 Des coffres pour le Top 3';L.es&&(L.es.tourn_prize='🎁 Cofres para el Top 3');L.de&&(L.de.tourn_prize='🎁 Truhen für die Top 3');L.it&&(L.it.tourn_prize='🎁 Forzieri per la Top 3');L.pt&&(L.pt.tourn_prize='🎁 Baús para o Top 3');
 L.en.tourn_ends='Ends in {0}';L.fr.tourn_ends='Fin dans {0}';L.es&&(L.es.tourn_ends='Termina en {0}');L.de&&(L.de.tourn_ends='Endet in {0}');L.it&&(L.it.tourn_ends='Finisce tra {0}');L.pt&&(L.pt.tourn_ends='Termina em {0}');
 L.en.tourn_result='Top {0} — Tournament!';L.fr.tourn_result='Top {0} — Tournoi !';L.es&&(L.es.tourn_result='¡Top {0} — Torneo!');L.de&&(L.de.tourn_result='Top {0} — Turnier!');L.it&&(L.it.tourn_result='Top {0} — Torneo!');L.pt&&(L.pt.tourn_result='Top {0} — Torneio!');
+L.en.streak_no_reward='No reward today — come back tomorrow!';L.fr.streak_no_reward='Pas de récompense aujourd\'hui — reviens demain !';L.es&&(L.es.streak_no_reward='Sin recompensa hoy — ¡vuelve mañana!');L.de&&(L.de.streak_no_reward='Heute keine Belohnung — komm morgen wieder!');L.it&&(L.it.streak_no_reward='Nessuna ricompensa oggi — torna domani!');L.pt&&(L.pt.streak_no_reward='Sem recompensa hoje — volta amanhã!');
+// ===== Noms des nouveaux skins (balles + traînées) =====
+L.en.ball_cherry='Cherry';L.fr.ball_cherry='Cerise';L.es&&(L.es.ball_cherry='Cereza');L.de&&(L.de.ball_cherry='Kirsche');L.it&&(L.it.ball_cherry='Ciliegia');L.pt&&(L.pt.ball_cherry='Cereja');L.nl&&(L.nl.ball_cherry='Kers');
+L.en.ball_plasma='Plasma';L.fr.ball_plasma='Plasma';L.es&&(L.es.ball_plasma='Plasma');L.de&&(L.de.ball_plasma='Plasma');L.it&&(L.it.ball_plasma='Plasma');L.pt&&(L.pt.ball_plasma='Plasma');L.nl&&(L.nl.ball_plasma='Plasma');
+L.en.ball_midas='Midas';L.fr.ball_midas='Midas';L.es&&(L.es.ball_midas='Midas');L.de&&(L.de.ball_midas='Midas');L.it&&(L.it.ball_midas='Midas');L.pt&&(L.pt.ball_midas='Midas');L.nl&&(L.nl.ball_midas='Midas');
+L.en.trail_spark='Bright Spark';L.fr.trail_spark='Étincelle vive';L.es&&(L.es.trail_spark='Chispa viva');L.de&&(L.de.trail_spark='Heller Funke');L.it&&(L.it.trail_spark='Scintilla viva');L.pt&&(L.pt.trail_spark='Faísca viva');L.nl&&(L.nl.trail_spark='Felle vonk');
+L.en.trail_prism='Prism';L.fr.trail_prism='Prisme';L.es&&(L.es.trail_prism='Prisma');L.de&&(L.de.trail_prism='Prisma');L.it&&(L.it.trail_prism='Prisma');L.pt&&(L.pt.trail_prism='Prisma');L.nl&&(L.nl.trail_prism='Prisma');
+L.en.trail_fortune='Fortune';L.fr.trail_fortune='Fortune';L.es&&(L.es.trail_fortune='Fortuna');L.de&&(L.de.trail_fortune='Reichtum');L.it&&(L.it.trail_fortune='Fortuna');L.pt&&(L.pt.trail_fortune='Fortuna');L.nl&&(L.nl.trail_fortune='Fortuin');
 // Booster de récolte ×2 (pub avant une partie) — en + fr (fallback en)
 L.en.harvest_boost='×2 gems next game';L.fr.harvest_boost='Gemmes ×2 la prochaine partie';
 L.en.harvest_boost_armed='✓ ×2 gems armed';L.fr.harvest_boost_armed='✓ Gemmes ×2 armé';
@@ -941,11 +973,16 @@ return{
 };
 })();
 
-// === STREAK : calendrier de récompenses sur 14 jours (petites/grosses alternées, coffre J7, skin J14) ===
-// Au-delà de J14 le cycle plafonne sur la dernière valeur. J1..J14 :
-const STREAK_REWARDS=[5,10,8,15,10,20,40,12,25,15,30,18,35,60];
-// Le motif de 14 jours CYCLE indéfiniment (toute l'année) : J15 = comme J1, etc. → récompenses qui ne s'arrêtent jamais, coffre tous les 7 jours.
+// === STREAK : calendrier de récompenses PSEUDO-ALÉATOIRE sur 28 jours (cycle) ===
+// 0 = jour SANS récompense (mais la série continue). Motif volontairement non-linéaire :
+// certains jours donnent, d'autres non, avec AU PLUS 3 jours vides d'affilée (jamais plus, sinon démotivant).
+// Les jours %7 (7,14,21,28) sont des COFFRES (bundle de gemmes, jamais vides) ; J14 = déblocage skin.
+// Le motif CYCLE toute l'année : J29 = comme J1, etc.
+const STREAK_REWARDS=[5,0,10,0,0,15,0, 0,8,0,0,0,20,0, 6,0,12,0,0,25,0, 0,10,0,0,18,0,0];
 function streakRewardFor(d){return STREAK_REWARDS[(Math.max(d||1,1)-1)%STREAK_REWARDS.length];}
+// Jour "coffre" (tous les 7 jours) : bundle de gemmes jaunes, escalade légère plafonnée.
+function isStreakChestDay(d){return (d||0)>0 && d%7===0;}
+function streakChestReward(d){return Math.min(30+Math.floor((d||7)/7)*5,80);}
 
 // === SOUND MANAGER ===
 const SoundManager={
@@ -1358,7 +1395,7 @@ const PerfUtils = {
 
 // === DATA MANAGER ===
 const DataManager={
-data:{highScore:0,gems:50,gemsBlue:30,skins:['classic'],trails:['classic'],currentSkin:'classic',currentTrail:'classic',currentBg:'classic',backgrounds:['classic'],emblems:['classic'],banners:['classic'],currentEmblem:'classic',currentBanner:'classic',noAds:false,stats:{totalPivots:0,totalScore:0,totalRuns:0,totalGemsCollected:0,bestGemsInRun:0,blitzRuns:0,weeklySubmitCount:0,weeklyTop10Count:0,totalPerfects:0,totalMaxMultiplier:0,weeklyPodiumCount:0,bestPerfectStreak:0},sessionRuns:0,missionsProgress:{},unlockedPacks:[],claimedMissions:[],lastDailyDate:0,claimedDailies:[],musicVol:10,sfxVol:75,dailyStats:{date:0,runs:0,score:0,gems:0,bestRun:0},lives:3,livesLastRegen:0,adsLivesToday:0,adsLivesDate:0,notificationsEnabled:true,reduceFx:false,lang:'',duelIntroSeen:false,duelDailyWinDate:'',campaignLevel:1,campaignStars:{},campaignFlawless:{},dailyCampaignDate:0,dailyCampaignDone:false,streak:0,streakLastDate:0,streakShownToday:false,_streakGemReward:0,_streakSkinUnlocked:false,installDate:0,starterOfferShown:false,starterOfferClaimed:false,timeAttackBest:0,storedPowerups:{shield:0,slowmo:0,magnet:0,mult2:0},adRouletteDate:'',adRouletteCount:0,playerName:'',nameIsLocked:false,weeklyScores:[],weeklyScoreWeek:0,lastWeekTopScores:[],v200TutoSeen:false,tutoHints:{cone:false,mult:false,pu:false}},
+data:{highScore:0,gems:50,gemsBlue:30,skins:['classic'],trails:['classic'],currentSkin:'classic',currentTrail:'classic',currentBg:'classic',backgrounds:['classic'],emblems:['classic'],banners:['classic'],currentEmblem:'classic',currentBanner:'classic',noAds:false,stats:{totalPivots:0,totalScore:0,totalRuns:0,totalGemsCollected:0,bestGemsInRun:0,blitzRuns:0,weeklySubmitCount:0,weeklyTop10Count:0,totalPerfects:0,totalMaxMultiplier:0,weeklyPodiumCount:0,bestPerfectStreak:0},sessionRuns:0,missionsProgress:{},unlockedPacks:[],claimedMissions:[],lastDailyDate:0,claimedDailies:[],musicVol:10,sfxVol:75,dailyStats:{date:0,runs:0,score:0,gems:0,bestRun:0},lives:3,livesLastRegen:0,adsLivesToday:0,adsLivesDate:0,notificationsEnabled:true,reduceFx:false,lang:'',duelIntroSeen:false,duelDailyWinDate:'',campaignLevel:1,campaignStars:{},campaignFlawless:{},dailyCampaignDate:0,dailyCampaignDone:false,streak:0,streakLastDate:0,streakShownToday:false,_streakGemReward:0,_streakSkinUnlocked:false,installDate:0,starterOfferShown:false,starterOfferClaimed:false,timeAttackBest:0,storedPowerups:{shield:0,slowmo:0,magnet:0,mult2:0},adRouletteDate:'',adRouletteCount:0,playerName:'',nameIsLocked:false,weeklyScores:[],weeklyScoreWeek:0,duelChests:[],lastWeekTopScores:[],v200TutoSeen:false,tutoHints:{cone:false,mult:false,pu:false}},
 load(){try{const s=localStorage.getItem('swingSnapData');this._wasFresh=!s; // pas de données locales → install/réinstall (déclenche la restauration cloud auto)
 if(s){const saved=JSON.parse(s);this.data={...this.data,...saved,stats:{...this.data.stats,...(saved.stats||{})},dailyStats:{...this.data.dailyStats,...(saved.dailyStats||{})},storedPowerups:{...this.data.storedPowerups,...(saved.storedPowerups||{})},tutoHints:{...this.data.tutoHints,...(saved.tutoHints||{})}};}this.checkDailyReset();this.updateUI();
 try{reconcileOwnedPacks();}catch(e){} // re-livre aux propriétaires tout contenu ajouté à un pack déjà acheté
@@ -1383,9 +1420,12 @@ if(this.data.streakLastDate!==today){
   this.data.streakLastDate=today;
   // Gem reward seulement si streak > 0 (pas de récompense au premier lancement)
   if((this.data.streak||0)>0){
-    const reward=streakRewardFor(this.data.streak);
+    // Jour coffre (%7) → bundle ; jour normal → valeur du motif (peut être 0 = jour sans récompense) ; la série continue quoi qu'il arrive.
+    const isChest=isStreakChestDay(this.data.streak);
+    const reward=isChest?streakChestReward(this.data.streak):streakRewardFor(this.data.streak);
     this.data.gems=(this.data.gems||0)+reward;
     this.data._streakGemReward=reward;
+    this.data._streakIsChest=isChest;
     // Day-14 skin unlock (trainée + fond complétés par le rattrapage ci-dessous)
     if((this.data.streak||0)>=14&&!(this.data.skins||[]).includes('ball_streak')){
       if(!this.data.skins)this.data.skins=[];
@@ -2689,7 +2729,12 @@ c.fillStyle='rgba(230,255,190,.9)';c.beginPath();c.ellipse(-3.2,-3.6,2.2,1.4,-0.
  // ===== SKINS À ATOUT (perk-skins) — très difficiles à débloquer. L'atout gemmes s'applique partout ; l'atout vitesse UNIQUEMENT en modes non classés (campagne/défi) pour ne pas fausser les classements. =====
  'ball_zen':{price:0,type:'perk',perk:{kind:'slow',pct:15,after:80},unlockStat:'highScore',unlockReq:120,name:'Zen',draw:c=>{const g=c.createRadialGradient(-3,-3,1,0,0,12);g.addColorStop(0,'#E0F7FA');g.addColorStop(.5,'#4DD0E1');g.addColorStop(1,'#00838F');c.fillStyle=g;c.beginPath();c.arc(0,0,10.5,0,6.28);c.fill();c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=1.1;for(let i=1;i<=3;i++){c.globalAlpha=.55-i*.13;c.beginPath();c.arc(0,0,i*3,0,6.28);c.stroke();}c.globalAlpha=1;c.fillStyle='#fff';c.beginPath();c.arc(0,0,1.8,0,6.28);c.fill();},color:'#4DD0E1'},
  'ball_prospector':{price:0,type:'perk',perk:{kind:'gem',pct:18},unlockStat:'stats.totalGemsCollected',unlockReq:4000,name:'Prospecteur',draw:c=>{const g=c.createRadialGradient(-3,-4,1,0,0,13);g.addColorStop(0,'#FFF9C4');g.addColorStop(.45,'#FFD54F');g.addColorStop(.8,'#FFA000');g.addColorStop(1,'#B26A00');c.fillStyle=g;c.beginPath();c.arc(0,0,10.5,0,6.28);c.fill();c.save();c.fillStyle='rgba(255,255,255,.95)';c.beginPath();c.moveTo(0,-6);c.lineTo(1.5,0);c.lineTo(0,6);c.lineTo(-1.5,0);c.closePath();c.moveTo(-6,0);c.lineTo(0,1.5);c.lineTo(6,0);c.lineTo(0,-1.5);c.closePath();c.fill();c.restore();c.globalAlpha=.5;c.fillStyle='#fff';c.beginPath();c.arc(-3.5,3.5,1.3,0,6.28);c.fill();c.globalAlpha=1;},color:'#FFD54F'},
- 'ball_laurel':{price:0,type:'perk',perk:{kind:'gem',pct:25},unlockStat:'stats.weeklyPodiumCount',unlockReq:3,name:'Lauréat',draw:c=>{const g=c.createRadialGradient(-3,-3,1,0,0,12);g.addColorStop(0,'#F1F8E9');g.addColorStop(.5,'#AED581');g.addColorStop(1,'#33691E');c.fillStyle=g;c.beginPath();c.arc(0,0,10.5,0,6.28);c.fill();c.strokeStyle='#FFD700';c.lineWidth=2;c.beginPath();c.arc(0,0,7.5,0,6.28);c.stroke();c.fillStyle='#FFD700';c.beginPath();c.arc(0,0,2.4,0,6.28);c.fill();c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.arc(-.8,-.8,.9,0,6.28);c.fill();},color:'#AED581'}
+ 'ball_laurel':{price:0,type:'perk',perk:{kind:'gem',pct:25},unlockStat:'stats.weeklyPodiumCount',unlockReq:3,name:'Lauréat',draw:c=>{const g=c.createRadialGradient(-3,-3,1,0,0,12);g.addColorStop(0,'#F1F8E9');g.addColorStop(.5,'#AED581');g.addColorStop(1,'#33691E');c.fillStyle=g;c.beginPath();c.arc(0,0,10.5,0,6.28);c.fill();c.strokeStyle='#FFD700';c.lineWidth=2;c.beginPath();c.arc(0,0,7.5,0,6.28);c.stroke();c.fillStyle='#FFD700';c.beginPath();c.arc(0,0,2.4,0,6.28);c.fill();c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.arc(-.8,-.8,.9,0,6.28);c.fill();},color:'#AED581'},
+ // ===== NOUVEAUX SKINS DE BALLE (sans atout, achetables en gemmes) =====
+ 'cherry':{price:1400,name:'Cerise',draw:c=>{const g=c.createRadialGradient(-3,-4,1,0,0,12);g.addColorStop(0,'#FF8A80');g.addColorStop(.5,'#E53935');g.addColorStop(1,'#8E0000');c.fillStyle=g;c.beginPath();c.arc(0,0,10,0,6.28);c.fill();c.strokeStyle='#5D4037';c.lineWidth=1.4;c.beginPath();c.moveTo(2,-8);c.quadraticCurveTo(6,-12,4,-14);c.stroke();c.fillStyle='rgba(255,255,255,.7)';c.beginPath();c.ellipse(-3.5,-4,2.2,1.3,-.5,0,6.28);c.fill();},color:'#E53935'},
+ 'plasma':{price:1800,name:'Plasma',draw:c=>{const g=c.createRadialGradient(-2,-3,1,0,0,12);g.addColorStop(0,'#E1BEE7');g.addColorStop(.5,'#8E24AA');g.addColorStop(1,'#4A148C');c.fillStyle=g;c.beginPath();c.arc(0,0,10,0,6.28);c.fill();c.save();c.beginPath();c.arc(0,0,10,0,6.28);c.clip();c.strokeStyle='rgba(0,229,255,.9)';c.lineWidth=1.3;for(let i=0;i<3;i++){c.beginPath();c.moveTo(-9,-6+i*5);c.quadraticCurveTo(0,-2+i*5,9,-7+i*5);c.stroke();}c.restore();c.fillStyle='#fff';c.beginPath();c.arc(-3,-3,1.4,0,6.28);c.fill();},color:'#8E24AA'},
+ // ===== SKIN DE BALLE À ATOUT ACHETABLE (boutique, gemmes jaunes) — atout gemmes, actif partout =====
+ 'ball_midas':{price:6000,type:'perk',perk:{kind:'gem',pct:12},name:'Midas',draw:c=>{const g=c.createRadialGradient(-3,-4,1,0,0,13);g.addColorStop(0,'#FFFDE7');g.addColorStop(.4,'#FFD700');g.addColorStop(.8,'#FFA000');g.addColorStop(1,'#7A4F00');c.fillStyle=g;c.beginPath();c.arc(0,0,10.5,0,6.28);c.fill();c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=1.1;c.beginPath();c.arc(0,0,6.5,0,6.28);c.stroke();c.beginPath();c.arc(0,0,3.2,0,6.28);c.stroke();c.fillStyle='#fff';c.beginPath();c.arc(-4,-4,1.7,0,6.28);c.fill();},color:'#FFD700'}
 };
 
 // ============================================
@@ -2760,7 +2805,12 @@ this.trailSkins={
 'shooting':{price:2650,name:'Étoiles Filantes',spawnMs:7,decay:0.018,draw:(c,t)=>{c.save();c.translate(t.x,t.y);c.rotate(0.6);const len=14*t.life;const g=c.createLinearGradient(-len,0,3,0);g.addColorStop(0,'rgba(120,180,255,0)');g.addColorStop(1,`rgba(180,220,255,${t.life*.8})`);c.strokeStyle=g;c.lineWidth=2.4*t.life;c.lineCap='round';c.beginPath();c.moveTo(-len,0);c.lineTo(0,0);c.stroke();c.shadowBlur=8*t.life;c.shadowColor='#fff';c.fillStyle=`rgba(255,255,255,${t.life})`;c.beginPath();for(let i=0;i<5;i++){const a=i*4*Math.PI/5-Math.PI/2;c.lineTo(Math.cos(a)*3*t.life,Math.sin(a)*3*t.life);const a2=a+Math.PI/5;c.lineTo(Math.cos(a2)*1.3*t.life,Math.sin(a2)*1.3*t.life);}c.closePath();c.fill();c.shadowBlur=0;c.restore();},color:'#82B1FF'},
 'firefly':{price:1300,name:'Lucioles',spawnMs:13,decay:0.011,draw:(c,t)=>{const glow=0.5+Math.sin((1-t.life)*15)*0.5;const sway=Math.sin((1-t.life)*6)*7;c.save();c.translate(t.x+sway,t.y+Math.cos((1-t.life)*5)*5);c.shadowBlur=10*t.life*glow;c.shadowColor='rgba(180,255,80,.9)';c.fillStyle=`rgba(220,255,120,${t.life*glow})`;c.beginPath();c.arc(0,0,2.4*t.life,0,6.28);c.fill();c.shadowBlur=0;c.fillStyle=`rgba(255,255,200,${t.life*glow})`;c.beginPath();c.arc(0,0,1*t.life,0,6.28);c.fill();c.restore();},color:'#AEEA00'},
 'ribbon':{price:1550,name:'Rubans',spawnMs:8,decay:0.016,draw:(c,t)=>{const cols=['#EC407A','#7E57C2','#26C6DA','#FFCA28'];const col=cols[Math.floor((t.x*0.09+t.y*0.05+1))%4];c.save();c.translate(t.x,t.y);c.globalAlpha=t.life*.85;c.strokeStyle=col;c.lineWidth=3*t.life;c.lineCap='round';const p=(1-t.life)*6;c.beginPath();for(let i=0;i<=8;i++){const x=(i-4)*2*t.life;const y=Math.sin(i*0.8+p)*3*t.life;i===0?c.moveTo(x,y):c.lineTo(x,y);}c.stroke();c.restore();},color:'#EC407A'},
-'thunder':{price:2200,name:'Foudre',spawnMs:5,decay:0.024,draw:(c,t)=>{c.save();c.translate(t.x,t.y);c.shadowBlur=12*t.life;c.shadowColor='rgba(180,210,255,.9)';if(Math.random()<0.5){c.strokeStyle=`rgba(230,240,255,${t.life})`;c.lineWidth=1.8*t.life;c.beginPath();let x=0,y=-7*t.life;c.moveTo(x,y);for(let i=0;i<4;i++){x+=(Math.random()-0.5)*5*t.life;y+=3.5*t.life;c.lineTo(x,y);}c.stroke();}c.fillStyle=`rgba(200,220,255,${t.life*.7})`;c.beginPath();c.arc(0,0,2.5*t.life,0,6.28);c.fill();c.shadowBlur=0;c.restore();},color:'#B3C6FF'}
+'thunder':{price:2200,name:'Foudre',spawnMs:5,decay:0.024,draw:(c,t)=>{c.save();c.translate(t.x,t.y);c.shadowBlur=12*t.life;c.shadowColor='rgba(180,210,255,.9)';if(Math.random()<0.5){c.strokeStyle=`rgba(230,240,255,${t.life})`;c.lineWidth=1.8*t.life;c.beginPath();let x=0,y=-7*t.life;c.moveTo(x,y);for(let i=0;i<4;i++){x+=(Math.random()-0.5)*5*t.life;y+=3.5*t.life;c.lineTo(x,y);}c.stroke();}c.fillStyle=`rgba(200,220,255,${t.life*.7})`;c.beginPath();c.arc(0,0,2.5*t.life,0,6.28);c.fill();c.shadowBlur=0;c.restore();},color:'#B3C6FF'},
+ // ===== NOUVELLES TRAÎNÉES (sans atout, achetables) =====
+ 'trail_spark':{price:800,name:'Étincelle vive',spawnMs:7,decay:0.02,draw:(c,t)=>{const p=1-t.life;c.shadowBlur=6*t.life;c.shadowColor='#FFD54F';c.fillStyle='#FFF59D';for(let i=0;i<3;i++){const a=i*2.1+p*4;const d=(2+i*2+p*6)*t.life;c.beginPath();c.arc(t.x+Math.cos(a)*d,t.y+Math.sin(a)*d,1.6*t.life,0,6.28);c.fill();}c.shadowBlur=0;},color:'#FFD54F'},
+ 'trail_prism':{price:1200,name:'Prisme',spawnMs:8,decay:0.016,draw:(c,t)=>{const cols=['#FF5252','#FFD740','#69F0AE','#40C4FF','#E040FB'];const i=Math.floor((1-t.life)*cols.length)%cols.length;c.globalAlpha=t.life;c.shadowBlur=7*t.life;c.shadowColor=cols[i];c.fillStyle=cols[i];c.beginPath();c.arc(t.x,t.y,4*t.life,0,6.28);c.fill();c.shadowBlur=0;c.globalAlpha=1;},color:'#40C4FF'},
+ // ===== TRAÎNÉE À ATOUT (déblocage difficile) — atout gemmes +8%, actif partout =====
+ 'trail_fortune':{price:0,type:'perk',perk:{kind:'gem',pct:8},unlockStat:'stats.totalRuns',unlockReq:600,name:'Fortune',spawnMs:8,decay:0.018,draw:(c,t)=>{c.globalAlpha=t.life;c.shadowBlur=6*t.life;c.shadowColor='#FFD700';const g=c.createRadialGradient(t.x-1,t.y-1,0,t.x,t.y,4.5*t.life);g.addColorStop(0,'#FFF9C4');g.addColorStop(.6,'#FFD700');g.addColorStop(1,'#B8860B');c.fillStyle=g;c.beginPath();c.arc(t.x,t.y,4.5*t.life,0,6.28);c.fill();c.shadowBlur=0;c.globalAlpha=1;},color:'#FFD700'}
 };
 
 // ============================================
@@ -3641,7 +3691,7 @@ this.mode=this.mode||'arcade';this.score=0;this.displayScore=0;this.gemsCollecte
 // Booster de récolte : consommé au début d'une partie qui ramasse des gemmes (arcade/blitz/campagne/quotidien), pas en duel.
 this.gemBoost=1;try{if(DataManager.data.harvestBoostArmed&&(this.mode==='arcade'||this.mode==='timeattack'||this.mode==='campaign'||this.mode==='daily')){this.gemBoost=2;DataManager.data.harvestBoostArmed=false;DataManager.save();try{updateHarvestBoostUI();}catch(e){}try{showToast(I18N.t('harvest_boost_active'),{mini:true,ttl:1400});}catch(e){}}}catch(e){}
 // Atout du skin équipé. Gemmes : partout. Vitesse : SEULEMENT en modes non classés (campagne/défi), jamais en arcade/blitz classés → classements équitables. Duels non touchés (moteur dédié).
-this.gemPerkMul=1;this.activeSlowPerk=null;this._gemCarry=0;try{const pk=currentSkinPerk();if(pk){const ranked=(this.mode==='arcade'||this.mode==='timeattack');if(pk.kind==='gem')this.gemPerkMul=1+(pk.pct||0)/100;else if(pk.kind==='slow'&&!ranked)this.activeSlowPerk={pct:pk.pct||0,after:pk.after||0};}}catch(e){}
+this.gemPerkMul=1;this.activeSlowPerk=null;this._gemCarry=0;try{const pk=collectPerks();const ranked=(this.mode==='arcade'||this.mode==='timeattack');if(pk.gemPct>0)this.gemPerkMul=1+pk.gemPct/100;if(pk.slow&&!ranked)this.activeSlowPerk=pk.slow;}catch(e){}
 try{const _gh=document.querySelector('.gem-hud');if(_gh){clearTimeout(_gh._hideT);_gh.style.display='none';}}catch(e){}
 this.freeFrames=0;this.immuneFrames=0;this._wasComing=false;this._lastTierScore=-1;this.lastSnappedPivot=null;
 this.perfectChain=0;this.multiplier=1;this.allPerfect=true;this.perfectsThisRun=0;this._mileNext=100;
@@ -4263,7 +4313,8 @@ else if(item.type==='campaign'){locked=true;pd=I18N.t('camp_level_badge')+item.c
 else if(item.type==='division'){locked=true;pd=(()=>{try{return DuelManager.rankFor(item.divPts).name;}catch(e){return '🏆';}})();li='🏆';lc+=' lock-campaign';}
 else if(item.type==='streak'){locked=true;pd='🔥 14 JOURS';li='🔥';lc+=' lock-mission';}
 else if(item.type==='pstreak'){locked=true;pd='🎯 '+item.streakReq;li='🎯';lc+=' lock-mission';}
-else if(item.type==='perk'){locked=true;pd='⭐';li='⭐';lc+=' lock-campaign';}
+else if(item.type==='perk'&&item.unlockStat){locked=true;pd='⭐';li='⭐';lc+=' lock-campaign';}
+else if(item.type==='perk'){pd='⭐ '+price+' '+gemIco;}
 else pd=price+' '+gemIco;
 }else pd='✓';
 // Achat générique (gemmes jaunes ou bleues selon l'onglet) puis sélection.
@@ -4441,11 +4492,11 @@ function unlockMissionCondFor(id,rt){try{
 // Provenance / condition d'un cosmétique. `rt` (ball/trail/bg/emblem/banner) permet de préciser
 // QUELLE mission le débloque et, si acheté en gemmes, de le dire clairement.
 function perkDesc(item){const p=item&&item.perk;if(!p)return '';if(p.kind==='gem')return I18N.t('perk_gem',p.pct);if(p.kind==='slow')return I18N.t('perk_slow',p.pct,p.after);return '';}
-function perkUnlockHint(item){try{const req=item.unlockReq||0;const cur=_readStatPath(item.unlockStat);const map={'highScore':'perk_req_score','stats.totalGemsCollected':'perk_req_gems','stats.weeklyPodiumCount':'perk_req_podium'};const k=map[item.unlockStat]||'perk_req_score';return I18N.t(k,req,Math.min(cur,req));}catch(e){return '';}}
+function perkUnlockHint(item){try{const req=item.unlockReq||0;const cur=_readStatPath(item.unlockStat);const map={'highScore':'perk_req_score','stats.totalGemsCollected':'perk_req_gems','stats.weeklyPodiumCount':'perk_req_podium','stats.totalRuns':'perk_req_runs'};const k=map[item.unlockStat]||'perk_req_score';return I18N.t(k,req,Math.min(cur,req));}catch(e){return '';}}
 function cosmSource(item,has,id,rt){
   const t=item&&item.type;
   const rank=()=>{try{return DuelManager.rankFor(item.divPts).name;}catch(e){return '';}};
-  if(t==='perk'){const eff='⭐ '+perkDesc(item);return has?(eff+' · '+I18N.t('src_owned')):(eff+' — '+perkUnlockHint(item));}
+  if(t==='perk'){const eff='⭐ '+perkDesc(item);if(has)return eff+' · '+I18N.t('src_owned');return eff+' — '+(item.unlockStat?perkUnlockHint(item):I18N.t('src_gems'));}
   const cond=(t==='mission'&&rt&&id)?unlockMissionCondFor(id,rt):null;
   if(has){
     if(t==='mission')return '🎯 '+I18N.t('src_mission')+(cond?' · '+cond:'');
@@ -4476,7 +4527,7 @@ function openSkinPreview(id){
   $('skinPreviewName').textContent=cfg.nameFromDef?cosmName(cfg.tkey,id,item.name):I18N.t(id.startsWith(prefix.slice(0,-1)+'_')?id:prefix+id);
   const sub=$('skinPreviewSub'),act=$('skinPreviewAction');act.disabled=false;act.style.opacity='';
   const packLocked=(!has&&item.type==='pack');
-  const specialLocked=(!has&&id!=='classic'&&['mission','campaign','division','streak','pstreak','perk'].indexOf(item.type)>=0);
+  const specialLocked=(!has&&id!=='classic'&&(['mission','campaign','division','streak','pstreak'].indexOf(item.type)>=0||(item.type==='perk'&&item.unlockStat)));
   const _rt={balls:'ball',trails:'trail',bgs:'bg',emblems:'emblem',banners:'banner'}[tab];
   if(has||id==='classic'){
     // Possédé : on montre la PROVENANCE + un bouton Équiper (ou « déjà équipé »).
@@ -4492,8 +4543,8 @@ function openSkinPreview(id){
     sub.innerHTML=cosmSource(item,false,id,_rt)||'🔒';
     act.className='btn';act.style.opacity='.55';act.textContent='🔒';act.onclick=()=>{showToast(sub.textContent||'🔒');};
   }else{
-    // Achetable avec des gemmes.
-    sub.innerHTML=price+' '+gemIco;
+    // Achetable avec des gemmes. Si c'est un skin à ATOUT achetable, on montre l'effet au-dessus du prix.
+    sub.innerHTML=(item.perk?('⭐ '+perkDesc(item)+'<br>'):'')+price+' '+gemIco;
     act.className='btn btn-primary';act.style.opacity='';act.innerHTML=(I18N.t('pv_buy')||'Acheter')+' — '+price+' '+gemIco;
     act.onclick=()=>{const bal=cfg.blue?(DataManager.data.gemsBlue||0):DataManager.data.gems;if(bal>=price){if(cfg.blue)DataManager.data.gemsBlue=(DataManager.data.gemsBlue||0)-price;else DataManager.data.gems-=price;DataManager.data[cfg.owned].push(id);DataManager.data[cfg.cur]=id;DataManager.save();try{FriendManager.syncProfile();}catch(e){}showToast(I18N.t('toast_bought'));closeSkinPreview();renderShop();}else showToast(I18N.t('toast_not_enough'));};
   }
@@ -4668,7 +4719,9 @@ const modal=$('streakModal');if(!modal)return;
 streak=streak||1;gemReward=gemReward||5;
 Haptic.success();try{SoundManager.playReward();}catch(e){}
 $('streakDayNum').textContent=streak;
-$('streakGemReward').innerHTML='+'+gemReward+' <span class="gem-i"></span>';
+// Jour sans récompense : on l'affiche clairement (la série continue quand même)
+if(gemReward>0){$('streakGemReward').innerHTML=(DataManager.data._streakIsChest?'🎁 ':'+')+gemReward+' <span class="gem-i"></span>';}
+else{$('streakGemReward').innerHTML='<span style="font-size:.8rem;opacity:.75">'+(I18N.t('streak_no_reward')||'Pas de récompense aujourd\'hui — reviens demain !')+'</span>';}
 const skinBox=$('streakSkinBox');
 if(skinBox)skinBox.style.display=skinUnlocked?'block':'none';
 // Title changes at milestones
@@ -4691,10 +4744,12 @@ if(dotsEl){
   const blockStart=Math.floor((streak-1)/14)*14+1;
   for(let k=0;k<14;k++){
     const day=blockStart+k;
-    const c=document.createElement('div');
-    c.className='streak-cell '+(day<streak?'done':day===streak?'today':'future');
     const isChest=day%7===0, isSkin=day===14; // coffre tous les 7 jours ; skin unique à J14
-    const mid=isSkin?'🔥':isChest?'🎁':('+'+streakRewardFor(day));
+    const rew=streakRewardFor(day);
+    const isEmpty=!isChest&&!isSkin&&rew<=0; // jour sans récompense
+    const c=document.createElement('div');
+    c.className='streak-cell '+(day<streak?'done':day===streak?'today':'future')+(isEmpty?' empty':'');
+    const mid=isSkin?'🔥':isChest?'🎁':(isEmpty?'—':('+'+rew));
     c.innerHTML='<span class="sc-day">J'+day+'</span><span class="sc-rew">'+mid+'</span>';
     dotsEl.appendChild(c);
   }
@@ -4866,12 +4921,19 @@ DataManager.save();
 
 // Atout du skin actuellement équipé (ou null). Lu par startRun / getCurrentSpeed.
 function currentSkinPerk(){try{const s=DataManager.data.currentSkin||'classic';const bs=Game.player&&Game.player.ballSkins;const def=bs&&bs[s];return(def&&def.perk)||null;}catch(e){return null;}}
+// Agrège les atouts de la balle ET de la traînée équipées → {gemPct, slow:{pct,after}|null}. Les % gemmes s'additionnent ; on garde le meilleur ralenti.
+function collectPerks(){const out={gemPct:0,slow:null};const add=(def)=>{const p=def&&def.perk;if(!p)return;if(p.kind==='gem')out.gemPct+=(p.pct||0);else if(p.kind==='slow'){if(!out.slow||(p.pct||0)>out.slow.pct)out.slow={pct:p.pct||0,after:p.after||0};}};
+ try{const bs=Game.player&&Game.player.ballSkins;add(bs&&bs[DataManager.data.currentSkin]);}catch(e){}
+ try{const ts=Game.player&&Game.player.trailSkins;add(ts&&ts[DataManager.data.currentTrail]);}catch(e){}
+ return out;}
 // Lit une stat qui peut être au premier niveau (ex. 'highScore') ou sous data.stats (ex. 'stats.totalGemsCollected').
 function _readStatPath(p){try{const d=DataManager.data;if(!p)return 0;if(p.indexOf('stats.')===0)return(d.stats&&d.stats[p.slice(6)])||0;return d[p]||0;}catch(e){return 0;}}
-// Débloque les skins à atout quand leur condition (très exigeante) est atteinte. Idempotent.
+// Débloque les skins à atout À DÉBLOCAGE (unlockStat) quand la condition est atteinte. Idempotent. Balles → data.skins, traînées → data.trails. Les perk-skins ACHETABLES (price>0, sans unlockStat) sont ignorés ici.
 function checkPerkUnlocks(){
-try{const d=DataManager.data;const bs=Game.player&&Game.player.ballSkins;if(!bs)return;if(!d.skins)d.skins=[];let changed=false;
-for(const id in bs){const def=bs[id];if(!def||def.type!=='perk')continue;if(d.skins.includes(id))continue;if(_readStatPath(def.unlockStat)>=(def.unlockReq||Infinity)){d.skins.push(id);changed=true;try{showToast('⭐ '+I18N.t('perk_unlocked',I18N.t('ball_'+id)||def.name));}catch(e){}}}
+try{const d=DataManager.data;let changed=false;
+const scan=(cat,ownedKey,pref)=>{const map=Game.player&&Game.player[cat];if(!map)return;if(!d[ownedKey])d[ownedKey]=[];
+  for(const id in map){const def=map[id];if(!def||def.type!=='perk'||!def.unlockStat)continue;if(d[ownedKey].includes(id))continue;if(_readStatPath(def.unlockStat)>=(def.unlockReq||Infinity)){d[ownedKey].push(id);changed=true;try{showToast('⭐ '+I18N.t('perk_unlocked',I18N.t(pref+id)||def.name));}catch(e){}}}};
+scan('ballSkins','skins','ball_');scan('trailSkins','trails','trail_');
 if(changed){DataManager.save();try{FriendManager.syncProfile();}catch(e){}try{if($('shopScreen')&&$('shopScreen').classList.contains('active'))renderShop();}catch(e){}}
 }catch(e){}
 }
@@ -5374,26 +5436,27 @@ const claimed=DataManager.data.claimedMissions||[];
 return CAMP_MISSION_DEFS.flatMap(def=>def.tiers.filter((t,i)=>getMissionProgress({stat:def.stat})>=t.g&&!claimed.includes(def.id+'_t'+i)));
 }
 // ═══════ UNLOCK MISSION DEFS (tiered cosmetics) ═══════
+// Seuils RELEVÉS (certains étaient trop faciles) — récompenses cosmétiques plus méritées.
 const UNLOCK_MISSION_DEFS=[
 {id:'ub',nameKey:'unlock_balls_name',icon:'⚽',tiers:[
-{g:35,stat:'bestRun',r:'mystical',rt:'ball'},
-{g:2000,stat:'totalGemsCollected',r:'matrix',rt:'ball'},
-{g:8,stat:'duelWins',r:'venom',rt:'ball'},
+{g:60,stat:'bestRun',r:'mystical',rt:'ball'},
+{g:3500,stat:'totalGemsCollected',r:'matrix',rt:'ball'},
+{g:15,stat:'duelWins',r:'venom',rt:'ball'},
 ]},
 {id:'ut',nameKey:'unlock_trails_name',icon:'🌊',tiers:[
-{g:300,stat:'totalRuns',r:'mystical',rt:'trail'},
-{g:8000,stat:'totalScore',r:'matrix',rt:'trail'},
-{g:30,stat:'duelPlayed',r:'venom',rt:'trail'},
+{g:500,stat:'totalRuns',r:'mystical',rt:'trail'},
+{g:15000,stat:'totalScore',r:'matrix',rt:'trail'},
+{g:50,stat:'duelPlayed',r:'venom',rt:'trail'},
 ]},
 {id:'ubg',nameKey:'unlock_bgs_name',icon:'🌌',tiers:[
-{g:40,stat:'bestRun',r:'mystical',rt:'bg'},
-{g:1500,stat:'totalGemsCollected',r:'matrix',rt:'bg'},
+{g:70,stat:'bestRun',r:'mystical',rt:'bg'},
+{g:3000,stat:'totalGemsCollected',r:'matrix',rt:'bg'},
 ]},
 {id:'ue',nameKey:'unlock_emblems_name',icon:'🛡️',tiers:[
-{g:10,stat:'duelPlayed',r:'whistle',rt:'emblem'},
+{g:25,stat:'duelPlayed',r:'whistle',rt:'emblem'},
 ]},
 {id:'uban',nameKey:'unlock_banners_name',icon:'🏁',tiers:[
-{g:12,stat:'duelWins',r:'pitch_ban',rt:'banner'},
+{g:25,stat:'duelWins',r:'pitch_ban',rt:'banner'},
 ]},
 ];
 // ═══════ DUEL MISSION DEFS (tiered) ═══════
@@ -5950,13 +6013,15 @@ function grantTournamentChest(mode,rank){
 }
 function showChestReward(o){
   const tiers=['🥇','🥈','🥉'];
+  const titleTxt=o.title||((tiers[o.rank-1]||'')+' '+I18N.t('tourn_result',o.rank));
+  const startEmoji=o.emoji||'🎁';
   const ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:200;background:rgba(20,12,30,.72);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:24px';
   const card=document.createElement('div');
   card.style.cssText='background:linear-gradient(180deg,#FFFFFF,#FFF7EC);border-radius:24px;padding:26px 22px;max-width:330px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)';
   const rewardHtml=`<div style="font-size:1.05rem;font-weight:900;color:var(--text);margin:2px 0 14px">+${o.gold} <span class="gem-i"></span> &nbsp; +${o.blue} <span class="gem-b"></span>${o.skinName?`<div style="margin-top:8px;font-size:.92rem;color:var(--accent,#8E63B4);font-weight:900">⭐ ${_esc(o.skinName)}</div>`:''}</div>`;
-  card.innerHTML=`<div style="font-size:.8rem;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.6px">${tiers[o.rank-1]||''} ${I18N.t('tourn_result',o.rank)}</div>
-   <div id="_chestIco" style="font-size:4.4rem;margin:10px 0;transform:scale(.8);transition:transform .3s">🎁</div>
+  card.innerHTML=`<div style="font-size:.8rem;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.6px">${titleTxt}</div>
+   <div id="_chestIco" style="font-size:4.4rem;margin:10px 0;transform:scale(.8);transition:transform .3s">${startEmoji}</div>
    <div id="_chestReveal" style="opacity:0;transition:opacity .4s">${rewardHtml}<button class="btn btn-primary" id="_chestClose" style="width:100%">${I18N.t('close')}</button></div>`;
   ov.appendChild(card);document.body.appendChild(ov);
   const ico=card.querySelector('#_chestIco');
@@ -5964,6 +6029,68 @@ function showChestReward(o){
   const close=()=>ov.remove();
   card.querySelector('#_chestClose').onclick=close;
   ov.onclick=e=>{if(e.target===ov)close();};
+}
+
+// ═══════ COFFRES DE DUEL (style Clash Royale — 4 emplacements) ═══════
+// Gagnés en remportant un duel classé (si un emplacement est libre). Un seul se déverrouille à la fois
+// (minuterie selon la rareté) ; ouverture instantanée possible contre des gemmes bleues.
+const DUEL_CHEST_TYPES={
+  common:{key:'chest_common',emoji:'📦',color:'#8D6E63',mins:15, y:[20,40], b:[10,20], cosmChance:0},
+  rare:{key:'chest_rare',emoji:'🎁',color:'#42A5F5',mins:60, y:[50,80], b:[20,35], cosmChance:0.15},
+  epic:{key:'chest_epic',emoji:'🧰',color:'#AB47BC',mins:180, y:[100,150], b:[40,60], cosmChance:0.40},
+  legendary:{key:'chest_legend',emoji:'👑',color:'#FFB300',mins:480, y:[200,300], b:[80,120], cosmChance:1}
+};
+const CHEST_MIN_PER_BLUE=5; // 5 min de déblocage restantes = 1 gemme bleue pour ouvrir tout de suite
+const ChestManager={
+  MAX:4,
+  list(){const d=DataManager.data;if(!Array.isArray(d.duelChests))d.duelChests=[];return d.duelChests;},
+  rollRarity(){const r=Math.random();if(r<0.60)return 'common';if(r<0.88)return 'rare';if(r<0.98)return 'epic';return 'legendary';},
+  award(){const l=this.list();if(l.length>=this.MAX)return null;const rarity=this.rollRarity();l.push({rarity,state:'locked',id:Date.now()+'_'+Math.floor(Math.random()*1e4)});DataManager.save();return rarity;},
+  startUnlock(idx){const l=this.list();const c=l[idx];if(!c||c.state!=='locked')return;if(l.some(x=>x.state==='unlocking'))return;const t=DUEL_CHEST_TYPES[c.rarity];c.state='unlocking';c.unlockEndAt=Date.now()+t.mins*60000;DataManager.save();renderDuelChests();},
+  remainingMs(c){if(!c)return 0;if(c.state==='locked')return DUEL_CHEST_TYPES[c.rarity].mins*60000;if(c.state==='unlocking')return Math.max(0,(c.unlockEndAt||0)-Date.now());return 0;},
+  isReady(c){return !!c&&(c.state==='ready'||(c.state==='unlocking'&&Date.now()>=(c.unlockEndAt||0)));},
+  gemCost(c){const ms=this.remainingMs(c);if(ms<=0)return 0;return Math.max(1,Math.ceil(ms/60000/CHEST_MIN_PER_BLUE));},
+  open(idx,viaGems){const l=this.list();const c=l[idx];if(!c)return;
+    if(!this.isReady(c)){if(!viaGems)return;const cost=this.gemCost(c);if((DataManager.data.gemsBlue||0)<cost){showToast(I18N.t('toast_not_enough'));return;}DataManager.data.gemsBlue-=cost;}
+    const t=DUEL_CHEST_TYPES[c.rarity];const rnd=a=>a[0]+Math.floor(Math.random()*(a[1]-a[0]+1));
+    const y=rnd(t.y), b=rnd(t.b);
+    DataManager.data.gems=(DataManager.data.gems||0)+y;DataManager.data.gemsBlue=(DataManager.data.gemsBlue||0)+b;
+    let skinName=null;
+    if(Math.random()<t.cosmChance){const POOL=['neon','sakura','aurora','crystal','rainbow','tropical','cyberpunk','mystical'];if(!DataManager.data.skins)DataManager.data.skins=[];const avail=POOL.filter(s=>!DataManager.data.skins.includes(s));if(avail.length){const id=avail[Math.floor(Math.random()*avail.length)];DataManager.data.skins.push(id);skinName=I18N.t('ball_'+id)||id;}else{DataManager.data.gemsBlue+=5;}}
+    l.splice(idx,1);DataManager.save();try{FriendManager.syncProfile();}catch(e){}
+    showChestReward({title:I18N.t('chest_opened',I18N.t(t.key)),emoji:t.emoji,gold:y,blue:b,skinName});
+    renderDuelChests();
+  }
+};
+let _chestTimer=null;
+function renderDuelChests(){
+  const bar=$('duelChestBar');if(!bar)return;
+  const l=ChestManager.list();
+  bar.innerHTML='';
+  const anyUnlocking=l.some(x=>x.state==='unlocking'&&!ChestManager.isReady(x));
+  for(let i=0;i<ChestManager.MAX;i++){
+    const c=l[i];
+    const cell=document.createElement('div');cell.className='chest-cell';
+    if(!c){cell.classList.add('empty');cell.innerHTML='<div class="chest-emoji" style="opacity:.3">➕</div>';bar.appendChild(cell);continue;}
+    const t=DUEL_CHEST_TYPES[c.rarity];const ready=ChestManager.isReady(c);
+    cell.style.borderColor=t.color;
+    let bottom='';
+    if(ready){cell.classList.add('ready');bottom='<div class="chest-act" style="color:#2E7D32">'+I18N.t('chest_open')+'</div>';}
+    else if(c.state==='unlocking'){bottom='<div class="chest-time">⏳ '+fmtCountdown(ChestManager.remainingMs(c))+'</div><div class="chest-act" style="color:#1976D2">'+ChestManager.gemCost(c)+' <span class="gem-b"></span></div>';}
+    else{bottom='<div class="chest-act" style="color:var(--text-light)">'+(anyUnlocking?(ChestManager.gemCost(c)+' <span class="gem-b"></span>'):I18N.t('chest_start'))+'</div>';}
+    cell.innerHTML='<div class="chest-emoji">'+t.emoji+'</div>'+bottom;
+    cell.onclick=()=>{
+      if(ChestManager.isReady(c)){ChestManager.open(i,false);}
+      else if(c.state==='locked'&&!anyUnlocking){ChestManager.startUnlock(i);}
+      else{const cost=ChestManager.gemCost(c);if(confirm(I18N.t('chest_confirm_open',cost))){ChestManager.open(i,true);}}
+    };
+    bar.appendChild(cell);
+  }
+  // minuterie live tant que le hub est visible
+  if(_chestTimer){clearInterval(_chestTimer);_chestTimer=null;}
+  if(l.some(x=>x.state==='unlocking'&&!ChestManager.isReady(x))){
+    _chestTimer=setInterval(()=>{const hub=$('duelHub');if(!hub||!hub.classList.contains('active')){clearInterval(_chestTimer);_chestTimer=null;return;}renderDuelChests();},1000);
+  }
 }
 
 // === SETTINGS NAME ===
@@ -6571,6 +6698,8 @@ window.onload=()=>Game.init();
 <div id="duelHub" class="screen ui-element">
   <div class="screen-header"><button class="back-btn" id="duelHubClose">&#8592;</button><h2 style="font-size:1.4rem;margin:0">⚔️ <span data-i18n="duel_title">DUEL</span></h2></div>
   <div id="duelHubLeague" style="background:linear-gradient(135deg,rgba(142,99,180,.12),rgba(244,169,38,.12));border:2px solid rgba(142,99,180,.25);border-radius:18px;padding:14px 16px;margin-bottom:14px;width:100%;box-sizing:border-box"></div>
+  <div style="width:100%;margin-bottom:6px;font-size:.72rem;font-weight:900;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px">🎁 <span data-i18n="chest_bar_title">Coffres de duel</span></div>
+  <div id="duelChestBar" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;margin-bottom:14px"></div>
   <button class="btn btn-primary" id="duelQuickBtn">🎯 <span data-i18n="duel_quick">Match rapide</span></button>
   <button class="btn btn-secondary" id="duelFriendsBtn" style="color:#1976D2">👥 <span data-i18n="duel_friends">Amis</span></button>
   <button class="btn btn-secondary" id="duelLeagueBtn" style="color:#C8860B">🏆 <span data-i18n="league_board">Classement Ligue</span></button>
@@ -7218,6 +7347,8 @@ const DuelManager=(function(){
     try{reconcileDivisionUnlocks(true);}catch(e){} // débloque emblèmes/bannières de palier atteints
     // bonus : 1re VICTOIRE classée du jour → gemmes (incite à revenir, 1×/jour)
     if(res==='win'){const _t=new Date().toDateString();if(d.duelDailyWinDate!==_t){d.duelDailyWinDate=_t;d.gems=(d.gems||0)+15;d.gemsBlue=(d.gemsBlue||0)+2;try{showToast(I18N.t('duel_daily_win'));}catch(e){}}}
+    // Coffre de duel (style Clash Royale) : victoire classée → un coffre si un emplacement est libre.
+    if(res==='win'){try{const rr=ChestManager.award();setTimeout(()=>{try{showToast(rr?I18N.t('chest_won'):I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},600);}catch(e){}}
     recordH2H();
     try{if(typeof DuelMissions!=='undefined')DuelMissions.onDuel(res,you,d.leaguePoints);}catch(e){}
     DataManager.save();
@@ -7352,7 +7483,8 @@ const DuelManager=(function(){
     const d=ensureData();const you=Math.min(TARGET,(M.P&&M.P.score)||0);let gain=0,_promo=null;
     if(!M.friendly){const _oldRank=rankFor(d.leaguePoints||0);gain=5;d.duelWins=(d.duelWins||0)+1;d.leaguePoints=(d.leaguePoints||0)+gain;d.duelBestLeague=Math.max(d.duelBestLeague||0,d.leaguePoints);
       const _newRank=rankFor(d.leaguePoints);if(_oldRank.name!==_newRank.name)_promo='up'; // gain par forfait peut faire monter de division → bannière + déblocages cohérents
-      try{reconcileDivisionUnlocks(true);}catch(e){}}
+      try{reconcileDivisionUnlocks(true);}catch(e){}
+      try{const rr=ChestManager.award();setTimeout(()=>{try{showToast(rr?I18N.t('chest_won'):I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},600);}catch(e){}}
     if(M.opp&&M.opp.uid){const h=d.h2h[M.opp.uid]||{name:M.opp.name,w:0,l:0,d:0};h.w++;h.name=M.opp.name;d.h2h[M.opp.uid]=h;}
     DataManager.save();try{FriendManager.syncProfile();}catch(e){}
     showResult('win',you,0,gain,M.friendly,true,_promo);
@@ -7384,6 +7516,7 @@ const DuelManager=(function(){
       (r.nextAt!=null?'<div style="height:7px;background:rgba(0,0,0,.1);border-radius:4px;margin-top:10px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,'+r.c2+','+r.color+')"></div></div><div style="font-size:.64rem;color:var(--text-light);margin-top:3px">'+(r.nextAt-d.leaguePoints)+' '+I18N.t('duel_points')+' → '+rankFor(r.nextAt).name+'</div>':'<div style="font-size:.64rem;color:var(--text-light);margin-top:8px">'+I18N.t('duel_maxtier')+'</div>')+
       '<div style="font-size:.58rem;color:var(--accent);text-align:center;margin-top:7px;font-weight:800">👆 '+I18N.t('league_see_path')+'</div>';
     $('duelHubLeague').style.cursor='pointer';$('duelHubLeague').onclick=showLeaguesPath;
+    try{renderDuelChests();}catch(e){}
     const total=d.duelWins+d.duelLosses+d.duelDraws;
     $('duelHubRecord').textContent=total?('🏆 '+d.duelWins+I18N.t('duel_w')+' · '+d.duelLosses+I18N.t('duel_l')+(d.duelDraws?' · '+d.duelDraws+I18N.t('duel_d'):'')):I18N.t('duel_no_games');
     // Hors ligne : on grise le bouton « Match rapide » et on affiche un avis (les duels sont en ligne).

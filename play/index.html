@@ -922,7 +922,8 @@ return{
 // === STREAK : calendrier de récompenses sur 14 jours (petites/grosses alternées, coffre J7, skin J14) ===
 // Au-delà de J14 le cycle plafonne sur la dernière valeur. J1..J14 :
 const STREAK_REWARDS=[5,10,8,15,10,20,40,12,25,15,30,18,35,60];
-function streakRewardFor(d){return STREAK_REWARDS[Math.min(Math.max(d||1,1)-1,STREAK_REWARDS.length-1)];}
+// Le motif de 14 jours CYCLE indéfiniment (toute l'année) : J15 = comme J1, etc. → récompenses qui ne s'arrêtent jamais, coffre tous les 7 jours.
+function streakRewardFor(d){return STREAK_REWARDS[(Math.max(d||1,1)-1)%STREAK_REWARDS.length];}
 
 // === SOUND MANAGER ===
 const SoundManager={
@@ -4656,13 +4657,15 @@ const _sg=$('streakGoBtn');if(_sg)_sg.textContent=_st('wn_btn',"LET'S GO! 🚀")
 const dotsEl=$('streakDots');
 if(dotsEl){
   dotsEl.style.display='grid';dotsEl.style.gridTemplateColumns='repeat(7,1fr)';dotsEl.style.gap='5px';dotsEl.innerHTML='';
-  const cycleDay=((streak-1)%14)+1; // position dans le cycle (au-delà de 14 ça recommence)
-  for(let i=1;i<=14;i++){
+  // Fenêtre de 14 jours EN COURS (avance toute l'année) : ex. série=20 → affiche J15..J28, aujourd'hui = J20
+  const blockStart=Math.floor((streak-1)/14)*14+1;
+  for(let k=0;k<14;k++){
+    const day=blockStart+k;
     const c=document.createElement('div');
-    c.className='streak-cell '+(i<cycleDay?'done':i===cycleDay?'today':'future');
-    const isChest=i===7,isSkin=i===14;
-    const mid=isSkin?'🔥':isChest?'🎁':('+'+streakRewardFor(i));
-    c.innerHTML='<span class="sc-day">J'+i+'</span><span class="sc-rew">'+mid+'</span>';
+    c.className='streak-cell '+(day<streak?'done':day===streak?'today':'future');
+    const isChest=day%7===0, isSkin=day===14; // coffre tous les 7 jours ; skin unique à J14
+    const mid=isSkin?'🔥':isChest?'🎁':('+'+streakRewardFor(day));
+    c.innerHTML='<span class="sc-day">J'+day+'</span><span class="sc-rew">'+mid+'</span>';
     dotsEl.appendChild(c);
   }
 }

@@ -31,7 +31,15 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <title>SWING & SNAP</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Bagel+Fat+One&display=swap" rel="stylesheet">
+<style>
+/* Polices EMBARQUÉES localement (assets/fonts) — plus de dépendance au CDN Google Fonts.
+   Corrige le bug « la police change pendant des heures » : hors ligne / hiccup CDN, le jeu
+   basculait sur une police système. En local, la bonne police s'affiche toujours, même hors ligne. */
+@font-face{font-family:'Nunito';font-style:normal;font-weight:200 1000;font-display:swap;src:url('assets/fonts/nunito-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:200 1000;font-display:swap;src:url('assets/fonts/nunito-latinext.woff2') format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Bagel Fat One';font-style:normal;font-weight:400;font-display:swap;src:url('assets/fonts/bagel-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Bagel Fat One';font-style:normal;font-weight:400;font-display:swap;src:url('assets/fonts/bagel-latinext.woff2') format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+</style>
 <style>
 :root{
 --bg: #F5F0E8;
@@ -68,6 +76,12 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 .streak-dot.done{background:linear-gradient(135deg,#FF6D00,#FF8F00);color:#fff;border-color:#FF6D00}
 .streak-dot.today{background:linear-gradient(135deg,#FF8F00,#FFB300);color:#fff;border-color:#FFB300;box-shadow:0 0 8px rgba(255,143,0,.6)}
 .streak-dot.future{background:rgba(0,0,0,.06);color:var(--text-light)}
+.streak-cell{border-radius:8px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:38px;font-weight:900;border:2px solid rgba(255,109,0,.22);background:rgba(0,0,0,.04);color:var(--text-light)}
+.streak-cell .sc-day{font-size:.5rem;opacity:.75;line-height:1}
+.streak-cell .sc-rew{font-size:.62rem;line-height:1.05}
+.streak-cell.done{background:linear-gradient(135deg,#FF6D00,#FF8F00);color:#fff;border-color:#FF6D00}
+.streak-cell.today{background:linear-gradient(135deg,#FF8F00,#FFB300);color:#fff;border-color:#FFB300;box-shadow:0 0 8px rgba(255,143,0,.6)}
+.streak-cell.future{background:rgba(0,0,0,.05);color:var(--text-light)}
 @keyframes perfectAnim{0%{opacity:0;transform:translate(-50%,-46%) scale(.5)}16%{opacity:1;transform:translate(-50%,-54%) scale(1.28)}30%{transform:translate(-50%,-53%) scale(.96)}40%{transform:translate(-50%,-54%) scale(1.04)}50%{transform:translate(-50%,-54%) scale(1)}74%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-98%) scale(.9)}}
 @keyframes duelFlashPop{0%{transform:scale(1.5)}60%{transform:scale(.94)}100%{transform:scale(1)}}
 @keyframes multPop{0%{transform:translateX(-50%) scale(1.55)}55%{transform:translateX(-50%) scale(.9)}78%{transform:translateX(-50%) scale(1.06)}100%{transform:translateX(-50%) scale(1)}}
@@ -96,7 +110,9 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 .btn-outline{background:transparent;border:2px solid var(--accent2);color:var(--accent2)}
 .btn-danger{background:var(--danger);color:#fff;box-shadow:0 6px 20px rgba(239, 83, 80, 0.3)}
 /* ── Roulette de modes (menu) ── */
-.mc-stage{position:relative;width:100%;height:min(30vh,210px);overflow:hidden;touch-action:pan-y;perspective:1000px}
+.mc-stage{position:relative;height:min(28vh,200px);overflow:hidden;touch-action:pan-y;perspective:1000px}
+/* Roulette pleine largeur : annule le padding 24px + max-width de .screen-body>* (spécificité plus forte) → les cartes latérales sortent des bords de l'écran au lieu d'être coupées net à 24px */
+.screen-body>.mc-stage{width:calc(100% + 48px);max-width:none;margin-left:-24px;margin-right:-24px}
 .mc-track{position:absolute;inset:0;transform-style:preserve-3d}
 .mc-card{position:absolute;top:0;left:50%;width:210px;height:100%;margin-left:-105px;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:min(1.3vh,8px);color:#fff;box-shadow:0 12px 24px rgba(60,40,25,.24),inset 0 2px 0 rgba(255,255,255,.32);transition:transform .42s cubic-bezier(.22,1,.3,1),opacity .42s,filter .42s;cursor:pointer}
 .mc-card.on{filter:none}
@@ -178,7 +194,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 @keyframes menuItemIn{from{opacity:0}to{opacity:1}}
 /* Le titre respirait mal collé en haut : on abaisse le bloc du menu (+26px sous la pastille de
    gemmes) pour une meilleure première impression. Le .screen-body scrolle → aucun risque de coupe. */
-#menuScreen>.screen-body{padding-top:calc(74px + var(--sat, 0px))}
+#menuScreen>.screen-body{padding-top:calc(52px + var(--sat, 0px));padding-bottom:calc(20px + var(--sab, 0px));gap:11px}
 #menuScreen h1{margin-bottom:10px}
 #menuScreen.active>*{opacity:0;animation:menuItemIn .4s ease forwards}
 #menuScreen.active>*:nth-child(1){animation-delay:.05s}
@@ -415,7 +431,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 <div style="font-size:.8rem;color:var(--text-light);margin-bottom:16px" data-i18n="offer_once">Offre valable une seule fois</div>
 <div style="background:linear-gradient(135deg,rgba(244,169,38,.1),rgba(255,200,80,.15));border:2px solid rgba(244,169,38,.35);border-radius:16px;padding:16px;margin-bottom:14px">
 <div style="display:flex;flex-direction:column;gap:8px">
-<div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem"><span style="font-size:1.3rem">💎</span><span data-i18n="offer_gems">200 Gemmes offertes</span></div>
+<div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem"><span class="gem-i" style="width:15px;height:15px"></span><span data-i18n="offer_gems">200 Gemmes offertes</span></div>
 <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem"><span style="font-size:1.3rem">⭐</span><span data-i18n="offer_skin">Skin Étoile (balle + traînée + fond)</span></div>
 </div>
 <div style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px">
@@ -762,6 +778,7 @@ L.en.rr_skin='Skin';L.fr.rr_skin='Skin';
 L.en.rr_win_gems='+{0} <span class="gem-i"></span> !';L.fr.rr_win_gems='+{0} <span class="gem-i"></span> !';
 L.en.rr_win_blue='+{0} <span class="gem-b"></span> !';L.fr.rr_win_blue='+{0} <span class="gem-b"></span> !';
 L.en.rr_win_skin='New skin: {0}!';L.fr.rr_win_skin='Nouveau skin : {0} !';
+L.en.camp_perfects='🎯 Perfects';L.fr.camp_perfects='🎯 Perfects';L.es&&(L.es.camp_perfects='🎯 Perfectos');L.de&&(L.de.camp_perfects='🎯 Perfects');L.it&&(L.it.camp_perfects='🎯 Perfetti');L.pt&&(L.pt.camp_perfects='🎯 Perfeitos');
 // Booster de récolte ×2 (pub avant une partie) — en + fr (fallback en)
 L.en.harvest_boost='×2 gems next game';L.fr.harvest_boost='Gemmes ×2 la prochaine partie';
 L.en.harvest_boost_armed='✓ ×2 gems armed';L.fr.harvest_boost_armed='✓ Gemmes ×2 armé';
@@ -901,6 +918,11 @@ return{
   warning:()=>notify('WARNING'),
 };
 })();
+
+// === STREAK : calendrier de récompenses sur 14 jours (petites/grosses alternées, coffre J7, skin J14) ===
+// Au-delà de J14 le cycle plafonne sur la dernière valeur. J1..J14 :
+const STREAK_REWARDS=[5,10,8,15,10,20,40,12,25,15,30,18,35,60];
+function streakRewardFor(d){return STREAK_REWARDS[Math.min(Math.max(d||1,1)-1,STREAK_REWARDS.length-1)];}
 
 // === SOUND MANAGER ===
 const SoundManager={
@@ -1338,8 +1360,7 @@ if(this.data.streakLastDate!==today){
   this.data.streakLastDate=today;
   // Gem reward seulement si streak > 0 (pas de récompense au premier lancement)
   if((this.data.streak||0)>0){
-    const rewards=[5,10,15,20,25,30,50];
-    const reward=rewards[Math.min((this.data.streak||1)-1,6)];
+    const reward=streakRewardFor(this.data.streak);
     this.data.gems=(this.data.gems||0)+reward;
     this.data._streakGemReward=reward;
     // Day-14 skin unlock (trainée + fond complétés par le rattrapage ci-dessous)
@@ -3596,14 +3617,15 @@ this.mode=this.mode||'arcade';this.score=0;this.displayScore=0;this.gemsCollecte
 this.gemBoost=1;try{if(DataManager.data.harvestBoostArmed&&(this.mode==='arcade'||this.mode==='timeattack'||this.mode==='campaign'||this.mode==='daily')){this.gemBoost=2;DataManager.data.harvestBoostArmed=false;DataManager.save();try{updateHarvestBoostUI();}catch(e){}try{showToast(I18N.t('harvest_boost_active'),{mini:true,ttl:1400});}catch(e){}}}catch(e){}
 try{const _gh=document.querySelector('.gem-hud');if(_gh){clearTimeout(_gh._hideT);_gh.style.display='none';}}catch(e){}
 this.freeFrames=0;this.immuneFrames=0;this._wasComing=false;this._lastTierScore=-1;this.lastSnappedPivot=null;
-this.perfectChain=0;this.multiplier=1;this.allPerfect=true;this._mileNext=100;
+this.perfectChain=0;this.multiplier=1;this.allPerfect=true;this.perfectsThisRun=0;this._mileNext=100;
 $('hudMultiplier').style.display='none';
 // Time Attack: 60s countdown
 this.timeLeft=(this.mode==='timeattack')?60000:0;
 const hudTimer=$('hudTimer');
 if(hudTimer){if(this.mode==='timeattack'){hudTimer.style.display='block';hudTimer.textContent='60';hudTimer.style.color='rgba(255,255,255,0.85)';}else{hudTimer.style.display='none';}}
 DataManager.checkDailyReset();
-if(this.mode==='arcade')DataManager.data.dailyStats.runs++;
+// Défis quotidiens : « parties jouées » compte dans tous les modes solo (pas seulement arcade)
+if(this.mode==='arcade'||this.mode==='timeattack'||this.mode==='campaign'||this.mode==='daily')DataManager.data.dailyStats.runs++;
 // Compteurs « parties faites » à vie pour Campagne / Défi du jour (arcade & Blitz sont déjà
 // comptés à la fin via totalRuns / blitzRuns ; les duels via duelWins/Losses/Draws). Chaque
 // tentative de niveau = une partie. Sert au total « toutes modes confondues » de l'écran Stats.
@@ -3727,7 +3749,7 @@ if(!g.collected){
   if(this.activePowerups.magnet>0&&this.player.pos.dist(g.pos)<magnetR){
     const dir=this.player.pos.sub(g.pos).normalize();const spd=10;g.bx+=dir.x*spd;g.by+=dir.y*spd;g.pos.x+=dir.x*spd;g.pos.y+=dir.y*spd;}
   if(this.player.pos.dist(g.pos)<CONFIG.gemCollectRadius){g.collected=true;this.spawnGemFx(g.pos.x,g.pos.y);const _inc=this.gemBoost||1;this.gemsCollected+=_inc;DataManager.data.gems+=_inc;
-  {const _ug=$('uiGems');if(_ug){_ug.textContent=DataManager.data.gems;const _gh=_ug.closest('.gem-hud');if(_gh){if(this.state==='PLAYING'){clearTimeout(_gh._hideT);_gh.style.display='';_gh._hideT=setTimeout(()=>{if(!document.querySelector('.screen.active'))_gh.style.display='none';},1400);}_gh.classList.remove('gem-pop');void _gh.offsetWidth;_gh.classList.add('gem-pop');}}}if(this.mode==='arcade'||this.mode==='daily'||this.mode==='campaign'){this.dailyGems+=_inc;DataManager.data.dailyStats.gems+=_inc;}DataManager.saveSoon();SoundManager.playGem();showToast('+'+_inc+' <span class="gem-i"></span>',{mini:true,ttl:900});}
+  {const _ug=$('uiGems');if(_ug){_ug.textContent=DataManager.data.gems;const _gh=_ug.closest('.gem-hud');if(_gh){if(this.state==='PLAYING'){clearTimeout(_gh._hideT);_gh.style.display='';_gh._hideT=setTimeout(()=>{if(!document.querySelector('.screen.active'))_gh.style.display='none';},1400);}_gh.classList.remove('gem-pop');void _gh.offsetWidth;_gh.classList.add('gem-pop');}}}if(this.mode==='arcade'||this.mode==='daily'||this.mode==='campaign'||this.mode==='timeattack'){this.dailyGems+=_inc;DataManager.data.dailyStats.gems+=_inc;}DataManager.saveSoon();SoundManager.playGem();showToast('+'+_inc+' <span class="gem-i"></span>',{mini:true,ttl:900});}
 }}},
 checkPowerupCollection(){
 for(let i=this.powerups.length-1;i>=0;i--){
@@ -3816,6 +3838,7 @@ if(!isPerfect&&_len2>0){const _N=14;
     if(Math.hypot(_px-p.pos.x,_py-p.pos.y)<=CONFIG.snapRadius&&_inCone(_px,_py)){isPerfect=true;break;}}}
 if(isPerfect){
   this.perfectChain++;
+  this.perfectsThisRun=(this.perfectsThisRun||0)+1; // total de perfects de la partie (pour la ligne PERFECT en fin de niveau campagne)
   // Track total perfects for progression mission
   if(!DataManager.data.stats)DataManager.data.stats={};
   DataManager.data.stats.totalPerfects=(DataManager.data.stats.totalPerfects||0)+1;
@@ -3899,9 +3922,12 @@ if(isArcade){
   if(isNewBest)DataManager.data.highScore=this.displayScore;
   DataManager.data.stats.totalScore+=this.displayScore;DataManager.data.sessionRuns++;
   if(!DataManager.data.stats.totalRuns)DataManager.data.stats.totalRuns=0;DataManager.data.stats.totalRuns++;
+  if(this.gemsCollected>DataManager.data.stats.bestGemsInRun)DataManager.data.stats.bestGemsInRun=this.gemsCollected;
+}
+// Défis quotidiens (score cumulé + meilleure partie) : comptent dans TOUS les modes solo, pas seulement arcade
+if(this.mode==='arcade'||this.mode==='timeattack'||this.mode==='campaign'||this.mode==='daily'){
   DataManager.data.dailyStats.score+=this.displayScore;
   if(this.displayScore>(DataManager.data.dailyStats.bestRun||0))DataManager.data.dailyStats.bestRun=this.displayScore;
-  if(this.gemsCollected>DataManager.data.stats.bestGemsInRun)DataManager.data.stats.bestGemsInRun=this.gemsCollected;
 }
 // Gemmes : toujours comptées (elles vont dans le portefeuille dans checkGemCollection)
 if(!DataManager.data.stats.totalGemsCollected)DataManager.data.stats.totalGemsCollected=0;DataManager.data.stats.totalGemsCollected+=this.gemsCollected;
@@ -4519,7 +4545,7 @@ for(const [k,v] of Object.entries(ap)){
 function showTimeAttackResult(score,gems,isNewBest){
 const modal=$('timeAttackResult');if(!modal)return;
 animateCountUp($('taFinalScore'),score,Math.min(1100,400+score*12));
-$('taFinalGems').textContent='+'+gems+' 💎';
+$('taFinalGems').innerHTML='+'+gems+' <span class="gem-i"></span>';
 const badge=$('taBestBadge');if(badge){badge.style.display=isNewBest?'inline-block':'none';}
 $('taAllTimeBest').textContent=DataManager.data.timeAttackBest||0;
 const _blitzBtn=$('btnBlitzRestart');if(_blitzBtn)_blitzBtn.textContent='⏱ '+(I18N.t('replay')||'REPLAY');
@@ -4626,9 +4652,20 @@ const _sr=$('streakRewardTitle');if(_sr)_sr.textContent=_st('streak_reward',"TOD
 const _ss=$('streakSkinTitle');if(_ss)_ss.textContent=_st('streak_skin_unlock','🎁 NEW SKIN UNLOCKED');
 const _sn=$('streakSkinName');if(_sn)_sn.textContent=_st('streak_skin_name','Flame 🔥');
 const _sg=$('streakGoBtn');if(_sg)_sg.textContent=_st('wn_btn',"LET'S GO! 🚀");
-// 7-dot progress bar (show days 1-7)
+// Calendrier 14 jours : chaque case montre la récompense (petites/grosses alternées), 🎁 coffre à J7, 🔥 skin à J14
 const dotsEl=$('streakDots');
-if(dotsEl){dotsEl.innerHTML='';const total=7;for(let i=1;i<=total;i++){const d=document.createElement('div');d.className='streak-dot '+(i<streak?'done':i===streak?'today':'future');d.textContent=i===total?'🏆':i;dotsEl.appendChild(d);}}
+if(dotsEl){
+  dotsEl.style.display='grid';dotsEl.style.gridTemplateColumns='repeat(7,1fr)';dotsEl.style.gap='5px';dotsEl.innerHTML='';
+  const cycleDay=((streak-1)%14)+1; // position dans le cycle (au-delà de 14 ça recommence)
+  for(let i=1;i<=14;i++){
+    const c=document.createElement('div');
+    c.className='streak-cell '+(i<cycleDay?'done':i===cycleDay?'today':'future');
+    const isChest=i===7,isSkin=i===14;
+    const mid=isSkin?'🔥':isChest?'🎁':('+'+streakRewardFor(i));
+    c.innerHTML='<span class="sc-day">J'+i+'</span><span class="sc-rew">'+mid+'</span>';
+    dotsEl.appendChild(c);
+  }
+}
 // Update badge on menu
 const badge=$('streakBadge');const sc=$('streakCount');
 if(badge&&sc){sc.textContent=streak;const bt=$('streakBadgeText');if(bt)bt.textContent=I18N.t('streak_badge')||"day(s) in a row!";badge.style.display='flex';}
@@ -5211,7 +5248,10 @@ const isFlawless=!isDaily&&attempts===0&&Game.allPerfect===true;
 if(!isDaily){DataManager.data.campaignCurrentAttempts=0;DataManager.data.campaignCurrentLevel=null;CampaignManager.setStars(level,stars);if(isFlawless)CampaignManager.setFlawless(level);}
 else CampaignManager.setDailyDone();
 const bonusGems=isDaily?15:0;
-if(bonusGems>0){DataManager.data.gems+=bonusGems;DataManager.save();}
+// #6 Récompense « niveau très propre » : +10 gemmes jaunes si au moins 75% des snaps sont des PERFECTS
+const _pcRun=Game.perfectsThisRun||0;const _perfRatio=score>0?_pcRun/score:0;const perfBonus=_perfRatio>=0.75?10:0;
+const _totalBonus=bonusGems+perfBonus;
+if(_totalBonus>0){DataManager.data.gems+=_totalBonus;DataManager.save();}
 // Stars display (🔥 si sans-faute parfait au 1er essai)
 $('levelCompleteStars').innerHTML=[1,2,3].map(i=>{const d=((i-1)*0.15).toFixed(2);const anim='starPop .44s cubic-bezier(.2,1.4,.5,1) '+d+'s both'+(isFlawless?', starFire .7s ease-in-out '+(0.44+(i-1)*0.15).toFixed(2)+'s infinite alternate':'');return '<span class="star-big '+(i<=stars?'lit':'dim')+(isFlawless?' fire':'')+'" style="animation:'+anim+'">'+(isFlawless?'🔥':'⭐')+'</span>';}).join('');
 try{SoundManager.playVictory();}catch(e){}
@@ -5224,9 +5264,10 @@ const criteriaHtml=`<div style="width:100%;font-size:.75rem;text-align:left;back
 <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06)"><span>${I18N.t('camp_star2_crit')}</span><span style="color:${attempts>0&&attempts<=3?'var(--gold)':'var(--text-light)'}">${attempts>0&&attempts<=3?'✓':'✗'}</span></div>
 <div style="display:flex;justify-content:space-between;padding:3px 0"><span>${I18N.t('camp_star1_crit')}</span><span style="color:${attempts>3?'var(--gold)':'var(--text-light)'}">${attempts>3?'✓':'✗'}</span></div>
 <div style="margin-top:5px;font-weight:900;border-top:1px solid rgba(0,0,0,.06);padding-top:5px">Score : <span style="color:var(--accent)">${score}/${target}</span>&nbsp;&nbsp;${attMsg}</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-weight:900;border-top:1px solid rgba(0,0,0,.06);padding-top:5px"><span>${I18N.t('camp_perfects')} <span style="color:var(--gold)">${_pcRun}/${score}</span></span>${perfBonus>0?`<span style="color:#E5762A">+${perfBonus} <span class="gem-i"></span></span>`:''}</div>
 </div>`;
-$('levelCompleteDetail').innerHTML=isDaily?`<div style="font-size:.8rem;color:var(--text-light)">${I18N.t('camp_daily_bonus',bonusGems)}</div>`:criteriaHtml;
-animateCountUp($('levelCompleteGems'),gems+bonusGems,Math.min(900,300+(gems+bonusGems)*30));
+$('levelCompleteDetail').innerHTML=isDaily?`<div style="font-size:.8rem;color:var(--text-light)">${I18N.t('camp_daily_bonus',bonusGems)}</div><div style="margin-top:6px;font-weight:900;font-size:.85rem">${I18N.t('camp_perfects')} <span style="color:var(--gold)">${_pcRun}/${score}</span>${perfBonus>0?` · <span style="color:#E5762A">+${perfBonus} <span class="gem-i"></span></span>`:''}</div>`:criteriaHtml;
+animateCountUp($('levelCompleteGems'),gems+bonusGems+perfBonus,Math.min(900,300+(gems+bonusGems+perfBonus)*30));
 const nextLives=DataManager.data.lives||0;
 $('btnNextLevel').style.display=isDaily?'none':'block';
 $('btnNextLevel').disabled=nextLives<=0;
@@ -8127,7 +8168,6 @@ const LiveDuel=(function(){
 </script>
 <script>
 // ── Build web : contrôle clavier (Espace / Entrée = lâcher la corde) ──
-// Le clic souris est déjà géré par le jeu ; on relaie le clavier vers le canvas.
 (function(){
   window.addEventListener('keydown', function(e){
     if (e.code === 'Space' || e.code === 'Enter' || e.key === ' ') {

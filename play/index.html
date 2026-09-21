@@ -6515,16 +6515,22 @@ if(mg)mg.textContent='x'+(sp.magnet||0);
 if(m2)m2.textContent='x'+(sp.mult2||0);
 if(pz)pz.textContent='x'+(sp.perfzone||0);
 }
-function buyStoredPowerup(type){
-const cost=({shield:200,slowmo:200,magnet:200,mult2:300,perfzone:300})[type]||200;const d=DataManager.data;
-if(d.gems<cost){showToast(I18N.t('toast_not_enough'));return;}
+const PU_COST_YELLOW={shield:200,slowmo:200,magnet:200,mult2:300,perfzone:300};
+// Prix en gemmes BLEUES (usage utile des gemmes bleues) — cohérent avec le taux 100 jaunes = 1 bleue.
+const PU_COST_BLUE={shield:2,slowmo:2,magnet:2,mult2:3,perfzone:3};
+function buyStoredPowerup(type,blue){
+const d=DataManager.data;
+const cost=(blue?PU_COST_BLUE:PU_COST_YELLOW)[type]||(blue?2:200);
+const bal=blue?(d.gemsBlue||0):(d.gems||0);
+if(bal<cost){showToast(I18N.t('toast_not_enough'));return;}
 const names={shield:I18N.t('shop_pu_shield')||'Bouclier',slowmo:I18N.t('shop_pu_slowmo')||'Slow-Mo',magnet:I18N.t('shop_pu_magnet')||'Aimant',mult2:I18N.t('shop_pu_mult2')||'Multi ×2',perfzone:I18N.t('shop_pu_perfzone')||'Zone Précision'};
 // L'achat est déclenché depuis le popup d'info (openPowerupInfo) qui sert déjà de confirmation.
-d.gems-=cost;
+if(blue)d.gemsBlue=(d.gemsBlue||0)-cost;else d.gems-=cost;
 if(!d.storedPowerups)d.storedPowerups={shield:0,slowmo:0,magnet:0,mult2:0,perfzone:0};
 d.storedPowerups[type]=(d.storedPowerups[type]||0)+1;
 DataManager.save();updatePuShopStock();showToast('✅ '+names[type]+' x1 !');
 const gemEl=$('gemCount');if(gemEl)gemEl.textContent=d.gems;
+try{const b=$('uiGemsBlue');if(b)b.textContent=d.gemsBlue||0;const b2=$('uiGemsShop');if(b2)b2.textContent=d.gems;}catch(e){}
 }
 // Clic sur un atout dans la Collection → popup qui EXPLIQUE ce qu'il fait avant d'acheter
 // Démo animée de l'effet d'un atout (comme la prévisu des skins) affichée dans le popup
@@ -6567,7 +6573,8 @@ function drawPowerupPreview(cc,W,H,type,t){
 function openPowerupInfo(type){
   const color=_puColors[type]||'#888',icon=_puIcons[type]||'💎';
   const name=I18N.t('shop_pu_'+type)||type,desc=I18N.t('pu_desc_'+type)||'';
-  const cost=({shield:200,slowmo:200,magnet:200,mult2:300,perfzone:300})[type]||200;
+  const cost=(typeof PU_COST_YELLOW!=='undefined'?PU_COST_YELLOW:{})[type]||200;
+  const costBlue=(typeof PU_COST_BLUE!=='undefined'?PU_COST_BLUE:{})[type]||2;
   const stock=(DataManager.data.storedPowerups&&DataManager.data.storedPowerups[type])||0;
   let m=$('puInfoModal');
   if(!m){m=document.createElement('div');m.id='puInfoModal';m.style.cssText='display:none;position:fixed;inset:0;z-index:345;background:rgba(30,20,45,.72);align-items:center;justify-content:center;pointer-events:auto;padding:24px;box-sizing:border-box';m.onclick=(e)=>{if(e.target===m)m.style.display='none';};document.body.appendChild(m);}
@@ -6578,10 +6585,12 @@ function openPowerupInfo(type){
     <div style="font-size:.7rem;color:var(--text-light);margin-top:3px">${I18N.t('pu_owned')||'En stock'} : <b style="color:${color}">x${stock}</b></div>
     <div style="font-size:.92rem;color:var(--text);opacity:.88;margin:11px 4px 2px;line-height:1.45">${desc}</div>
     <button id="puInfoBuy" class="btn btn-primary" style="margin-top:15px;width:100%;background:${color}">${I18N.t('pv_buy')||'Acheter'} — ${cost} <span class="gem-i"></span></button>
+    <button id="puInfoBuyBlue" class="btn" style="margin-top:8px;width:100%;background:linear-gradient(135deg,#29B6F6,#0288D1);color:#fff">${I18N.t('pv_buy')||'Acheter'} — ${costBlue} <span class="gem-b"></span></button>
   </div>`;
   m.style.display='flex';
   $('puInfoClose').onclick=()=>{m.style.display='none';};
-  $('puInfoBuy').onclick=()=>{m.style.display='none';buyStoredPowerup(type);};
+  $('puInfoBuy').onclick=()=>{m.style.display='none';buyStoredPowerup(type,false);};
+  $('puInfoBuyBlue').onclick=()=>{m.style.display='none';buyStoredPowerup(type,true);};
   const pcv=$('puPreviewCanvas');
   if(pcv){const pcc=pcv.getContext('2d');
     const ploop=(t)=>{const mm=$('puInfoModal');if(!mm||mm.style.display==='none'){_puPvRAF=0;return;}drawPowerupPreview(pcc,pcv.width,pcv.height,type,t);_puPvRAF=requestAnimationFrame(ploop);};

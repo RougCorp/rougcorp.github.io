@@ -85,14 +85,22 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
 .streak-cell.empty{border-style:dashed;border-color:rgba(0,0,0,.12);opacity:.55}
 .streak-cell.empty .sc-rew{opacity:.6}
 .streak-cell.done.empty{background:rgba(255,109,0,.18);color:var(--text-light);border-color:rgba(255,109,0,.3)}
-.chest-cell{border-radius:12px;border:2px solid rgba(0,0,0,.12);background:var(--card,#fff);padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:66px;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .1s}
+.chest-cell{position:relative;overflow:hidden;border-radius:12px;border:2px solid rgba(0,0,0,.12);background:var(--card,#fff);padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:66px;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .1s;animation:chestPopIn .32s cubic-bezier(.2,1.3,.4,1)}
 .chest-cell:active{transform:scale(.94)}
-.chest-cell.empty{cursor:default;border-style:dashed;box-shadow:none;background:rgba(0,0,0,.03)}
+.chest-cell.empty{cursor:default;border-style:dashed;box-shadow:none;background:rgba(0,0,0,.03);animation:none}
 .chest-cell .chest-emoji{font-size:1.7rem;line-height:1}
+.chest-cell .chest-ico{line-height:0}
+.chest-cell.ready .chest-ico{animation:chestBob 1s ease-in-out infinite}
 .chest-cell .chest-time{font-size:.56rem;font-weight:800;color:var(--text-light);font-variant-numeric:tabular-nums}
 .chest-cell .chest-act{font-size:.58rem;font-weight:900;line-height:1.1}
-.chest-cell.ready{animation:chestReady 1s ease-in-out infinite;border-color:#66BB6A;background:linear-gradient(135deg,rgba(102,187,106,.18),rgba(102,187,106,.06))}
-@keyframes chestReady{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.chest-cell.ready{border-color:#66BB6A;background:linear-gradient(135deg,rgba(102,187,106,.20),rgba(102,187,106,.06))}
+.chest-cell.shine::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:chestShine 3.2s ease-in-out infinite}
+.chest-cell.ready.shine::after{animation-duration:1.8s}
+@keyframes chestBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes chestPopIn{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes chestShine{0%,72%{left:-60%}100%{left:120%}}
+@keyframes chestWonPop{0%{transform:scale(0) rotate(-12deg)}60%{transform:scale(1.18) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.chest-won-ico{animation:chestWonPop .55s cubic-bezier(.2,1.4,.4,1)}
 @keyframes perfectAnim{0%{opacity:0;transform:translate(-50%,-46%) scale(.5)}16%{opacity:1;transform:translate(-50%,-54%) scale(1.28)}30%{transform:translate(-50%,-53%) scale(.96)}40%{transform:translate(-50%,-54%) scale(1.04)}50%{transform:translate(-50%,-54%) scale(1)}74%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-98%) scale(.9)}}
 @keyframes duelFlashPop{0%{transform:scale(1.5)}60%{transform:scale(.94)}100%{transform:scale(1)}}
 @keyframes multPop{0%{transform:translateX(-50%) scale(1.55)}55%{transform:translateX(-50%) scale(.9)}78%{transform:translateX(-50%) scale(1.06)}100%{transform:translateX(-50%) scale(1)}}
@@ -816,6 +824,7 @@ L.en.chest_won='🎁 Chest won!';L.fr.chest_won='🎁 Coffre gagné !';L.es&&(L.
 L.en.chest_full='Chest slots full — open one!';L.fr.chest_full='Emplacements pleins — ouvres-en un !';L.es&&(L.es.chest_full='¡Ranuras llenas — abre uno!');L.de&&(L.de.chest_full='Plätze voll — öffne eine!');L.it&&(L.it.chest_full='Slot pieni — aprine uno!');L.pt&&(L.pt.chest_full='Ranhuras cheias — abre um!');
 L.en.chest_opened='{0} opened!';L.fr.chest_opened='{0} ouvert !';L.es&&(L.es.chest_opened='¡{0} abierto!');L.de&&(L.de.chest_opened='{0} geöffnet!');L.it&&(L.it.chest_opened='{0} aperto!');L.pt&&(L.pt.chest_opened='{0} aberto!');
 L.en.chest_confirm_open='Open now for {0} blue gems?';L.fr.chest_confirm_open='Ouvrir tout de suite pour {0} gemmes bleues ?';L.es&&(L.es.chest_confirm_open='¿Abrir ahora por {0} gemas azules?');L.de&&(L.de.chest_confirm_open='Jetzt für {0} blaue Edelsteine öffnen?');L.it&&(L.it.chest_confirm_open='Aprire ora per {0} gemme blu?');L.pt&&(L.pt.chest_confirm_open='Abrir agora por {0} gemas azuis?');
+L.en.duel_weekend_boost='WEEKEND BOOST: double trophies on wins, half loss!';L.fr.duel_weekend_boost='WEEK-END BOOST : trophées ×2 en victoire, pertes réduites !';L.es&&(L.es.duel_weekend_boost='BOOST DE FIN DE SEMANA: trofeos x2 al ganar, menos al perder.');L.de&&(L.de.duel_weekend_boost='WOCHENEND-BOOST: doppelte Trophäen bei Sieg, halber Verlust!');L.it&&(L.it.duel_weekend_boost='BOOST WEEKEND: trofei x2 in vittoria, meno alla sconfitta!');L.pt&&(L.pt.duel_weekend_boost='BOOST DE FIM DE SEMANA: troféus x2 na vitória, menos na derrota!');
 L.en.ball_zen='Zen';L.fr.ball_zen='Zen';L.es&&(L.es.ball_zen='Zen');L.de&&(L.de.ball_zen='Zen');L.it&&(L.it.ball_zen='Zen');L.pt&&(L.pt.ball_zen='Zen');L.nl&&(L.nl.ball_zen='Zen');
 L.en.ball_prospector='Prospector';L.fr.ball_prospector='Prospecteur';L.es&&(L.es.ball_prospector='Buscador');L.de&&(L.de.ball_prospector='Schürfer');L.it&&(L.it.ball_prospector='Cercatore');L.pt&&(L.pt.ball_prospector='Garimpeiro');L.nl&&(L.nl.ball_prospector='Zoeker');
 L.en.ball_laurel='Laureate';L.fr.ball_laurel='Lauréat';L.es&&(L.es.ball_laurel='Laureado');L.de&&(L.de.ball_laurel='Preisträger');L.it&&(L.it.ball_laurel='Laureato');L.pt&&(L.pt.ball_laurel='Laureado');L.nl&&(L.nl.ball_laurel='Laureaat');
@@ -6028,18 +6037,20 @@ function grantTournamentChest(mode,rank){
 function showChestReward(o){
   const tiers=['🥇','🥈','🥉'];
   const titleTxt=o.title||((tiers[o.rank-1]||'')+' '+I18N.t('tourn_result',o.rank));
-  const startEmoji=o.emoji||'🎁';
+  // Icône : vrai coffre dessiné (par rareté, ou or/argent/bronze selon le rang de tournoi).
+  const rar=o.rarity||(o.rank?({1:'legendary',2:'silver',3:'bronze'})[o.rank]:null);
+  const startIco=rar?chestSVG(rar,84):(o.emoji||'🎁');
   const ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:200;background:rgba(20,12,30,.72);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:24px';
   const card=document.createElement('div');
   card.style.cssText='background:linear-gradient(180deg,#FFFFFF,#FFF7EC);border-radius:24px;padding:26px 22px;max-width:330px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)';
   const rewardHtml=`<div style="font-size:1.05rem;font-weight:900;color:var(--text);margin:2px 0 14px">+${o.gold} <span class="gem-i"></span> &nbsp; +${o.blue} <span class="gem-b"></span>${o.skinName?`<div style="margin-top:8px;font-size:.92rem;color:var(--accent,#8E63B4);font-weight:900">⭐ ${_esc(o.skinName)}</div>`:''}</div>`;
   card.innerHTML=`<div style="font-size:.8rem;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.6px">${titleTxt}</div>
-   <div id="_chestIco" style="font-size:4.4rem;margin:10px 0;transform:scale(.8);transition:transform .3s">${startEmoji}</div>
+   <div id="_chestIco" style="margin:10px auto;width:84px;height:84px;display:flex;align-items:center;justify-content:center;font-size:4.4rem;transform:scale(.8);transition:transform .3s">${startIco}</div>
    <div id="_chestReveal" style="opacity:0;transition:opacity .4s">${rewardHtml}<button class="btn btn-primary" id="_chestClose" style="width:100%">${I18N.t('close')}</button></div>`;
   ov.appendChild(card);document.body.appendChild(ov);
   const ico=card.querySelector('#_chestIco');
-  let n=0;const shake=setInterval(()=>{ico.style.transform='scale(.85) rotate('+((n%2)?6:-6)+'deg)';n++;if(n>6){clearInterval(shake);ico.textContent='🎉';ico.style.transform='scale(1.15) rotate(0)';try{celebrate('record');}catch(e){}const rv=card.querySelector('#_chestReveal');if(rv)rv.style.opacity='1';}},90);
+  let n=0;const shake=setInterval(()=>{ico.style.transform='scale(.85) rotate('+((n%2)?6:-6)+'deg)';n++;if(n>6){clearInterval(shake);ico.innerHTML='<span style="font-size:4.4rem">🎉</span>';ico.style.transform='scale(1.15) rotate(0)';try{celebrate('record');}catch(e){}const rv=card.querySelector('#_chestReveal');if(rv)rv.style.opacity='1';}},90);
   const close=()=>ov.remove();
   card.querySelector('#_chestClose').onclick=close;
   ov.onclick=e=>{if(e.target===ov)close();};
@@ -6048,11 +6059,45 @@ function showChestReward(o){
 // ═══════ COFFRES DE DUEL (style Clash Royale — 4 emplacements) ═══════
 // Gagnés en remportant un duel classé (si un emplacement est libre). Un seul se déverrouille à la fois
 // (minuterie selon la rareté) ; ouverture instantanée possible contre des gemmes bleues.
+// Coffres DESSINÉS (SVG) par rareté — vrais coffres, plus d'emoji carton.
+function chestPalette(r){return ({
+  common:{wood:'#A1785A',woodD:'#6E4A2E',band:'#C89B6A',lid:'#B58A66',lock:'#F4C560',jewel:null},
+  rare:{wood:'#6E8CA8',woodD:'#3E566E',band:'#CFD8DC',lid:'#8AA6BE',lock:'#ECEFF1',jewel:null},
+  epic:{wood:'#7E57C2',woodD:'#4527A0',band:'#FFD54F',lid:'#9575CD',lock:'#FFE082',jewel:'#E040FB'},
+  legendary:{wood:'#E0A81E',woodD:'#8A5A00',band:'#FFF176',lid:'#FFD54F',lock:'#FFFDE7',jewel:'#40C4FF'},
+  silver:{wood:'#9E9E9E',woodD:'#616161',band:'#ECEFF1',lid:'#BDBDBD',lock:'#FAFAFA',jewel:null},
+  bronze:{wood:'#B87333',woodD:'#7A4A1E',band:'#D9A066',lid:'#C68642',lock:'#F4C560',jewel:null}
+}[r]||{wood:'#A1785A',woodD:'#6E4A2E',band:'#C89B6A',lid:'#B58A66',lock:'#F4C560',jewel:null});}
+function chestSVG(rarity,px){const p=chestPalette(rarity);px=px||34;const jewel=p.jewel?`<circle cx="24" cy="6.6" r="2.7" fill="${p.jewel}"/><circle cx="23.2" cy="5.8" r="1" fill="#fff" opacity=".7"/>`:'';
+ return `<svg width="${px}" height="${px}" viewBox="0 0 48 44" xmlns="http://www.w3.org/2000/svg" style="display:block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))">`+
+  `<path d="M6 22 Q6 9 24 9 Q42 9 42 22 Z" fill="${p.lid}"/>`+
+  `<rect x="5" y="20.5" width="38" height="4.5" rx="1" fill="${p.band}"/>`+
+  `<rect x="6" y="24" width="36" height="15" rx="2.5" fill="${p.wood}"/>`+
+  `<rect x="6.6" y="24.6" width="34.8" height="13.8" rx="2" fill="none" stroke="${p.woodD}" stroke-width="1" opacity=".55"/>`+
+  `<rect x="20.5" y="11.5" width="7" height="27.5" rx="1" fill="${p.band}"/>`+
+  `<rect x="21" y="24" width="6" height="8" rx="1.5" fill="${p.lock}"/>`+
+  `<circle cx="24" cy="27.6" r="1.5" fill="${p.woodD}"/>`+
+  jewel+`</svg>`;
+}
+// Petite annonce animée du coffre gagné (non bloquante) après un duel remporté.
+function announceChestWon(rarity){
+ const t=DUEL_CHEST_TYPES[rarity]||DUEL_CHEST_TYPES.common;
+ const ov=document.createElement('div');
+ ov.style.cssText='position:fixed;left:50%;top:34%;z-index:210;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px;transform:translate(-50%,-50%)';
+ ov.innerHTML='<div class="chest-won-ico">'+chestSVG(rarity,88)+'</div><div style="background:rgba(20,12,30,.78);color:#fff;font-weight:900;font-size:.92rem;padding:7px 16px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.4)">🎁 '+I18N.t(t.key)+'</div>';
+ document.body.appendChild(ov);
+ try{Haptic.success();}catch(e){}try{celebrate&&celebrate('record');}catch(e){}
+ setTimeout(()=>{ov.style.transition='opacity .4s,transform .4s';ov.style.opacity='0';ov.style.transform='translate(-50%,-72%)';},1500);
+ setTimeout(()=>ov.remove(),2000);
+}
+// Week-end de boost des duels (ven/sam/dim UTC) : mêmes jours que le tournoi du week-end.
+function isDuelWeekendBoost(){try{return isWeekendTournament();}catch(e){return false;}}
 const DUEL_CHEST_TYPES={
-  common:{key:'chest_common',emoji:'📦',color:'#8D6E63',mins:15, y:[20,40], b:[10,20], cosmChance:0},
-  rare:{key:'chest_rare',emoji:'🎁',color:'#42A5F5',mins:60, y:[50,80], b:[20,35], cosmChance:0.15},
-  epic:{key:'chest_epic',emoji:'🧰',color:'#AB47BC',mins:180, y:[100,150], b:[40,60], cosmChance:0.40},
-  legendary:{key:'chest_legend',emoji:'👑',color:'#FFB300',mins:480, y:[200,300], b:[80,120], cosmChance:1}
+  // Rééquilibré : surtout des gemmes JAUNES, très peu de BLEUES (elles restent rares/premium).
+  common:{key:'chest_common',color:'#A1785A',mins:15, y:[30,55], b:[0,2], cosmChance:0},
+  rare:{key:'chest_rare',color:'#6E8CA8',mins:60, y:[60,100], b:[1,3], cosmChance:0.12},
+  epic:{key:'chest_epic',color:'#7E57C2',mins:180, y:[120,180], b:[3,6], cosmChance:0.35},
+  legendary:{key:'chest_legend',color:'#E0A81E',mins:480, y:[250,350], b:[8,15], cosmChance:1}
 };
 const CHEST_MIN_PER_BLUE=5; // 5 min de déblocage restantes = 1 gemme bleue pour ouvrir tout de suite
 const ChestManager={
@@ -6072,7 +6117,7 @@ const ChestManager={
     let skinName=null;
     if(Math.random()<t.cosmChance){const POOL=['neon','sakura','aurora','crystal','rainbow','tropical','cyberpunk','mystical'];if(!DataManager.data.skins)DataManager.data.skins=[];const avail=POOL.filter(s=>!DataManager.data.skins.includes(s));if(avail.length){const id=avail[Math.floor(Math.random()*avail.length)];DataManager.data.skins.push(id);skinName=I18N.t('ball_'+id)||id;}else{DataManager.data.gemsBlue+=5;}}
     l.splice(idx,1);DataManager.save();try{FriendManager.syncProfile();}catch(e){}
-    showChestReward({title:I18N.t('chest_opened',I18N.t(t.key)),emoji:t.emoji,gold:y,blue:b,skinName});
+    showChestReward({title:I18N.t('chest_opened',I18N.t(t.key)),rarity:c.rarity,gold:y,blue:b,skinName});
     renderDuelChests();
   }
 };
@@ -6087,12 +6132,12 @@ function renderDuelChests(){
     const cell=document.createElement('div');cell.className='chest-cell';
     if(!c){cell.classList.add('empty');cell.innerHTML='<div class="chest-emoji" style="opacity:.3">➕</div>';bar.appendChild(cell);continue;}
     const t=DUEL_CHEST_TYPES[c.rarity];const ready=ChestManager.isReady(c);
-    cell.style.borderColor=t.color;
+    cell.style.borderColor=t.color;cell.classList.add('shine');
     let bottom='';
     if(ready){cell.classList.add('ready');bottom='<div class="chest-act" style="color:#2E7D32">'+I18N.t('chest_open')+'</div>';}
     else if(c.state==='unlocking'){bottom='<div class="chest-time">⏳ '+fmtCountdown(ChestManager.remainingMs(c))+'</div><div class="chest-act" style="color:#1976D2">'+ChestManager.gemCost(c)+' <span class="gem-b"></span></div>';}
     else{bottom='<div class="chest-act" style="color:var(--text-light)">'+(anyUnlocking?(ChestManager.gemCost(c)+' <span class="gem-b"></span>'):I18N.t('chest_start'))+'</div>';}
-    cell.innerHTML='<div class="chest-emoji">'+t.emoji+'</div>'+bottom;
+    cell.innerHTML='<div class="chest-ico">'+chestSVG(c.rarity,34)+'</div>'+bottom;
     cell.onclick=()=>{
       if(ChestManager.isReady(c)){ChestManager.open(i,false);}
       else if(c.state==='locked'&&!anyUnlocking){ChestManager.startUnlock(i);}
@@ -6712,6 +6757,7 @@ window.onload=()=>Game.init();
 <div id="duelHub" class="screen ui-element">
   <div class="screen-header"><button class="back-btn" id="duelHubClose">&#8592;</button><h2 style="font-size:1.4rem;margin:0">⚔️ <span data-i18n="duel_title">DUEL</span></h2></div>
   <div id="duelHubLeague" style="background:linear-gradient(135deg,rgba(142,99,180,.12),rgba(244,169,38,.12));border:2px solid rgba(142,99,180,.25);border-radius:18px;padding:14px 16px;margin-bottom:14px;width:100%;box-sizing:border-box"></div>
+  <div id="duelWeekendBanner" style="display:none;width:100%;margin-bottom:10px;padding:9px 12px;border-radius:14px;text-align:center;font-weight:900;font-size:.82rem;color:#fff;background:linear-gradient(135deg,#7B1FA2,#E040FB);box-shadow:0 4px 12px rgba(123,31,162,.3)"></div>
   <div style="width:100%;margin-bottom:6px;font-size:.72rem;font-weight:900;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px">🎁 <span data-i18n="chest_bar_title">Coffres de duel</span></div>
   <div id="duelChestBar" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;margin-bottom:14px"></div>
   <button class="btn btn-primary" id="duelQuickBtn">🎯 <span data-i18n="duel_quick">Match rapide</span></button>
@@ -7347,9 +7393,10 @@ const DuelManager=(function(){
     // Points de ligue proportionnels à l'écart de score : victoire nette = gros gain (10→25),
     // défaite serrée = petite perte (−5→−20). Le gagnant gagne un peu plus que le perdant ne perd.
     const _diff=Math.max(1,Math.min(TARGET,Math.abs(you-opp))); // 1 (serré) → 30 (écrasant)
-    if(res==='win'){d.duelWins++;delta=Math.round(10+15*(_diff-1)/(TARGET-1));}   // +10 → +25
-    else if(res==='lose'){d.duelLosses++;delta=-Math.round(5+15*(_diff-1)/(TARGET-1));} // −5 → −20
-    else{d.duelDraws=(d.duelDraws||0)+1;delta=2;}
+    const _wkBoost=isDuelWeekendBoost(); // week-end : trophées gagnés ×2, pertes réduites de moitié → on encourage à jouer
+    if(res==='win'){d.duelWins++;delta=Math.round(10+15*(_diff-1)/(TARGET-1));if(_wkBoost)delta*=2;}   // +10 → +25 (×2 week-end)
+    else if(res==='lose'){d.duelLosses++;delta=-Math.round(5+15*(_diff-1)/(TARGET-1));if(_wkBoost)delta=Math.round(delta/2);} // −5 → −20 (moitié le week-end)
+    else{d.duelDraws=(d.duelDraws||0)+1;delta=_wkBoost?4:2;}
     d.leaguePoints=Math.max(0,(d.leaguePoints||0)+delta);
     const _newRank=rankFor(d.leaguePoints),_promo=(_oldRank.name!==_newRank.name)?(delta>0?'up':'down'):null; // changement de division/palier
     d.duelBestLeague=Math.max(d.duelBestLeague||0,d.leaguePoints); // pour les missions "atteindre une ligue"
@@ -7362,7 +7409,7 @@ const DuelManager=(function(){
     // bonus : 1re VICTOIRE classée du jour → gemmes (incite à revenir, 1×/jour)
     if(res==='win'){const _t=new Date().toDateString();if(d.duelDailyWinDate!==_t){d.duelDailyWinDate=_t;d.gems=(d.gems||0)+15;d.gemsBlue=(d.gemsBlue||0)+2;try{showToast(I18N.t('duel_daily_win'));}catch(e){}}}
     // Coffre de duel (style Clash Royale) : victoire classée → un coffre si un emplacement est libre.
-    if(res==='win'){try{const rr=ChestManager.award();setTimeout(()=>{try{showToast(rr?I18N.t('chest_won'):I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},600);}catch(e){}}
+    if(res==='win'){try{const rr=ChestManager.award();setTimeout(()=>{try{if(rr)announceChestWon(rr);else showToast(I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},900);}catch(e){}}
     recordH2H();
     try{if(typeof DuelMissions!=='undefined')DuelMissions.onDuel(res,you,d.leaguePoints);}catch(e){}
     DataManager.save();
@@ -7495,10 +7542,10 @@ const DuelManager=(function(){
     if(M.state==='done'||M.state==='idle'||!M.opp)return;
     M.state='done';M.active=false;cancelAnimationFrame(M.raf);M.paused=false;M.oppPaused=false;hidePauseOverlay();
     const d=ensureData();const you=Math.min(TARGET,(M.P&&M.P.score)||0);let gain=0,_promo=null;
-    if(!M.friendly){const _oldRank=rankFor(d.leaguePoints||0);gain=5;d.duelWins=(d.duelWins||0)+1;d.leaguePoints=(d.leaguePoints||0)+gain;d.duelBestLeague=Math.max(d.duelBestLeague||0,d.leaguePoints);
+    if(!M.friendly){const _oldRank=rankFor(d.leaguePoints||0);gain=isDuelWeekendBoost()?10:5;d.duelWins=(d.duelWins||0)+1;d.leaguePoints=(d.leaguePoints||0)+gain;d.duelBestLeague=Math.max(d.duelBestLeague||0,d.leaguePoints);
       const _newRank=rankFor(d.leaguePoints);if(_oldRank.name!==_newRank.name)_promo='up'; // gain par forfait peut faire monter de division → bannière + déblocages cohérents
       try{reconcileDivisionUnlocks(true);}catch(e){}
-      try{const rr=ChestManager.award();setTimeout(()=>{try{showToast(rr?I18N.t('chest_won'):I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},600);}catch(e){}}
+      try{const rr=ChestManager.award();setTimeout(()=>{try{if(rr)announceChestWon(rr);else showToast(I18N.t('chest_full'),{mini:true,ttl:1600});}catch(e){}},900);}catch(e){}}
     if(M.opp&&M.opp.uid){const h=d.h2h[M.opp.uid]||{name:M.opp.name,w:0,l:0,d:0};h.w++;h.name=M.opp.name;d.h2h[M.opp.uid]=h;}
     DataManager.save();try{FriendManager.syncProfile();}catch(e){}
     showResult('win',you,0,gain,M.friendly,true,_promo);
@@ -7531,6 +7578,7 @@ const DuelManager=(function(){
       '<div style="font-size:.58rem;color:var(--accent);text-align:center;margin-top:7px;font-weight:800">👆 '+I18N.t('league_see_path')+'</div>';
     $('duelHubLeague').style.cursor='pointer';$('duelHubLeague').onclick=showLeaguesPath;
     try{renderDuelChests();}catch(e){}
+    try{const wb=$('duelWeekendBanner');if(wb){if(isDuelWeekendBoost()){wb.style.display='block';wb.innerHTML='🔥 '+I18N.t('duel_weekend_boost');}else{wb.style.display='none';}}}catch(e){}
     const total=d.duelWins+d.duelLosses+d.duelDraws;
     $('duelHubRecord').textContent=total?('🏆 '+d.duelWins+I18N.t('duel_w')+' · '+d.duelLosses+I18N.t('duel_l')+(d.duelDraws?' · '+d.duelDraws+I18N.t('duel_d'):'')):I18N.t('duel_no_games');
     // Hors ligne : on grise le bouton « Match rapide » et on affiche un avis (les duels sont en ligne).

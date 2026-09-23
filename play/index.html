@@ -4524,27 +4524,31 @@ function closeSkinPreview(){if(_pvRAF)cancelAnimationFrame(_pvRAF);_pvRAF=0;cons
 // Finition « sticker de jeu » commune (boutique + partie). Appelée avec le contexte translaté au centre de la balle,
 // à l'échelle réelle (rayon ~10.5), SANS rotation. Casse le rendu « dégradé lisse = IA » : contour franc,
 // ombre de contact basse nette, liseré de contre-jour, éclat blanc net en haut-gauche → volume dessiné, pas juste verni.
-function _lighten(hex,amt){try{if(!hex||hex[0]!=='#')return '#ffffff';let h=hex.slice(1);if(h.length===3)h=h.split('').map(x=>x+x).join('');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16),L=v=>Math.round(v+(255-v)*amt);return 'rgb('+L(r)+','+L(g)+','+L(b)+')';}catch(e){return '#ffffff';}}
+function _tintRGB(hex,amt){try{if(!hex||hex[0]!=='#')return [255,255,255];let h=hex.slice(1);if(h.length===3)h=h.split('').map(x=>x+x).join('');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16),L=v=>Math.round(v+(255-v)*amt);return [L(r),L(g),L(b)];}catch(e){return [255,255,255];}}
+function _lighten(hex,amt){const c=_tintRGB(hex,amt);return 'rgb('+c[0]+','+c[1]+','+c[2]+')';}
+function _tintA(hex,amt,a){const c=_tintRGB(hex,amt);return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
 function ballFinish(c,col){
   c.save();c.beginPath();c.arc(0,0,10.5,0,6.28);c.clip();
-  // 1) Modelé sphérique profond (terminator) : lumière haut-gauche → bord opposé sombre
-  const vol=c.createRadialGradient(-3.2,-4.2,2,-0.5,-0.5,14.5);vol.addColorStop(0,'rgba(0,0,0,0)');vol.addColorStop(.5,'rgba(0,0,0,0)');vol.addColorStop(.85,'rgba(0,0,0,.16)');vol.addColorStop(1,'rgba(0,0,0,.42)');c.fillStyle=vol;c.fillRect(-11,-11,22,22);
-  // 2) Ombre de contact en bas
-  const sh=c.createLinearGradient(0,3,0,11);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.24)');c.fillStyle=sh;c.fillRect(-11,-11,22,22);
-  // 3) Vernis brillant : bandeau de reflet net sous le haut (clear-coat) → aspect verni premium
-  c.save();c.rotate(-0.32);const coat=c.createLinearGradient(0,-10.5,0,-3);coat.addColorStop(0,'rgba(255,255,255,.34)');coat.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=coat;c.beginPath();c.ellipse(0,-6.6,8.6,3.6,0,0,6.28);c.fill();c.restore();
-  // 4) Liseré de Fresnel TEINTÉ (contre-jour bas/droite) → arête colorée vibrante
-  c.save();c.globalAlpha=.5;c.lineWidth=1.7;c.strokeStyle=_lighten(col,.5);c.beginPath();c.arc(0,0,9.5,0.28,2.42);c.stroke();c.restore();
-  // 5) Arête ambiante froide en haut (lumière du ciel) — fine
-  c.lineWidth=1;c.strokeStyle='rgba(255,255,255,.26)';c.beginPath();c.arc(0,0,9.7,3.75,5.7);c.stroke();
+  // 1) Modelé sphérique PROFOND (terminator) : lumière haut-gauche → bord opposé très sombre
+  const vol=c.createRadialGradient(-3.2,-4.2,1.5,-0.3,-0.3,15);vol.addColorStop(0,'rgba(0,0,0,0)');vol.addColorStop(.46,'rgba(0,0,0,0)');vol.addColorStop(.8,'rgba(0,0,0,.2)');vol.addColorStop(1,'rgba(0,0,0,.5)');c.fillStyle=vol;c.fillRect(-11,-11,22,22);
+  // 2) Profondeur colorée interne (comme un joyau translucide) : halo de la teinte, bas-centre
+  const dp=c.createRadialGradient(1,4,0,1,4,9);dp.addColorStop(0,_tintA(col,.2,.42));dp.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=dp;c.beginPath();c.arc(1,4,9,0,6.28);c.fill();
+  // 3) Ombre de contact en bas
+  const sh=c.createLinearGradient(0,3,0,11);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.22)');c.fillStyle=sh;c.fillRect(-11,-11,22,22);
+  // 4) Vernis brillant (clear-coat) : bandeau de reflet net sous le haut → verre/verni premium
+  c.save();c.rotate(-0.32);const coat=c.createLinearGradient(0,-10.5,0,-2.6);coat.addColorStop(0,'rgba(255,255,255,.44)');coat.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=coat;c.beginPath();c.ellipse(0,-6.4,8.9,3.9,0,0,6.28);c.fill();c.restore();
+  // 5) Liseré arrière lumineux EN HAUT (back-light) + Fresnel TEINTÉ en bas → éclairage studio complet
+  c.lineWidth=1.5;c.strokeStyle='rgba(255,255,255,.6)';c.beginPath();c.arc(0,0,9.7,3.9,5.55);c.stroke();
+  c.save();c.globalAlpha=.62;c.lineWidth=1.9;c.strokeStyle=_lighten(col,.55);c.beginPath();c.arc(0,0,9.5,0.22,2.5);c.stroke();c.restore();
   c.restore();
   // 6) Contour franc
-  c.lineWidth=1.5;c.strokeStyle='rgba(16,10,24,.52)';c.beginPath();c.arc(0,0,10.4,0,6.28);c.stroke();
-  // 7) Spéculaire multi-couche : bloom large + cœur net + micro-pointe
+  c.lineWidth=1.5;c.strokeStyle='rgba(12,7,20,.55)';c.beginPath();c.arc(0,0,10.4,0,6.28);c.stroke();
+  // 7) Spéculaire riche : bloom large + cœur net + STREAK de reflet verre + étincelle
   c.save();
-  const bloom=c.createRadialGradient(-3.3,-4.2,0,-3.3,-4.2,6.2);bloom.addColorStop(0,'rgba(255,255,255,.78)');bloom.addColorStop(.45,'rgba(255,255,255,.18)');bloom.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=bloom;c.beginPath();c.arc(-3.3,-4.2,6.2,0,6.28);c.fill();
-  c.fillStyle='#fff';c.beginPath();c.ellipse(-3.9,-4.9,2.2,1.35,-.6,0,6.28);c.fill();
-  c.globalAlpha=.82;c.beginPath();c.arc(-1.1,-6.5,.62,0,6.28);c.fill();c.globalAlpha=1;
+  const bloom=c.createRadialGradient(-3.3,-4.2,0,-3.3,-4.2,6.8);bloom.addColorStop(0,'rgba(255,255,255,.85)');bloom.addColorStop(.4,'rgba(255,255,255,.2)');bloom.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=bloom;c.beginPath();c.arc(-3.3,-4.2,6.8,0,6.28);c.fill();
+  c.fillStyle='#fff';c.beginPath();c.ellipse(-3.9,-4.9,2.4,1.45,-.6,0,6.28);c.fill();
+  c.globalAlpha=.5;c.lineWidth=1.1;c.strokeStyle='#fff';c.beginPath();c.arc(0,0,7,-2.55,-1.35);c.stroke();
+  c.globalAlpha=.9;c.fillStyle='#fff';c.beginPath();c.arc(-0.6,-6.7,.6,0,6.28);c.fill();c.globalAlpha=1;
   c.restore();
 }
 function drawSkinPreview(cc,W,H,tab,id,item,t){cc.clearRect(0,0,W,H);try{

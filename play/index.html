@@ -4528,24 +4528,25 @@ function _tintRGB(hex,amt){try{if(!hex||hex[0]!=='#')return [255,255,255];let h=
 function _lighten(hex,amt){const c=_tintRGB(hex,amt);return 'rgb('+c[0]+','+c[1]+','+c[2]+')';}
 function _tintA(hex,amt,a){const c=_tintRGB(hex,amt);return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
 function ballFinish(c,col){
-  // Épaisseur des traits en PIXELS écran (indépendante de l'échelle) : sinon un trait de 1px devient
-  // un gros anneau une fois la balle agrandie ×5 en boutique (= le « cercle noir » moche). On corrige.
-  let s=1;try{const m=c.getTransform();s=Math.hypot(m.a,m.b)||1;}catch(e){}const px=v=>v/s;
   c.save();c.beginPath();c.arc(0,0,10.5,0,6.28);c.clip();
-  // === Modèle d'éclairage complet (le vrai « 3D » vient d'ici, pas des reflets) ===
-  // A) Occlusion de bord SYMÉTRIQUE (vignette) : assombrit tout le pourtour → transforme le disque en SPHÈRE.
-  const ao=c.createRadialGradient(0,0,6,0,0,10.5);ao.addColorStop(0,'rgba(0,0,0,0)');ao.addColorStop(.72,'rgba(0,0,0,0)');ao.addColorStop(1,'rgba(0,0,0,.3)');c.fillStyle=ao;c.fillRect(-11,-11,22,22);
-  // B) Éclairage directionnel : côté opposé à la lumière (bas-droite) plus sombre → terminator.
-  const vol=c.createRadialGradient(-3.2,-4.2,3,-1,-1,15);vol.addColorStop(0,'rgba(0,0,0,0)');vol.addColorStop(.52,'rgba(0,0,0,0)');vol.addColorStop(1,'rgba(0,0,0,.34)');c.fillStyle=vol;c.fillRect(-11,-11,22,22);
-  // C) Voile diffus doux sur l'hémisphère éclairé (large, très léger) → surface arrondie qui « prend » la lumière.
-  const dif=c.createRadialGradient(-3.5,-4.5,1,-3.5,-4.5,11);dif.addColorStop(0,'rgba(255,255,255,.2)');dif.addColorStop(.5,'rgba(255,255,255,.05)');dif.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=dif;c.fillRect(-11,-11,22,22);
-  // D) Lumière de rebond (bounce) en bas, teintée → ambiance/relief comme un vrai objet éclairé
-  c.lineWidth=px(1.1);c.strokeStyle=_tintA(col,.55,.4);c.beginPath();c.arc(0,0,10.0,0.5,2.2);c.stroke();
-  c.restore();
-  // E) Spéculaire : petit cœur chaud net + micro halo (haut-gauche). Serré → le motif reste lisible.
-  c.save();
-  const sp=c.createRadialGradient(-3.7,-4.5,0,-3.7,-4.5,3.6);sp.addColorStop(0,'rgba(255,255,255,.72)');sp.addColorStop(.55,'rgba(255,255,255,.12)');sp.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=sp;c.beginPath();c.arc(-3.7,-4.5,3.6,0,6.28);c.fill();
-  c.fillStyle='rgba(255,255,255,.92)';c.beginPath();c.ellipse(-4,-4.9,1.3,.85,-.6,0,6.28);c.fill();
+  // === VRAIE 3D : ombrage sphérique en SOFT-LIGHT ===
+  // Le dégradé n'est PAS posé en noir par-dessus (ça faisait un anneau qui dénature). En mode « soft-light »,
+  // il ÉCLAIRCIT/ASSOMBRIT la balle DANS SA PROPRE COULEUR (l'ombre d'une balle rouge = rouge foncé, pas noir).
+  // Centré sur le point de lumière (haut-gauche) → transition continue lit→ombre, sans bande de bord = SANS anneau.
+  c.globalCompositeOperation='soft-light';
+  const sh=c.createRadialGradient(-3.6,-4.6,1.5,-1.6,-1.9,16.5);
+  sh.addColorStop(0,'rgba(255,255,255,.98)');
+  sh.addColorStop(.28,'rgba(255,255,255,.28)');
+  sh.addColorStop(.5,'rgba(128,128,128,0)');
+  sh.addColorStop(.78,'rgba(0,0,0,.45)');
+  sh.addColorStop(1,'rgba(0,0,0,.9)');
+  c.fillStyle=sh;c.fillRect(-11,-11,22,22);
+  // Renfort d'ombre du côté opposé, toujours en soft-light (profondeur), sans toucher le bord éclairé
+  const sh2=c.createRadialGradient(4.5,5,1,4.5,5,13);sh2.addColorStop(0,'rgba(0,0,0,.34)');sh2.addColorStop(.6,'rgba(0,0,0,.12)');sh2.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=sh2;c.fillRect(-11,-11,22,22);
+  c.globalCompositeOperation='source-over';
+  // Spéculaire net (reflet vitré) — normal, par-dessus
+  const sp=c.createRadialGradient(-3.9,-4.8,0,-3.9,-4.8,3.3);sp.addColorStop(0,'rgba(255,255,255,.82)');sp.addColorStop(.5,'rgba(255,255,255,.14)');sp.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=sp;c.beginPath();c.arc(-3.9,-4.8,3.3,0,6.28);c.fill();
+  c.fillStyle='rgba(255,255,255,.95)';c.beginPath();c.ellipse(-4.2,-5.1,1.15,.75,-.6,0,6.28);c.fill();
   c.restore();
 }
 function drawSkinPreview(cc,W,H,tab,id,item,t){cc.clearRect(0,0,W,H);try{

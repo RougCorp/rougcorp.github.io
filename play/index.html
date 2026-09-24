@@ -2024,7 +2024,10 @@ function bgPolish(c,w,h,dark){
   const key=w+'x'+h+'/'+(dark?1:0);
   if(_bgPolishKey!==key||!_bgPolishCache){
     const oc=_bgPolishCache||document.createElement('canvas');oc.width=w;oc.height=h;const g=oc.getContext('2d');g.clearRect(0,0,w,h);
-    const rg=g.createRadialGradient(w/2,h*.42,Math.min(w,h)*.26,w/2,h*.55,Math.max(w,h)*.66);rg.addColorStop(0,'rgba(0,0,0,0)');rg.addColorStop(.72,'rgba(0,0,0,0)');rg.addColorStop(1,dark?'rgba(0,0,0,.42)':'rgba(60,40,18,.17)');g.fillStyle=rg;g.fillRect(0,0,w,h);
+    // bloom de lumière ambiante en haut (TOUS les fonds) : halo doux depuis le ciel → profondeur, sensation d'éclairage
+    const tb=g.createRadialGradient(w*.5,-h*.06,0,w*.5,-h*.06,h*1.05);tb.addColorStop(0,dark?'rgba(255,255,255,.09)':'rgba(255,255,255,.11)');tb.addColorStop(.5,dark?'rgba(255,255,255,.03)':'rgba(255,255,255,.04)');tb.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=tb;g.fillRect(0,0,w,h);
+    // vignette cinématique (centre net → bords assombris) — plus marquée sur sombre
+    const rg=g.createRadialGradient(w/2,h*.42,Math.min(w,h)*.24,w/2,h*.56,Math.max(w,h)*.68);rg.addColorStop(0,'rgba(0,0,0,0)');rg.addColorStop(.66,'rgba(0,0,0,0)');rg.addColorStop(1,dark?'rgba(0,0,0,.48)':'rgba(60,40,18,.20)');g.fillStyle=rg;g.fillRect(0,0,w,h);
     if(dark){const t=g.createLinearGradient(0,0,0,h*.45);t.addColorStop(0,'rgba(255,255,255,.06)');t.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=t;g.fillRect(0,0,w,h*.45);}
     // grain fin (anti-banding → rendu premium) : tuile de bruit répétée à faible opacité
     const _nz=_bgNoiseTile();if(_nz){g.save();g.globalAlpha=dark?.05:.032;g.fillStyle=g.createPattern(_nz,'repeat');g.fillRect(0,0,w,h);g.restore();}

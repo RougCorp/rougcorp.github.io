@@ -2003,9 +2003,14 @@ const EMBLEMS={
 // === BANNERS (profil — achetés avec gemmes BLEUES) ===
 // draw(c,w,h): remplit un rectangle w×h.
 // Effets communs (profondeur premium) : brillance haut + ombre bas, vignette, étoiles.
-function bGloss(c,w,h){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,255,255,.16)');g.addColorStop(.45,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(0,0,0,.24)');c.fillStyle=g;c.fillRect(0,0,w,h);
-// liseré lumineux 1px en haut → fini « verre » premium, uplift homogène de toutes les bannières
-c.fillStyle='rgba(255,255,255,.30)';c.fillRect(0,0,w,1);}
+function bGloss(c,w,h){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,255,255,.18)');g.addColorStop(.42,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(0,0,0,.26)');c.fillStyle=g;c.fillRect(0,0,w,h);
+// biseau latéral : léger assombrissement des bords gauche/droite → effet « carte en relief » homogène
+const eg=c.createLinearGradient(0,0,w,0);eg.addColorStop(0,'rgba(0,0,0,.16)');eg.addColorStop(.10,'rgba(0,0,0,0)');eg.addColorStop(.90,'rgba(0,0,0,0)');eg.addColorStop(1,'rgba(0,0,0,.16)');c.fillStyle=eg;c.fillRect(0,0,w,h);
+// grain fin anti-banding (tuile de bruit en cache, faible opacité) → matière premium, plus de dégradés « plastique »
+try{const nz=_bgNoiseTile();if(nz){c.save();c.globalAlpha=.028;c.fillStyle=c.createPattern(nz,'repeat');c.fillRect(0,0,w,h);c.restore();}}catch(e){}
+// liseré lumineux 1px en haut + ombre 1px en bas → cadre « verre » premium, uplift homogène de toutes les bannières
+c.fillStyle='rgba(255,255,255,.34)';c.fillRect(0,0,w,1);
+c.fillStyle='rgba(0,0,0,.20)';c.fillRect(0,h-1,w,1);}
 function bVig(c,w,h){const g=c.createRadialGradient(w*.5,h*.5,h*.2,w*.5,h*.5,w*.65);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.30)');c.fillStyle=g;c.fillRect(0,0,w,h);}
 function bStars(c,w,h,n,col){c.fillStyle=col||'#fff';for(let i=0;i<n;i++){const x=(i*53.13)%w,y=(i*97.31)%h;c.globalAlpha=.3+((i*7)%4)*.18;c.beginPath();c.arc(x,y,(i%5===0?1.2:.6),0,6.28);c.fill();}c.globalAlpha=1;}
 // Vignette/profondeur appliquée par-dessus N'IMPORTE QUEL fond (subtile sur clair,
@@ -4815,7 +4820,9 @@ function renderEmblem3D(id,item){return render3D('emb::'+id,c=>{c.save();crestPa
 function drawSkinPreview(cc,W,H,tab,id,item,t){cc.clearRect(0,0,W,H);try{
   if(tab==='bgs'){item.draw(cc,W,H,t);try{bgPolish(cc,W,H,DARK_BGS.includes(id));}catch(e){}}
   else if(tab==='banners'){item.draw(cc,W,H,t);}
-  else if(tab==='trails'){const cx=W/2,cy=H/2,R=Math.min(W,H)*0.26,ang=t/520;const hx=cx+Math.cos(ang)*R,hy=cy+Math.sin(ang)*R;_pvTrail.unshift({x:hx,y:hy});if(_pvTrail.length>22)_pvTrail.pop();cc.fillStyle=item.color||'#fff';for(let i=_pvTrail.length-1;i>=0;i--){const p=_pvTrail[i],life=1-i/_pvTrail.length;cc.save();cc.globalAlpha=life;cc.translate(p.x,p.y);cc.scale(2.4,2.4);item.draw(cc,{x:0,y:0,life});cc.restore();}cc.globalAlpha=1;}
+  else if(tab==='trails'){const cx=W/2,cy=H/2,R=Math.min(W,H)*0.28,ang=t/520;const hx=cx+Math.cos(ang)*R,hy=cy+Math.sin(ang)*R;_pvTrail.unshift({x:hx,y:hy});if(_pvTrail.length>30)_pvTrail.pop();cc.fillStyle=item.color||'#fff';for(let i=_pvTrail.length-1;i>=0;i--){const p=_pvTrail[i],life=1-i/_pvTrail.length;cc.save();cc.globalAlpha=life;cc.translate(p.x,p.y);cc.scale(2.4,2.4);item.draw(cc,{x:0,y:0,life});cc.restore();}cc.globalAlpha=1;
+    // tête lumineuse : la balle « émettrice » en tête du sillage → aperçu plus lisible et vivant
+    cc.save();cc.translate(hx,hy);cc.shadowBlur=16;cc.shadowColor=item.color||'#fff';cc.fillStyle=item.color||'#fff';cc.beginPath();cc.arc(0,0,5.5,0,6.28);cc.fill();cc.shadowBlur=0;cc.fillStyle='rgba(255,255,255,.95)';cc.beginPath();cc.arc(0,0,2.6,0,6.28);cc.fill();cc.restore();}
   else if(tab==='emblems'){ // EMBLÈMES : blason embossé en relief 3D (mis en cache)
     let img=null;try{img=renderEmblem3D(id,item);}catch(e){}
     if(img){cc.save();cc.translate(W/2,H/2);const R=Math.min(W,H)*0.46;
